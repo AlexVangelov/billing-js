@@ -1,10 +1,19 @@
 {
   "name": "billing",
-  "version": "0.0.1",
-  "description": "Billing Module",
+  "version": "0.0.2",
+  "description": "Billing Module Js",
   "author": "AlexV",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexVangelov/billing-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlexVangelov/billing-js/issues"
+  },
+  "keywords": [
+    "billing"
+  ],
   "main": "lib/index.js",
-  "private": true,
   "license": "MIT",
   "scripts": {
     "typings": "typings install",
