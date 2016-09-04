@@ -4,7 +4,6 @@ import { Charge } from './billing/charge';
 import { Modifier } from './billing/modifier';
 import { Payment } from './billing/payment';
 
-export default Billing;
 export {
   Billing,
   Bill as BillingBill,

@@ -3,33 +3,32 @@
   "version": "0.0.1",
   "description": "Billing Module",
   "author": "AlexV",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "postinstall": "autodts link && typings install",
-    "prepublish": "tsc && autodts generate",
-    "test": "karma start karma.conf.js"
+    "typings": "typings install",
+    "test": "karma start karma.conf.js",
+    "build": "tsc -d",
+    "dist": "webpack -p"
   },
   "devDependencies": {
-    "@lib/autodts-generator": "0.0.2",
     "@types/jasmine": "^2.2.31",
     "istanbul": "^0.4.5",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
-    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
-    "karma-phantomjs-launcher": "^1.0.2",
     "karma-typescript": "^2.0.1",
+    "ts-loader": "^0.8.2",
     "typescript": "^2.0.0",
-    "typings": "^1.3.3"
+    "typings": "^1.3.3",
+    "webpack": "^1.13.2"
   },
-  "dependencies": {
-    "autodts": "0.0.6"
-  },
-  "typescript": {
-    "definition": "index.d.ts"
-  }
+  "typings": "lib/index",
+  "files": [
+    "lib/",
+    "dist/"
+  ]
 }
