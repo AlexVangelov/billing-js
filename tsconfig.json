@@ -1,13 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "outDir": "dist"
-  },
+    "compileOnSave": false,
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "sourceMap": false,
+        "types":["jasmine"],
+        "outDir": "dist"
+    },
+    "exclude": [
+        "node_modules"
+    ],
 	"files": [
 		"lib/index.ts"
 	]
