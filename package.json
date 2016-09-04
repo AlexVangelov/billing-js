@@ -1,0 +1,32 @@
+{
+  "name": "billing",
+  "version": "0.0.1",
+  "description": "Billing Module",
+  "main": "dist/index.js",
+  "scripts": {
+    "preinstall": "npm install autodts",
+    "postinstall": "autodts link",
+    "prepublish": "tsc && autodts generate",
+    "test": "karma start karma.conf.js",
+    "typings": "typings install"
+  },
+  "typescript": {
+    "definition": "index.d.ts"
+  },
+  "author": "Alex Vangelov <email@data.bg>",
+  "license": "MIT",
+  "devDependencies": {
+    "@lib/autodts-generator": "0.0.2",
+    "istanbul": "^0.4.5",
+    "jasmine-core": "^2.5.0",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "^2.0.1",
+    "typescript": "^1.8.10",
+    "typings": "^1.3.3"
+  },
+  "dependencies": {
+    "autodts": "0.0.6"
+  }
+}
