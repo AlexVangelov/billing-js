@@ -3,7 +3,8 @@
 import { Bill } from './bill';
 
 describe('Bill', () => {
-  it('works', () => {
+  it('init', () => {
     let bill = new Bill();
+    expect(bill.charges.bill).toEqual(bill);
   });
 });

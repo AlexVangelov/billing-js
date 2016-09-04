@@ -9,7 +9,7 @@ export class Modifier extends BillItem {
   constructor(attributes: any = {}) {
     super(attributes.bill);
     this.percentRatio = attributes.percentRatio;
-    this.fixedValue = attributes.fixedValue;
+    if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
     this.charge = attributes.charge;
   }
 
