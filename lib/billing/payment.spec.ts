@@ -1,3 +1,5 @@
+/// <reference path="../../typings/index.d.ts" />
+
 import { Payment } from './payment';
 
 describe('Payment', () => {

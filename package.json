@@ -7,8 +7,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "preinstall": "npm install autodts",
-    "postinstall": "autodts link",
+    "postinstall": "autodts link && typings install",
     "prepublish": "tsc && autodts generate",
     "test": "karma start karma.conf.js"
   },
@@ -24,7 +23,8 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-typescript": "^2.0.1",
-    "typescript": "^2.0.0"
+    "typescript": "^2.0.0",
+    "typings": "^1.3.3"
   },
   "dependencies": {
     "autodts": "0.0.6"
