@@ -1,10 +1,14 @@
-import { Charge } from './charge';
-import { Modifier } from './modifier';
-import { Payment } from './payment';
+import { ChargesCollection } from './charge';
+import { Modifier, ModifiersCollection } from './modifier';
+import { PaymentsCollection } from './payment';
 
 export class Bill {
-  charges: Array<Charge> = [];
-  modifiers: Array<Modifier> = [];
-  payments: Array<Payment> = [];
-  globalModifier: Modifier;
+  charges :ChargesCollection = new ChargesCollection();
+  modifiers :ModifiersCollection = new ModifiersCollection();
+  payments :PaymentsCollection = new PaymentsCollection();
+  globalModifier :Modifier;
+
+  total() :number {
+    return this.charges.sum() - this.modifiers.sum();
+  }
 }

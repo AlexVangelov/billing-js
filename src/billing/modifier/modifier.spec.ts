@@ -1,6 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../../../typings/index.d.ts" />
 
-import { Modifier } from './modifier';
+import { Modifier } from './index';
 
 describe('Modifier', () => {
   it('works', () => {

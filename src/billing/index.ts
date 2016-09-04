@@ -4,7 +4,7 @@ import { Modifier } from './modifier';
 import { Payment } from './payment';
 
 export class Billing {
-  bills: Array<Bill> = [];
+  bills :Array<Bill> = [];
   
   constructor() {
     console.log("Initialize billing");

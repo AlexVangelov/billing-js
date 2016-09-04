@@ -1,4 +1,4 @@
-import { Bill } from './bill';
+import { Bill } from '../bill';
 
 export abstract class BillItem {
   bill: Bill;

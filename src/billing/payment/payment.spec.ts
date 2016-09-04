@@ -1,6 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../../../typings/index.d.ts" />
 
-import { Payment } from './payment';
+import { Payment } from './index';
 
 describe('Payment', () => {
   it('works', () => {
