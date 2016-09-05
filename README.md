@@ -4,7 +4,7 @@ Billing Module JS
     npm install billing
 
 ## Usage
-### Left contructor ([samples/node/leftConstructor.js](samples/node/leftConstructor.js))
+### Left constructor ([samples/node/leftConstructor.js](samples/node/leftConstructor.js))
 ```javascript
 var billing = require('billing');
 
@@ -59,7 +59,7 @@ bill.charges    //Charge collection
 bill.modifiers  //Modifier collection
 bill.payments   //Payment collection
 bill.total()    //The whole number or amount (charges and modifiers)
-bill balance()  //Bill remainder (total - payments)
+bill.balance()  //Bill remainder (total - payments)
 ```
 
 ### Billing collections
