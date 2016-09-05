@@ -1,4 +1,21 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
+/**
+ * 
+ * 
+ * @export
+ * @abstract
+ * @class ErrorItem
+ */
 export abstract class ErrorItem {
+  /**
+   * 
+   * 
+   * @static
+   */
   static MAP = {
     accepted: "must be accepted",
     blank: "can't be blank",

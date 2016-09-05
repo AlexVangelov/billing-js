@@ -1,12 +1,44 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
 import { BillItem } from '../concerns/billItem';
 import { Charge } from '../charge';
 import { IModifierAttributes } from './interface';
 
+/**
+ * 
+ * 
+ * @export
+ * @class Modifier
+ * @extends {BillItem}
+ */
 export class Modifier extends BillItem {
+  /**
+   * 
+   * 
+   * @type {Charge}
+   */
   charge :Charge;
+  /**
+   * 
+   * 
+   * @type {number}
+   */
   percentRatio :number;
+  /**
+   * 
+   * 
+   * @type {number}
+   */
   fixedValue :number = 0;
 
+  /**
+   * Creates an instance of Modifier.
+   * 
+   * @param {IModifierAttributes} [attributes={}]
+   */
   constructor(attributes: IModifierAttributes = {}) {
     super(attributes.bill);
     this.percentRatio = attributes.percentRatio;
@@ -23,6 +55,11 @@ export class Modifier extends BillItem {
     if (this.bill) this.bill.modifiers.add(this);
   }
 
+  /**
+   * 
+   * 
+   * @returns {number}
+   */
   value(): number {
     if (this.charge || this.bill) {
       if (!this.percentRatio) return this.fixedValue;
@@ -34,6 +71,11 @@ export class Modifier extends BillItem {
     }
   }
 
+  /**
+   * 
+   * 
+   * @returns {Boolean}
+   */
   delete():Boolean {
     if (this.bill) this.bill.modifiers.remove(this);
     if (this.charge) delete this.charge.modifier;

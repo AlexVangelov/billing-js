@@ -1,19 +1,24 @@
-module.exports = function(config) {
-    config.set({
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
 
-        frameworks: ["jasmine", "karma-typescript"],
+module.exports = function (config) {
+  config.set({
 
-        files: [
-            { pattern: "src/**/*.ts" }
-        ],
+    frameworks: ["jasmine", "karma-typescript"],
 
-        preprocessors: {
-            "**/*.ts": ["karma-typescript"]
-        },
+    files: [
+      { pattern: "src/**/*.ts" }
+    ],
 
-        reporters: ["progress", "karma-typescript"],
+    preprocessors: {
+      "**/*.ts": ["karma-typescript"]
+    },
 
-        browsers: ["Chrome"],
-        singleRun: true
-    });
+    reporters: ["progress", "karma-typescript"],
+
+    browsers: ["Chrome"],
+    singleRun: true
+  });
 };

@@ -1,15 +1,57 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
 import { BillItem } from '../concerns/billItem';
 import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
 
+/**
+ * 
+ * 
+ * @export
+ * @class Charge
+ * @extends {BillItem}
+ */
 export class Charge extends BillItem {
+  /**
+   * 
+   * 
+   * @type {Modifier}
+   */
   modifier :Modifier;
+  /**
+   * 
+   * 
+   * @type {string}
+   */
   name :string = '';
+  /**
+   * 
+   * 
+   * @type {string}
+   */
   description :string;
+  /**
+   * 
+   * 
+   * @type {number}
+   */
   price :number = 0;
+  /**
+   * 
+   * 
+   * @type {number}
+   */
   qty :number = 1;
 
+  /**
+   * Creates an instance of Charge.
+   * 
+   * @param {IChargeAttributes} [attributes={}]
+   */
   constructor(attributes: IChargeAttributes = {}) {
     super(attributes.bill);
     if (attributes.name) this.name = attributes.name;
@@ -32,14 +74,30 @@ export class Charge extends BillItem {
     if (this.bill) this.bill.charges.add(this);
   }
 
+  /**
+   * 
+   * 
+   * @returns {number}
+   */
   value() :number {
     return (this.qty * this.price);
   }
 
+  /**
+   * 
+   * 
+   * @returns {number}
+   */
   finalValue() :number {
     return this.modifier ? this.value() + this.modifier.value() : this.value();
   }
 
+  /**
+   * 
+   * 
+   * @param {IModifierAttributes} [attributes={}]
+   * @returns {Modifier}
+   */
   modify(attributes: IModifierAttributes = {}) :Modifier {
     attributes.charge = this;
     if (attributes.bill) {
@@ -55,6 +113,11 @@ export class Charge extends BillItem {
     return this.modifier;
   }
 
+  /**
+   * 
+   * 
+   * @returns {Boolean}
+   */
   delete():Boolean {
     if (this.bill) this.bill.charges.remove(this);
     return delete this;
