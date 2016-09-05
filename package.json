@@ -39,6 +39,7 @@
   "typings": "lib/index",
   "files": [
     "lib/",
-    "dist/"
+    "dist/",
+    "samples/"
   ]
 }
