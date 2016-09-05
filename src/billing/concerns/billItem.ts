@@ -14,7 +14,7 @@ import { ErrorItem } from './errorItem';
  * @class BillItem
  * @extends {ErrorItem}
  */
-export abstract class BillItem extends ErrorItem {
+export abstract class BillItem {
   /**
    * 
    * 
@@ -28,7 +28,6 @@ export abstract class BillItem extends ErrorItem {
    * @param {Bill} bill
    */
   constructor(bill: Bill) {
-    super();
     this.bill = bill;
   }
 }

@@ -25,6 +25,7 @@ export class ModifiersCollection extends BillCollection {
    * @returns {Modifier}
    */
   new(attributes: IModifierAttributes = {}) :Modifier {
+    attributes.bill = this.bill;
     return <Modifier> this.add(new Modifier(attributes));
   }
 

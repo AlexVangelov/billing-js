@@ -29,6 +29,9 @@ describe('ChargesCollection', () => {
     expect(modifier.bill).toEqual(bill);
     expect(collection.length).toEqual(1);
     modifier = collection.new({ fixedValue: 2.5 });
+    expect(modifier.bill).toEqual(bill);
+    expect(modifier.value()).toEqual(2.5);
+    expect(bill.modifiers.sum()).toEqual(2.5);
     expect(collection.length).toEqual(2);
     expect(modifier.value()).toEqual(2.5);
   });

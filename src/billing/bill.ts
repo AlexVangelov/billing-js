@@ -15,7 +15,7 @@ import { ErrorItem } from './concerns/errorItem';
  * @class Bill
  * @extends {ErrorItem}
  */
-export class Bill extends ErrorItem {
+export class Bill {
   /**
    * 
    * 
@@ -42,5 +42,14 @@ export class Bill extends ErrorItem {
    */
   total() :number {
     return this.charges.sum() + this.modifiers.sum();
+  }
+
+  /**
+   * 
+   * 
+   * @returns {number}
+   */
+  balance() :number {
+    return this.total() - this.payments.sum();
   }
 }

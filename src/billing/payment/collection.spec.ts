@@ -29,6 +29,8 @@ describe('PaymentsCollection', () => {
     expect(payment.bill).toEqual(bill);
     expect(collection.length).toEqual(1);
     payment = collection.new({ value: 2.5 });
+    expect(payment.bill).toEqual(bill);
+    expect(bill.payments.sum()).toEqual(2.5);
     expect(collection.length).toEqual(2);
     expect(payment.value).toEqual(2.5);
   });

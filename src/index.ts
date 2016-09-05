@@ -13,5 +13,6 @@ export {
   Billing,
   Bill as BillingBill,
   Charge as BillingCharge,
-  Modifier as BillingModifier
+  Modifier as BillingModifier,
+  Payment as BillingPayment
 }

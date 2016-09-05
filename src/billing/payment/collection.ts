@@ -24,6 +24,7 @@ export class PaymentsCollection extends BillCollection {
    * @returns {Payment}
    */
   new(attributes: IPaymentAttributes = {}) :Payment {
+    attributes.bill = this.bill;
     return <Payment> this.add(new Payment(attributes));
   }
 
