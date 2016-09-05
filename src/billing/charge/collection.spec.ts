@@ -15,11 +15,12 @@ describe('ChargesCollection', () => {
   it('new', ()=> {
     let chargesCollection = new ChargesCollection(bill);
     let charge = chargesCollection.new();
+    expect(charge instanceof Charge).toBeTruthy();
     expect(charge.bill).toEqual(bill);
     expect(chargesCollection.length).toEqual(1);
     charge = chargesCollection.new({ price: 2.5 });
     expect(chargesCollection.length).toEqual(2);
-    expect(charge.price).toEqual(2.5);
+    expect((<Charge> charge).price).toEqual(2.5);
   });
 
   it('add', ()=> {

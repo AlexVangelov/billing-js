@@ -2,10 +2,13 @@
 
 import { Charge } from './index';
 import { Modifier } from '../modifier';
+import { Bill } from '../bill';
 
 describe('Charge', () => {
   it('default values', () => {
-    let charge = new Charge();
+    let bill = new Bill();
+    let charge = new Charge({ bill: bill });
+    expect(charge.bill).toEqual(bill);
     expect(charge.price).toEqual(0);
     expect(charge.qty).toEqual(1);
     expect(charge.name).toEqual('');
@@ -40,9 +43,21 @@ describe('Charge', () => {
   });
 
   it('modifier from attributes', ()=> {
-    let modifier = new Modifier();
     let charge = new Charge({ modifier: {} });
     expect(charge.modifier instanceof Modifier).toBeTruthy();
     expect(charge.modifier.charge).toEqual(charge);
+  });
+
+  it('propagates self into bill charges', ()=> {
+    let bill = new Bill();
+    let charge = new Charge({ bill: bill, price: 1 });
+    expect(bill.charges[0]).toEqual(charge);
+  });
+
+  it('populates modifier into bill modifiers', ()=> {
+    let bill = new Bill();
+    let modifier = new Modifier();
+    let charge = new Charge({ bill: bill, modifier: modifier });
+    expect(bill.modifiers[0]).toEqual(modifier);
   });
 });

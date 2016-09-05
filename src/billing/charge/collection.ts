@@ -1,30 +1,15 @@
 import { Charge } from './index';
 import { Bill } from '../bill';
+import { BillCollection } from '../concerns/billCollection';
 
-export class ChargesCollection extends Array<Charge> {
-  bill: Bill;
-
-  constructor(bill: Bill) {
-    super();
-    this.bill = bill;
-  }
+export class ChargesCollection extends BillCollection {
+  ItemClass = Charge;
 
   sum() :number {
     let sum = 0;
     this.forEach((charge)=> {
-      sum += charge.value();
+      sum += (<Charge> charge).value();
     });
     return sum;
-  }
-
-  new(attributes: any = {}) :Charge {
-    let charge = new Charge(attributes);
-    return this.add(charge);
-  }
-
-  add(charge: Charge) :Charge {
-    charge.bill = this.bill;
-    this.push(charge);
-    return charge;
   }
 }

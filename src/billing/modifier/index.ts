@@ -1,12 +1,13 @@
 import { BillItem } from '../concerns/billItem';
 import { Charge } from '../charge';
+import { IModifierAttributes } from './interface';
 
 export class Modifier extends BillItem {
   charge :Charge;
   percentRatio :number;
   fixedValue :number = 0;
 
-  constructor(attributes: any = {}) {
+  constructor(attributes: IModifierAttributes = {}) {
     super(attributes.bill);
     this.percentRatio = attributes.percentRatio;
     if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
