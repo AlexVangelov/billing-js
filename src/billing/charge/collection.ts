@@ -8,15 +8,25 @@ export class ChargesCollection extends BillCollection {
   new(attributes: IChargeAttributes = {}) :Charge {
     attributes.bill = this.bill;
     let charge = new Charge(attributes);
-    if (!~this.indexOf(charge)) charge = this.add(charge);
-    return charge;
+    return this.add(charge);
   }
 
   add(charge: Charge) :Charge {
-    charge.bill = this.bill;
-    this.push(charge);
-    if (charge.modifier && charge.modifier.bill !== this.bill) this.bill.modifiers.add(charge.modifier);
+    if (charge.bill) {
+      if (charge.bill !== this.bill) throw new ReferenceError("Trying to add cross bill charge. Use 'transfer'.");
+    } else charge.bill = this.bill;
+    if (!~this.indexOf(charge))this.push(charge);
+    if (charge.modifier) this.bill.modifiers.add(charge.modifier);
     return charge;
+  }
+
+  remove(charge: Charge) :boolean {
+    let index = this.indexOf(charge);
+    if (!!~index) {
+      if (charge.modifier) this.bill.modifiers.remove(charge.modifier);
+      this.splice(index, 1);
+      return true;
+    } else return false;
   }
 
   sum() :number {

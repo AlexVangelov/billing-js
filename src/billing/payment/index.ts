@@ -11,7 +11,12 @@ export class Payment extends BillItem {
     } else {
       this.value = attributes.value;
     }
-    if (this.bill && !~this.bill.payments.indexOf(this)) this.bill.payments.add(this);
+    if (this.bill) this.bill.payments.add(this);
+  }
+
+  delete():Boolean {
+    if (this.bill) this.bill.payments.remove(this);
+    return delete this;
   }
 }
 

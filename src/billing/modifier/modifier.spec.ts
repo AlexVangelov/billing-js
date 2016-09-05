@@ -20,6 +20,7 @@ describe('Modifier', () => {
   it('charge percent', ()=> {
     let charge = new Charge({ qty: 2, price: 10.5 });
     let modifier = new Modifier({ charge: charge, percentRatio: 0.3 });
+    expect(charge.modifier).toEqual(modifier);
     expect(modifier.value()).toEqual((21 * 30 ) / 100);
   });
 
@@ -57,5 +58,78 @@ describe('Modifier', () => {
     expect(bill.total()).toEqual(12);
     let modifier = new Modifier({ bill: bill, percentRatio: 0.5 });
     expect(modifier.value()).toEqual(6);
+  });
+
+  it('propagate modifier to bill modifiers', ()=> {
+    let bill = new Bill();
+    let modifier = new Modifier({ bill: bill, fixedValue: 1 });
+    expect(bill.modifiers.length).toEqual(1);
+    expect(bill.modifiers[0]).toEqual(modifier);
+  });
+
+  it('propagate modifier to charge bill modifiers', ()=> {
+    let bill = new Bill();
+    let charge = bill.charges.new({ price: 8, modifier: { percentRatio: 0.5 }});
+    let modifier = new Modifier({ charge: charge, fixedValue: 1 });
+    expect(bill.modifiers.length).toEqual(1);
+    expect(bill.charges.length).toEqual(1);
+    expect(bill.modifiers[0]).toEqual(modifier);
+  });
+
+  it('indirect bill through charge', ()=> {
+    let bill = new Bill();
+    let charge = new Charge({ price: 4, bill: bill });
+    let modifier = new Modifier({ fixedValue: 1, charge: charge });
+    expect(modifier.bill).toEqual(bill);
+    expect(bill.modifiers.length).toEqual(1);
+    expect(bill.charges.length).toEqual(1);
+  });
+
+  it('delete', ()=> {
+    let modifier = new Modifier();
+    expect(modifier.delete()).toBeTruthy();
+  });
+
+  it('delete with charge', ()=> {
+    let charge = new Charge();
+    let modifier = new Modifier({ charge: charge, fixedValue: 0.3 });
+    expect(charge.modifier).toBeDefined();
+    expect(modifier.delete()).toBeTruthy();
+    expect(charge.modifier).not.toBeDefined();
+  });
+
+  it('delete with bill charge', ()=> {
+    let bill = new Bill();
+    bill.charges.new({ price: 5 });
+    let modifier = new Modifier({ bill: bill, fixedValue: 0.3 });
+    expect(bill.charges.length).toEqual(1);
+    expect(bill.modifiers.length).toEqual(1);
+    expect(modifier.delete()).toBeTruthy();
+    expect(bill.charges.length).toEqual(1);
+    expect(bill.modifiers.length).toEqual(0);
+  });
+
+  it('delete with bill', ()=> {
+    let bill = new Bill();
+    let modifier = new Modifier({ bill: bill, fixedValue: 0.3 });
+    expect(bill.modifiers.length).toEqual(1);
+    expect(modifier.delete()).toBeTruthy();
+    expect(bill.modifiers.length).toEqual(0);
+  });
+
+  it('cross bill charge', ()=> {
+    let bill = new Bill();
+    let charge = new Charge({ bill: new Bill() });
+    expect(()=> {
+      new Modifier({ bill: bill, charge: charge });
+    }).toThrowError(ReferenceError);
+  });
+
+  it('matching bill charge', ()=> {
+    let bill = new Bill();
+    let charge = new Charge({ bill: bill });
+    expect(()=> {
+      new Modifier({ bill: bill, charge: charge });
+    }).not.toThrowError(ReferenceError);
   });
 });

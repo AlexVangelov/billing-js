@@ -6,7 +6,11 @@ import { Modifier } from '../modifier';
 import { Charge } from '../charge';
 
 describe('ChargesCollection', () => {
-  let bill = new Bill();
+  let bill;
+  
+  beforeEach(()=> {
+    bill = new Bill();
+  });
 
   it('init', () => {
     let collection = new ModifiersCollection(bill);
@@ -41,5 +45,37 @@ describe('ChargesCollection', () => {
     collection.new({ charge: charge, fixedValue: 1.2 });
     expect(collection.length).toEqual(2);
     expect(collection.sum()).toEqual(2.8);
+  });
+
+  it('remove', ()=> {
+    let collection = new ModifiersCollection(bill);
+    let modifier = collection.new();
+    expect(modifier.bill).toEqual(bill);
+    expect(collection[0]).toEqual(modifier);
+    expect(collection.remove(modifier)).toBeTruthy();
+  });
+
+  it('remove non existing', ()=> {
+    let collection = new ModifiersCollection(bill);
+    let modifier = new Modifier();
+    expect(collection.remove(modifier)).toBeFalsy();
+  });
+
+  it('add cross bill', ()=> {
+    let bill2 = new Bill();
+    let collection = new ModifiersCollection(bill);
+    let modifier = new Modifier({ bill: bill2 });
+    expect(()=> { collection.add(modifier); }).toThrowError(ReferenceError);
+  });
+
+  it('add with cross bill charge', ()=> {
+    let bill2 = new Bill();
+    let collection = new ModifiersCollection(bill);
+    let charge = new Charge({ bill: bill2, price: 2 });
+    let modifier = new Modifier({ fixedValue: 3, charge: charge });
+    expect(bill.charges.length).toEqual(0);
+    expect(bill.modifiers.length).toEqual(0);
+    expect(bill2.charges.length).toEqual(1);
+    expect(()=> { collection.add(modifier); }).toThrowError(ReferenceError);
   });
 });

@@ -31,5 +31,18 @@ describe('Payment', () => {
     let payment = new Payment({ bill: bill });
     expect(bill.payments.length).toEqual(1);
     expect(bill.payments[0]).toEqual(payment);
-  })
+  });
+
+  it('delete', ()=> {
+    let payment = new Payment();
+    expect(payment.delete()).toBeTruthy();
+  });
+
+  it('delete associated', ()=> {
+    let bill = new Bill();
+    let payment = bill.payments.new({ value: 5 });
+    expect(bill.payments.length).toEqual(1);
+    expect(payment.delete()).toBeTruthy();
+    expect(bill.payments.length).toEqual(0);
+  });
 });

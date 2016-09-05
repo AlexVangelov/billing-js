@@ -47,4 +47,18 @@ describe('PaymentsCollection', () => {
     expect(collection.sum()).toEqual(2.8);
     expect(collection.length).toEqual(2);
   });
+
+  it('remove', ()=> {
+    let collection = new PaymentsCollection(bill);
+    let payment = collection.new();
+    expect(payment.bill).toEqual(bill);
+    expect(collection[0]).toEqual(payment);
+    expect(collection.remove(payment)).toBeTruthy();
+  });
+
+  it('remove non existing', ()=> {
+    let collection = new PaymentsCollection(bill);
+    let payment = new Payment();
+    expect(collection.remove(payment)).toBeFalsy();
+  });
 });

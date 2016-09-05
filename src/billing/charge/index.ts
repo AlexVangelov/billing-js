@@ -1,6 +1,7 @@
 import { BillItem } from '../concerns/billItem';
 import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
+import { IModifierAttributes } from '../modifier/interface';
 
 export class Charge extends BillItem {
   modifier :Modifier;
@@ -11,9 +12,16 @@ export class Charge extends BillItem {
 
   constructor(attributes: IChargeAttributes = {}) {
     super(attributes.bill);
+    if (attributes.name) this.name = attributes.name;
+    this.description = attributes.description;
+    if (attributes.price) this.price = attributes.price;
+    if (attributes.qty) this.qty = attributes.qty;
     if (attributes.modifier) {
+      if (attributes.modifier.bill) {
+        if (!this.bill) this.bill = attributes.modifier.bill;
+        else if (this.bill !== attributes.modifier.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
+      } else attributes.modifier.bill = this.bill;
       attributes.modifier.charge = this;
-      attributes.modifier.bill = this.bill;
       if (attributes.modifier instanceof Modifier) {
         this.modifier = <Modifier> attributes.modifier; 
       } else {
@@ -21,11 +29,7 @@ export class Charge extends BillItem {
       }
       if (this.bill) this.bill.modifiers.add(this.modifier);
     }
-    if (attributes.name) this.name = attributes.name;
-    this.description = attributes.description;
-    if (attributes.price) this.price = attributes.price;
-    if (attributes.qty) this.qty = attributes.qty;
-    if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
+    if (this.bill) this.bill.charges.add(this);
   }
 
   value() :number {
@@ -34,6 +38,26 @@ export class Charge extends BillItem {
 
   finalValue() :number {
     return this.modifier ? this.value() + this.modifier.value() : this.value();
+  }
+
+  modify(attributes: IModifierAttributes = {}) :Modifier {
+    attributes.charge = this;
+    if (attributes.bill) {
+      if (!this.bill) this.bill = attributes.bill;
+      else if (attributes.bill !== this.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
+    } else attributes.bill = this.bill;
+    if (this.modifier) this.bill.modifiers.remove(this.modifier);
+    this.modifier = new Modifier(attributes);
+    if (this.bill) {
+      this.bill.modifiers.add(this.modifier);
+      this.bill.charges.add(this);
+    }
+    return this.modifier;
+  }
+
+  delete():Boolean {
+    if (this.bill) this.bill.charges.remove(this);
+    return delete this;
   }
 }
 
