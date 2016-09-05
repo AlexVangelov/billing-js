@@ -16,8 +16,12 @@ export class Modifier extends BillItem {
 
   value(): number {
     if (this.charge || this.bill) {
-      var modValue = this.charge ? this.charge.value() : this.bill.charges.sum();
-      return this.percentRatio ? modValue * this.percentRatio : this.fixedValue;
+      if (!this.percentRatio) return this.fixedValue;
+      if (this.charge) {
+        return this.charge.value() * this.percentRatio;
+      } else {
+        return this.bill.charges.finalSum() * this.percentRatio;
+      }
     }
   }
 }

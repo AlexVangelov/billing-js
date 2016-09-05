@@ -48,13 +48,14 @@ describe('Charge', () => {
     expect(charge.modifier.charge).toEqual(charge);
   });
 
-  it('propagates self into bill charges', ()=> {
+  it('propagates self to bill charges', ()=> {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, price: 1 });
+    expect(bill.charges.length).toEqual(1);
     expect(bill.charges[0]).toEqual(charge);
   });
 
-  it('populates modifier into bill modifiers', ()=> {
+  it('populates modifier to bill modifiers', ()=> {
     let bill = new Bill();
     let modifier = new Modifier();
     let charge = new Charge({ bill: bill, modifier: modifier });

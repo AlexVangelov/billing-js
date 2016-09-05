@@ -25,11 +25,15 @@ export class Charge extends BillItem {
     this.description = attributes.description;
     if (attributes.price) this.price = attributes.price;
     if (attributes.qty) this.qty = attributes.qty;
-    if (this.bill) this.bill.charges.add(this);
+    if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
   }
 
   value() :number {
     return (this.qty * this.price);
+  }
+
+  finalValue() :number {
+    return this.modifier ? this.value() + this.modifier.value() : this.value();
   }
 }
 

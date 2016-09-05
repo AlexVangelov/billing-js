@@ -1,9 +1,13 @@
 import { Payment } from './index';
 import { Bill } from '../bill';
 import { BillCollection } from '../concerns/billCollection';
+import { IPaymentAttributes } from './interface';
 
 export class PaymentsCollection extends BillCollection {
-  ItemClass = Payment;
+  
+  new(attributes: IPaymentAttributes = {}) :Payment {
+    return <Payment> this.add(new Payment(attributes));
+  }
 
   sum() :number {
     let sum = 0;

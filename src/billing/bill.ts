@@ -1,12 +1,12 @@
 import { ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
+import { ErrorItem } from './concerns/errorItem';
 
-export class Bill {
+export class Bill extends ErrorItem {
   charges :ChargesCollection = new ChargesCollection(this);
   modifiers :ModifiersCollection = new ModifiersCollection(this);
   payments :PaymentsCollection = new PaymentsCollection(this);
-  globalModifier :Modifier;
 
   total() :number {
     return this.charges.sum() + this.modifiers.sum();
