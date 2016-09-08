@@ -1,0 +1,142 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
+/// <reference path="../../../typings/index.d.ts" />
+
+var samples = [
+ {"price":6},
+ {},
+ {"price":0.6},
+ {"price":2},
+ {"qty":2},
+ {"qty":2},
+ {"qty":2,"price":4},
+ {"qty":2,"price":4},
+ {"qty":2,"price":4.6},
+ {"price":5},
+ {"price":5},
+ {"price":5},
+ {"price":5,"name":"U"},
+ {"price":5,"name":"U"},
+ {"price":5,"name":"Um"},
+ {"price":5,"name":"Umb"},
+ {"price":5,"name":"Umbr"},
+ {"price":5,"name":"Umbre"},
+ {"price":5,"name":"Umbrel"},
+ {"price":5,"name":"Umbrell"},
+ {"price":5,"name":"Umbrella"},
+ {"price":2},
+ {"qty":2},
+ {"qty":2},
+ {"qty":2,"price":3},
+ {"qty":2,"price":3},
+ {"qty":2,"price":3.3},
+ {"qty":2,"price":3.33},
+ {"qty":2,"price":3.33},
+ {"qty":2,"price":3.33},
+ {"qty":2,"price":3.33,"name":"T"},
+ {"qty":2,"price":3.33,"name":"T"},
+ {"qty":2,"price":3.33,"name":"Te"},
+ {"qty":2,"price":3.33,"name":"Tex"},
+ {"qty":2,"price":3.33,"name":"Text"},
+ {"qty":2,"price":3.33,"name":"Text "},
+ {"qty":2,"price":3.33,"name":"Text l"},
+ {"qty":2,"price":3.33,"name":"Text li"},
+ {"qty":2,"price":3.33,"name":"Text lin"},
+ {"qty":2,"price":3.33,"name":"Text line"},
+ {"qty":2,"price":3.33,"name":"Text line "},
+ {"qty":2,"price":3.33,"name":"Text line 1"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":""},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":""},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"T"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"T"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Te"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Tex"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text "},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text l"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text li"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text lin"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text line"},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text line "},
+ {"qty":2,"price":3.33,"name":"Text line 1","description":"Text line 2"},
+ {"price":3},
+ {"qty":3},
+ {"qty":3},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2,"modifier":{"fixedValue":-1}},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2,"modifier":{"fixedValue":1}},
+ {"qty":3,"price":2,"modifier":{"percentRatio":0.01}},
+ {"qty":3,"price":2,"modifier":{"percentRatio":0.01}},
+ {"qty":3,"price":2,"modifier":{"fixedValue":1}},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2},
+ {"qty":3,"price":2,"modifier":{"fixedValue":-1}},
+ {"qty":3,"price":2,"modifier":{"fixedValue":-10}},
+ {"qty":3,"price":2,"modifier":{"percentRatio":-0.1}},
+ {"qty":3,"price":2,"modifier":{"percentRatio":-0.1}},
+ {"price":3},
+ {"price":3},
+ {"price":3.2},
+ {"qty":3.2},
+ {"qty":3.2},
+ {"qty":3.2,"price":1},
+ {"qty":3.2,"price":1},
+ {"qty":3.2,"price":1.2},
+ {"qty":3.2,"price":1.2},
+ {"qty":3.2,"price":1.2},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1}},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1}},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1}},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"O"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"O"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Ol"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Oli"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Oliv"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olive"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":""},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":""},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"F"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"F"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fr"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fre"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fres"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh "},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh e"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh ev"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh eve"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh ever"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every "},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every d"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every da"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every day"},
+ {"qty":3.2,"price":1.2,"modifier":{"fixedValue":1},"name":"Olives","description":"Fresh every day"}
+]
+
+import { Bill } from '../bill';
+
+describe('Charge Stress Test', () => {
+  var bill;
+  beforeEach(function() {
+    bill = new Bill();
+  });
+
+  it('create delete bill charges', () => {
+    let charge;
+    samples.forEach(function(sample) {
+      charge = bill.charges.new(sample);
+      bill.charges.remove(charge);
+    });
+  });
+});

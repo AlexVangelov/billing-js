@@ -81,6 +81,10 @@ export class Modifier extends BillItem {
     if (this.charge) delete this.charge.modifier;
     return delete this;
   }
+
+  update(attributes: IModifierAttributes = {}) :boolean {
+    return true;
+  }
 }
 
 export { ModifiersCollection } from './collection';

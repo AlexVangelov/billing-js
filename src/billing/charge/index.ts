@@ -54,24 +54,7 @@ export class Charge extends BillItem {
    */
   constructor(attributes: IChargeAttributes = {}) {
     super(attributes.bill);
-    if (attributes.name) this.name = attributes.name;
-    this.description = attributes.description;
-    if (attributes.price) this.price = attributes.price;
-    if (attributes.qty) this.qty = attributes.qty;
-    if (attributes.modifier) {
-      if (attributes.modifier.bill) {
-        if (!this.bill) this.bill = attributes.modifier.bill;
-        else if (this.bill !== attributes.modifier.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
-      } else attributes.modifier.bill = this.bill;
-      attributes.modifier.charge = this;
-      if (attributes.modifier instanceof Modifier) {
-        this.modifier = <Modifier> attributes.modifier; 
-      } else {
-        this.modifier = new Modifier(attributes.modifier);
-      }
-      if (this.bill) this.bill.modifiers.add(this.modifier);
-    }
-    if (this.bill) this.bill.charges.add(this);
+    this.update(attributes);
   }
 
   /**
@@ -121,6 +104,28 @@ export class Charge extends BillItem {
   delete():Boolean {
     if (this.bill) this.bill.charges.remove(this);
     return delete this;
+  }
+
+  update(attributes: IChargeAttributes = {}) :boolean {
+    if (attributes.name) this.name = attributes.name;
+    this.description = attributes.description;
+    if (attributes.price) this.price = attributes.price;
+    if (attributes.qty) this.qty = attributes.qty;
+    if (attributes.modifier) {
+      if (attributes.modifier.bill) {
+        if (!this.bill) this.bill = attributes.modifier.bill;
+        else if (this.bill !== attributes.modifier.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
+      } else attributes.modifier.bill = this.bill;
+      attributes.modifier.charge = this;
+      if (attributes.modifier instanceof Modifier) {
+        this.modifier = <Modifier> attributes.modifier; 
+      } else {
+        this.modifier = new Modifier(attributes.modifier);
+      }
+      if (this.bill) this.bill.modifiers.add(this.modifier);
+    }
+    if (this.bill) this.bill.charges.add(this);
+    return true;
   }
 }
 

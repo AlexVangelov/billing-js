@@ -16,6 +16,7 @@ module.exports = {
     library: "billingJs"
   },
   resolve: {
+    modulesDirectories: ['node_modules'],
     extensions: ['', '.js', '.ts']
   },
   module: {

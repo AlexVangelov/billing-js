@@ -59,4 +59,12 @@ export abstract class BillCollection extends Array<BillItem> {
       return true;
     } else return false;
   }
+
+  save() :boolean {
+    let success = true;
+    this.forEach((item)=> {
+      if (!item.save()) success = success || false;
+    });
+    return success;
+  }
 }

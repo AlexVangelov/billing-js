@@ -45,6 +45,10 @@ export class Payment extends BillItem {
     if (this.bill) this.bill.payments.remove(this);
     return delete this;
   }
+
+  update(attributes: IPaymentAttributes = {}) :boolean {
+    return true;
+  }
 }
 
 export { PaymentsCollection } from './collection';

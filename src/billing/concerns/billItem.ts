@@ -12,15 +12,22 @@ import { ErrorItem } from './errorItem';
  * @export
  * @abstract
  * @class BillItem
- * @extends {ErrorItem}
  */
 export abstract class BillItem {
+
   /**
    * 
    * 
    * @type {Bill}
    */
   bill: Bill;
+
+  /**
+   * 
+   * 
+   * @type {boolean}
+   */
+  isSaved: boolean = false;
   
   /**
    * Creates an instance of BillItem.
@@ -29,5 +36,15 @@ export abstract class BillItem {
    */
   constructor(bill: Bill) {
     this.bill = bill;
+  }
+
+  /**
+   * 
+   * 
+   * @returns {boolean}
+   */
+  save() :boolean {
+    this.isSaved = true;
+    return this.isSaved;
   }
 }

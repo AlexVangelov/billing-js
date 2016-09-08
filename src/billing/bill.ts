@@ -16,6 +16,12 @@ import { ErrorItem } from './concerns/errorItem';
  * @extends {ErrorItem}
  */
 export class Bill {
+  isSaved: boolean;
+
+  constructor(attributes :any = {}) {
+
+  }
+
   /**
    * 
    * 
@@ -51,5 +57,17 @@ export class Bill {
    */
   balance() :number {
     return this.total() - this.payments.sum();
+  }
+
+  save() :boolean {
+    let success = true;
+    if (!this.charges.save()) success = success || true;
+    if (!this.modifiers.save()) success = success || true;
+    if (!this.payments.save()) success = success || true;
+    return this.isSaved = success;
+  }
+
+  static new(attributes :any = {}) :Bill {
+    return new Bill(attributes);
   }
 }

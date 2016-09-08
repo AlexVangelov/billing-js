@@ -1,6 +1,9 @@
 # billing
 Billing Module JS
 
+[![npm version](https://badge.fury.io/js/billing.svg)](https://badge.fury.io/js/billing)
+
+
     npm install billing
 
 ## Usage
