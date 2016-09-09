@@ -13,7 +13,7 @@ describe('Charge', () => {
   it('default values', () => {
     let bill = new Bill();
     let charge = new Charge({ bill: bill });
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     expect(charge.price).toEqual(0);
     expect(charge.qty).toEqual(1);
     expect(charge.name).toEqual('');
@@ -43,14 +43,14 @@ describe('Charge', () => {
   it('modifier', ()=> {
     let modifier = new Modifier();
     let charge = new Charge({ modifier: modifier });
-    expect(charge.modifier instanceof Modifier).toBeTruthy();
-    expect(charge.modifier.charge).toEqual(charge);
+    expect(charge.getModifier() instanceof Modifier).toBeTruthy();
+    expect(charge.getModifier().getCharge()).toEqual(charge);
   });
 
   it('modifier from attributes', ()=> {
     let charge = new Charge({ modifier: {} });
-    expect(charge.modifier instanceof Modifier).toBeTruthy();
-    expect(charge.modifier.charge).toEqual(charge);
+    expect(charge.getModifier() instanceof Modifier).toBeTruthy();
+    expect(charge.getModifier().getCharge()).toEqual(charge);
   });
 
   it('propagates self to bill charges', ()=> {
@@ -82,7 +82,7 @@ describe('Charge', () => {
   it('modify propagate modifier to bill modifiers', ()=> {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, qty: 3, price: 4});
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     let modifier = charge.modify({ percentRatio: 0.4 });
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.modifiers[0]).toEqual(modifier);
@@ -91,7 +91,7 @@ describe('Charge', () => {
   it('modify propagate modifier to bill modifiers', ()=> {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, qty: 3, price: 4});
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     let modifier = charge.modify({ percentRatio: 0.4 });
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.modifiers[0]).toEqual(modifier);
@@ -100,7 +100,7 @@ describe('Charge', () => {
   it('modify replace propagation', ()=> {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, qty: 3, price: 4});
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     let modifier1 = charge.modify({ percentRatio: 0.4 });
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.modifiers[0]).toEqual(modifier1);
@@ -112,7 +112,7 @@ describe('Charge', () => {
   it('modify epmty', ()=> {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, qty: 3, price: 4});
-    let modifier = charge.modify();
+    let modifier = charge.modify({});
     expect(modifier.value()).toEqual(0);
   });
 
@@ -120,14 +120,14 @@ describe('Charge', () => {
     let bill = new Bill();
     let charge = new Charge({ qty: 3, price: 4});
     let modifier = charge.modify({ bill: bill});
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
   });
 
   it('indirect bill through modifier', ()=> {
     let bill = new Bill();
     let modifier = new Modifier({ bill: bill, fixedValue: 3});
     let charge = new Charge({ price: 1, modifier: modifier });
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.charges.length).toEqual(1);
   });
@@ -136,7 +136,7 @@ describe('Charge', () => {
     let bill = new Bill();
     let charge = new Charge({ price: 1 });
     let modifier = charge.modify({ bill: bill, charge: charge, percentRatio: 0.4 });
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.charges.length).toEqual(1);
   });

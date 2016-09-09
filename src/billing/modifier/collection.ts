@@ -7,7 +7,6 @@ import { Modifier } from './index';
 import { Bill } from '../bill';
 import { BillCollection } from '../concerns/billCollection';
 import { IModifierAttributes } from './interface';
-import { ErrorItem } from '../concerns/errorItem';
 
 /**
  * 

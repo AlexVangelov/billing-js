@@ -30,10 +30,8 @@ export class Payment extends BillItem {
     super(attributes.bill);
     if (!attributes.value) {
       if (this.bill) this.value = this.bill.total() - this.bill.payments.sum();
-    } else {
-      this.value = attributes.value;
     }
-    if (this.bill) this.bill.payments.add(this);
+    this.update(attributes);
   }
 
   /**
@@ -47,6 +45,9 @@ export class Payment extends BillItem {
   }
 
   update(attributes: IPaymentAttributes = {}) :boolean {
+    if (attributes.bill) this.bill = attributes.bill;
+    if (attributes.value) this.value = attributes.value;
+    if (this.bill && !~this.bill.payments.indexOf(this)) this.bill.payments.add(this);
     return true;
   }
 }

@@ -8,15 +8,16 @@
  * 
  * @export
  * @abstract
- * @class ErrorItem
+ * @class ValidationModel
  */
-export abstract class ErrorItem {
+export abstract class ValidationModel {
+  errors: any;
   /**
    * 
    * 
    * @static
    */
-  static MAP = {
+  protected static MAP = {
     accepted: "must be accepted",
     blank: "can't be blank",
     present: "must be blank",

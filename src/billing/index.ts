@@ -26,6 +26,6 @@ export class Billing {
    * Creates an instance of Billing.
    * 
    */
-  constructor(config: any) {
+  constructor(config: any = {}) {
   }
 }

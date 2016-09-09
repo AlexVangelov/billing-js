@@ -6,7 +6,7 @@
 import { ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
-import { ErrorItem } from './concerns/errorItem';
+import { ValidationModel } from './concerns/validationModel';
 
 /**
  * 
@@ -15,11 +15,11 @@ import { ErrorItem } from './concerns/errorItem';
  * @class Bill
  * @extends {ErrorItem}
  */
-export class Bill {
+export class Bill extends ValidationModel {
   isSaved: boolean;
 
   constructor(attributes :any = {}) {
-
+    super();
   }
 
   /**

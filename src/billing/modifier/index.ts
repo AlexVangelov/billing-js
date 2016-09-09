@@ -20,7 +20,7 @@ export class Modifier extends BillItem {
    * 
    * @type {Charge}
    */
-  charge :Charge;
+  protected charge :Charge;
   /**
    * 
    * 
@@ -41,18 +41,17 @@ export class Modifier extends BillItem {
    */
   constructor(attributes: IModifierAttributes = {}) {
     super(attributes.bill);
-    this.percentRatio = attributes.percentRatio;
-    if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
-    this.charge = attributes.charge;
-    if (this.charge) {
-      if (this.charge.bill) {
-        if (!this.bill) this.bill = this.charge.bill;
-        else if (this.bill !== this.charge.bill) throw new ReferenceError('Modifier with charge belonging to another bill.');
-        if (this.charge.modifier) this.charge.bill.modifiers.remove(this.charge.modifier);
-      }
-      this.charge.modifier = this;
-    }
-    if (this.bill) this.bill.modifiers.add(this);
+    this.update(attributes);
+  }
+
+  getCharge() :Charge {
+    return this.charge;
+  }
+
+  setCharge(charge :Charge) :boolean {
+    if (charge instanceof Charge) this.charge = charge;
+    else throw new ReferenceError('Set Charge by attributes is not allowed for modifier');
+    return true;
   }
 
   /**
@@ -78,11 +77,26 @@ export class Modifier extends BillItem {
    */
   delete():Boolean {
     if (this.bill) this.bill.modifiers.remove(this);
-    if (this.charge) delete this.charge.modifier;
+    if (this.charge) delete this.charge.deleteModifier();
     return delete this;
   }
 
   update(attributes: IModifierAttributes = {}) :boolean {
+    if (attributes.bill) this.bill = attributes.bill;
+    if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
+    if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
+    if (attributes.charge) this.charge = attributes.charge;
+    if (this.charge) {
+      let chargeBill = this.charge.getBill();
+      if (chargeBill) {
+        if (!this.bill) this.bill = chargeBill;
+        else if (this.bill !== chargeBill) throw new ReferenceError('Modifier with charge belonging to another bill.');
+        let chargeModifier = this.charge.getModifier();
+        if (chargeModifier) chargeBill.modifiers.remove(chargeModifier);
+      }
+      if (this.charge.getModifier() !== this) this.charge.modify(this);
+    }
+    if (this.bill && !~this.bill.modifiers.indexOf(this)) this.bill.modifiers.add(this);
     return true;
   }
 }

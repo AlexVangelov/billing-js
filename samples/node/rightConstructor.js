@@ -33,3 +33,4 @@ console.log('Charges: $' + bill.charges.sum().toFixed(2) + ' (' + bill.charges.l
 console.log('Modifiers: $' + bill.modifiers.sum().toFixed(2) + ' (' + bill.modifiers.length + ')');
 console.log('Payments: $' + bill.payments.sum().toFixed(2) + ' (' + bill.payments.length + ')');
 console.log('Balance: $' + bill.balance().toFixed());
+// console.log(bill);

@@ -25,7 +25,7 @@ describe('Modifier', () => {
   it('charge percent', ()=> {
     let charge = new Charge({ qty: 2, price: 10.5 });
     let modifier = new Modifier({ charge: charge, percentRatio: 0.3 });
-    expect(charge.modifier).toEqual(modifier);
+    expect(charge.getModifier()).toEqual(modifier);
     expect(modifier.value()).toEqual((21 * 30 ) / 100);
   });
 
@@ -85,7 +85,7 @@ describe('Modifier', () => {
     let bill = new Bill();
     let charge = new Charge({ price: 4, bill: bill });
     let modifier = new Modifier({ fixedValue: 1, charge: charge });
-    expect(modifier.bill).toEqual(bill);
+    expect(modifier.getBill()).toEqual(bill);
     expect(bill.modifiers.length).toEqual(1);
     expect(bill.charges.length).toEqual(1);
   });
@@ -98,9 +98,9 @@ describe('Modifier', () => {
   it('delete with charge', ()=> {
     let charge = new Charge();
     let modifier = new Modifier({ charge: charge, fixedValue: 0.3 });
-    expect(charge.modifier).toBeDefined();
+    expect(charge.getBill()).not.toBeDefined();
     expect(modifier.delete()).toBeTruthy();
-    expect(charge.modifier).not.toBeDefined();
+    expect(charge.getModifier()).not.toBeDefined();
   });
 
   it('delete with bill charge', ()=> {

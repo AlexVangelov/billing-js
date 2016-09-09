@@ -7,6 +7,23 @@ Billing Module JS
     npm install billing
 
 ## Usage
+
+### Right constructor  ([samples/node/rightConstructor.js](samples/node/rightConstructor.js))
+```javascript
+var Bill = require('billing').BillingBill;
+
+var bill = new Bill();
+bill.charges.new({ price: 1.2 });
+
+var charge = bill.charges.new({ qty: 2.5, price: 2.4});
+charge.modify({ fixedValue: 1.5 });
+
+bill.charges.new({ price: 3, modifier: { percentRatio: 0.5 } })
+bill.modifiers.new({ percentRatio: -0.1 });
+bill.payments.new({ value: 1 });
+bill.payments.new();
+```
+
 ### Left constructor ([samples/node/leftConstructor.js](samples/node/leftConstructor.js))
 ```javascript
 var billing = require('billing');
@@ -36,24 +53,6 @@ new Payment({ bill: bill, value: 1 });
 
 //Pay the rest
 new Payment({ bill: bill });
-```
-
-### Right constructor  ([samples/node/rightConstructor.js](samples/node/rightConstructor.js))
-```javascript
-var billing = require('../../');
-
-var Bill = billing.BillingBill;
-
-var bill = new Bill();
-bill.charges.new({ price: 1.2 });
-
-var charge = bill.charges.new({ qty: 2.5, price: 2.4});
-charge.modify({ fixedValue: 1.5 });
-
-bill.charges.new({ price: 3, modifier: { percentRatio: 0.5 } })
-bill.modifiers.new({ percentRatio: -0.1 });
-bill.payments.new({ value: 1 });
-bill.payments.new();
 ```
 
 ### Bill instance

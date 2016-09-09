@@ -20,7 +20,7 @@ export abstract class BillCollection extends Array<BillItem> {
    * 
    * @type {Bill}
    */
-  bill: Bill;
+  protected bill: Bill;
 
   /**
    * Creates an instance of BillCollection.
@@ -32,6 +32,10 @@ export abstract class BillCollection extends Array<BillItem> {
     this.bill = bill;
   }
 
+  getBill() :Bill {
+    return this.bill;
+  }
+
   /**
    * 
    * 
@@ -39,9 +43,10 @@ export abstract class BillCollection extends Array<BillItem> {
    * @returns {BillItem}
    */
   add(item: BillItem) :BillItem {
-    if (item.bill) {
-      if (item.bill !== this.bill) throw new ReferenceError("Trying to add cross bill item. Use 'transfer'.");
-    } else item.bill = this.bill;
+    let itemBill = item.getBill();
+    if (itemBill) {
+      if (itemBill !== this.bill) throw new ReferenceError("Trying to add cross bill item. Use 'transfer'.");
+    } else item.update({ bill: this.bill });
     if (!~this.indexOf(item)) this.push(item);
     return item;
   }

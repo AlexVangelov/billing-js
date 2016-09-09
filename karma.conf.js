@@ -13,17 +13,20 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      "**/*.ts": ["karma-typescript", "coverage"]
+      "**/*.ts": ["karma-typescript"]
     },
 
-    reporters: ["dots", "karma-typescript", "coverage"],
+    reporters: ["dots", "karma-typescript"],
 
     browsers: ["PhantomJS"],
     
     singleRun: true,
 
-    coverageReporter: {
-      type: "text-summary"
+    karmaTypescriptConfig: {
+      reports: {
+        "html": "coverage",
+        "text-summary": ""
+      }
     }
 
   });

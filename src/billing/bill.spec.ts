@@ -10,9 +10,9 @@ import { Bill } from './bill';
 describe('Bill', ()=> {
   it('init', () => {
     let bill = new Bill();
-    expect(bill.charges.bill).toEqual(bill);
-    expect(bill.modifiers.bill).toEqual(bill);
-    expect(bill.payments.bill).toEqual(bill);
+    expect(bill.charges.getBill()).toEqual(bill);
+    expect(bill.modifiers.getBill()).toEqual(bill);
+    expect(bill.payments.getBill()).toEqual(bill);
   });
 
   it('total', ()=> {

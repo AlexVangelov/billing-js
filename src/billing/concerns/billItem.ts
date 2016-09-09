@@ -4,8 +4,12 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { Bill } from '../bill';
-import { ErrorItem } from './errorItem';
+import { ValidationModel } from './validationModel';
+import { IChargeAttributes } from '../charge/interface';
+import { IModifierAttributes } from '../modifier/interface';
+import { IPaymentAttributes } from '../payment/interface';
 
+export declare type BillItemAttributes = IChargeAttributes | IModifierAttributes | IPaymentAttributes;
 /**
  * 
  * 
@@ -13,14 +17,14 @@ import { ErrorItem } from './errorItem';
  * @abstract
  * @class BillItem
  */
-export abstract class BillItem {
+export abstract class BillItem extends ValidationModel {
 
   /**
    * 
    * 
    * @type {Bill}
    */
-  bill: Bill;
+  protected bill: Bill;
 
   /**
    * 
@@ -35,7 +39,21 @@ export abstract class BillItem {
    * @param {Bill} bill
    */
   constructor(bill: Bill) {
+    super();
     this.bill = bill;
+  }
+
+  abstract update(attribute :BillItemAttributes) :boolean;
+
+  /**
+   * 
+   * 
+   * @returns {Bill}
+   * 
+   * @memberOf BillItem
+   */
+  getBill() :Bill {
+    return this.bill;
   }
 
   /**

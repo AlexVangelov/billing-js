@@ -19,14 +19,14 @@ describe('ChargesCollection', () => {
 
   it('init', () => {
     let collection = new ChargesCollection(bill);
-    expect(collection.bill).toEqual(bill);
+    expect(collection.getBill()).toEqual(bill);
   });
 
   it('new', ()=> {
     let collection = new ChargesCollection(bill);
     let charge = collection.new();
     expect(charge instanceof Charge).toBeTruthy();
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     expect(collection.length).toEqual(1);
     charge = collection.new({ price: 2.5 });
     expect(collection.length).toEqual(2);
@@ -37,7 +37,7 @@ describe('ChargesCollection', () => {
     let collection = new ChargesCollection(bill);
     let charge = new Charge();
     let addedCharge = collection.add(charge);
-    expect(addedCharge.bill).toEqual(bill);
+    expect(addedCharge.getBill()).toEqual(bill);
     expect(collection[0]).toEqual(addedCharge);
     expect(collection.length).toEqual(1);
   });
@@ -74,7 +74,7 @@ describe('ChargesCollection', () => {
   it('remove new', ()=> {
     let collection = new ChargesCollection(bill);
     let charge = collection.new();
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
     expect(collection[0]).toEqual(charge);
     expect(collection.length).toEqual(1);
     expect(collection.remove(charge)).toBeTruthy();
@@ -85,7 +85,7 @@ describe('ChargesCollection', () => {
     let collection = new ChargesCollection(bill);
     let charge = new Charge();
     let addedCharge = collection.add(charge);
-    expect(addedCharge.bill).toEqual(bill);
+    expect(addedCharge.getBill()).toEqual(bill);
     expect(collection[0]).toEqual(addedCharge);
     expect(collection.length).toEqual(1);
     expect(collection.remove(addedCharge)).toBeTruthy();
@@ -116,7 +116,7 @@ describe('ChargesCollection', () => {
     let charge = collection.new({ bill: bill2 });
     expect(collection.length).toEqual(1);
     expect(bill2.charges.length).toEqual(0);
-    expect(charge.bill).toEqual(bill);
+    expect(charge.getBill()).toEqual(bill);
   });
 
   it('add cross bill', ()=> {
