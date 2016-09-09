@@ -13,12 +13,18 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      "**/*.ts": ["karma-typescript"]
+      "**/*.ts": ["karma-typescript", "coverage"]
     },
 
-    reporters: ["progress", "karma-typescript"],
+    reporters: ["dots", "karma-typescript", "coverage"],
 
     browsers: ["PhantomJS"],
-    singleRun: true
+    
+    singleRun: true,
+
+    coverageReporter: {
+      type: "text-summary"
+    }
+
   });
 };
