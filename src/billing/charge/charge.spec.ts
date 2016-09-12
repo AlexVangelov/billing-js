@@ -30,14 +30,14 @@ describe('Charge', () => {
 
   it('value', ()=> {
     let charge = new Charge({ price: 1.12 });
-    expect(charge.value()).toEqual(1.12);
+    expect(charge.value).toEqual(1.12);
   });
 
   it('value with qty', ()=> {
     let charge = new Charge({ qty: 2, price: 1.12 });
-    expect(charge.value()).toEqual(2.24);
+    expect(charge.value).toEqual(2.24);
     charge.qty = 1.5;
-    expect(Math.round(charge.value() * 100) / 100).toEqual(1.68);
+    expect(Math.round(charge.value * 100) / 100).toEqual(1.68);
   });
 
   it('modifier', ()=> {
@@ -70,13 +70,13 @@ describe('Charge', () => {
   it('modify fixed', ()=> {
     let charge = new Charge();
     let modifier = charge.modify({ fixedValue: 3 });
-    expect(modifier.value()).toEqual(3);
+    expect(modifier.value).toEqual(3);
   });
 
   it('modify percent', ()=> {
     let charge = new Charge({ qty: 3, price: 4});
     let modifier = charge.modify({ percentRatio: 0.4 });
-    expect(Math.round(modifier.value() * 100) / 100).toEqual((12 * 40) / 100);
+    expect(Math.round(modifier.value * 100) / 100).toEqual((12 * 40) / 100);
   });
 
   it('modify propagate modifier to bill modifiers', ()=> {
@@ -113,7 +113,7 @@ describe('Charge', () => {
     let bill = new Bill();
     let charge = new Charge({ bill: bill, qty: 3, price: 4});
     let modifier = charge.modify({});
-    expect(modifier.value()).toEqual(0);
+    expect(modifier.value).toEqual(0);
   });
 
   it('modify propagate bill', ()=> {

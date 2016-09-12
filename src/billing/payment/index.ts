@@ -29,7 +29,7 @@ export class Payment extends BillItem {
   constructor(attributes: IPaymentAttributes = {}) {
     super(attributes.bill);
     if (!attributes.value) {
-      if (this.bill) this.value = this.bill.total() - this.bill.payments.sum();
+      if (this.bill) this.value = this.bill.total - this.bill.payments.sum();
     }
     this.update(attributes);
   }

@@ -68,7 +68,7 @@ export class Charge extends BillItem {
    * 
    * @returns {number}
    */
-  value() :number {
+  get value() :number {
     return (this.qty * this.price);
   }
 
@@ -77,8 +77,8 @@ export class Charge extends BillItem {
    * 
    * @returns {number}
    */
-  finalValue() :number {
-    return this.modifier ? this.value() + this.modifier.value() : this.value();
+  get finalValue() :number {
+    return this.modifier ? this.value + this.modifier.value : this.value;
   }
 
   /**

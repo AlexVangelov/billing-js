@@ -58,11 +58,11 @@ export class Modifier extends BillItem {
    * 
    * @returns {number}
    */
-  value(): number {
+  get value(): number {
     if (this.charge || this.bill) {
       if (!this.percentRatio) return this.fixedValue;
       if (this.charge) {
-        return this.charge.value() * this.percentRatio;
+        return this.charge.value * this.percentRatio;
       } else {
         return this.bill.charges.finalSum() * this.percentRatio;
       }

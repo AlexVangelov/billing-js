@@ -46,7 +46,7 @@ export class Bill extends ValidationModel {
    * 
    * @returns {number}
    */
-  total() :number {
+  get total() :number {
     return this.charges.sum() + this.modifiers.sum();
   }
 
@@ -55,8 +55,8 @@ export class Bill extends ValidationModel {
    * 
    * @returns {number}
    */
-  balance() :number {
-    return this.total() - this.payments.sum();
+  get balance() :number {
+    return this.total - this.payments.sum();
   }
 
   save() :boolean {

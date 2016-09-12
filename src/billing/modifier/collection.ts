@@ -36,8 +36,10 @@ export class ModifiersCollection extends BillCollection {
   sum() :number {
     let sum = 0;
     this.forEach((modifier)=> {
-      sum += (<Modifier> modifier).value();
+      sum += (<Modifier> modifier).value;
     });
     return sum;
   }
+
+  
 }
