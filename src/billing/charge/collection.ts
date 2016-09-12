@@ -36,13 +36,13 @@ export class ChargesCollection extends BillCollection {
    * @returns {Charge}
    */
   add(charge: Charge) :Charge {
-    let chargeBill = charge.getBill()
+    let chargeBill = charge.bill
     if (chargeBill) {
       if (chargeBill !== this.bill) throw new ReferenceError("Trying to add cross bill charge. Use 'transfer'.");
     } else charge.update({ bill: this.bill });
     if (!~this.indexOf(charge))this.push(charge);
 
-    let chargeModifier = charge.getModifier();
+    let chargeModifier = charge.modifier;
     if (chargeModifier) this.bill.modifiers.add(chargeModifier);
     return charge;
   }
@@ -56,7 +56,7 @@ export class ChargesCollection extends BillCollection {
   remove(charge: Charge) :boolean {
     let index = this.indexOf(charge);
     if (!!~index) {
-      let chargeModifier = charge.getModifier();
+      let chargeModifier = charge.modifier;
       if (chargeModifier) this.bill.modifiers.remove(chargeModifier);
       this.splice(index, 1);
       return true;

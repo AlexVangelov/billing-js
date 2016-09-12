@@ -20,7 +20,7 @@ export class Modifier extends BillItem {
    * 
    * @type {Charge}
    */
-  protected charge :Charge;
+  private _charge :Charge;
   /**
    * 
    * 
@@ -44,14 +44,13 @@ export class Modifier extends BillItem {
     this.update(attributes);
   }
 
-  getCharge() :Charge {
-    return this.charge;
+  get charge() :Charge {
+    return this._charge;
   }
 
-  setCharge(charge :Charge) :boolean {
-    if (charge instanceof Charge) this.charge = charge;
+  set charge(charge :Charge) {
+    if (charge instanceof Charge) this._charge = charge;
     else throw new ReferenceError('Set Charge by attributes is not allowed for modifier');
-    return true;
   }
 
   /**
@@ -82,19 +81,19 @@ export class Modifier extends BillItem {
   }
 
   update(attributes: IModifierAttributes = {}) :boolean {
-    if (attributes.bill) this.bill = attributes.bill;
+    if (attributes.bill) this._bill = attributes.bill;
     if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
     if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
-    if (attributes.charge) this.charge = attributes.charge;
+    if (attributes.charge) this._charge = attributes.charge;
     if (this.charge) {
-      let chargeBill = this.charge.getBill();
+      let chargeBill = this.charge.bill;
       if (chargeBill) {
-        if (!this.bill) this.bill = chargeBill;
+        if (!this.bill) this._bill = chargeBill;
         else if (this.bill !== chargeBill) throw new ReferenceError('Modifier with charge belonging to another bill.');
-        let chargeModifier = this.charge.getModifier();
+        let chargeModifier = this.charge.modifier;
         if (chargeModifier) chargeBill.modifiers.remove(chargeModifier);
       }
-      if (this.charge.getModifier() !== this) this.charge.modify(this);
+      if (this.charge.modifier !== this) this.charge.modify(this);
     }
     if (this.bill && !~this.bill.modifiers.indexOf(this)) this.bill.modifiers.add(this);
     return true;

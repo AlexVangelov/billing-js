@@ -19,17 +19,17 @@ describe('ChargesCollection', () => {
 
   it('init', () => {
     let collection = new ModifiersCollection(bill);
-    expect(collection.getBill()).toEqual(bill);
+    expect(collection.bill).toEqual(bill);
   });
 
   it('new', ()=> {
     let collection = new ModifiersCollection(bill);
     let modifier = collection.new();
     expect(modifier instanceof Modifier).toBeTruthy();
-    expect(modifier.getBill()).toEqual(bill);
+    expect(modifier.bill).toEqual(bill);
     expect(collection.length).toEqual(1);
     modifier = collection.new({ fixedValue: 2.5 });
-    expect(modifier.getBill()).toEqual(bill);
+    expect(modifier.bill).toEqual(bill);
     expect(modifier.value()).toEqual(2.5);
     expect(bill.modifiers.sum()).toEqual(2.5);
     expect(collection.length).toEqual(2);
@@ -40,7 +40,7 @@ describe('ChargesCollection', () => {
     let collection = new ModifiersCollection(bill);
     let modifier = new Modifier();
     let addedModifier = collection.add(modifier);
-    expect(addedModifier.getBill()).toEqual(bill);
+    expect(addedModifier.bill).toEqual(bill);
     expect(collection[0]).toEqual(addedModifier);
   });
 
@@ -58,7 +58,7 @@ describe('ChargesCollection', () => {
   it('remove', ()=> {
     let collection = new ModifiersCollection(bill);
     let modifier = collection.new();
-    expect(modifier.getBill()).toEqual(bill);
+    expect(modifier.bill).toEqual(bill);
     expect(collection[0]).toEqual(modifier);
     expect(collection.remove(modifier)).toBeTruthy();
   });

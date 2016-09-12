@@ -6,7 +6,7 @@
 import { ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
-import { ValidationModel } from './concerns/validationModel';
+import { ValidationModel } from './concerns/validations';
 
 /**
  * 

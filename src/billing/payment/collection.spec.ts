@@ -19,17 +19,17 @@ describe('PaymentsCollection', () => {
 
   it('init', () => {
     let collection = new PaymentsCollection(bill);
-    expect(collection.getBill()).toEqual(bill);
+    expect(collection.bill).toEqual(bill);
   });
 
   it('new', ()=> {
     let collection = new PaymentsCollection(bill);
     let payment = collection.new();
     expect(payment instanceof Payment).toBeTruthy();
-    expect(payment.getBill()).toEqual(bill);
+    expect(payment.bill).toEqual(bill);
     expect(collection.length).toEqual(1);
     payment = collection.new({ value: 2.5 });
-    expect(payment.getBill()).toEqual(bill);
+    expect(payment.bill).toEqual(bill);
     expect(bill.payments.sum()).toEqual(2.5);
     expect(collection.length).toEqual(2);
     expect(payment.value).toEqual(2.5);
@@ -39,7 +39,7 @@ describe('PaymentsCollection', () => {
     let collection = new PaymentsCollection(bill);
     let payment = new Payment();
     let addedPayment = collection.add(payment);
-    expect(addedPayment.getBill()).toEqual(bill);
+    expect(addedPayment.bill).toEqual(bill);
     expect(collection[0]).toEqual(addedPayment);
     expect(collection.length).toEqual(1);
   });
@@ -58,7 +58,7 @@ describe('PaymentsCollection', () => {
   it('remove', ()=> {
     let collection = new PaymentsCollection(bill);
     let payment = collection.new();
-    expect(payment.getBill()).toEqual(bill);
+    expect(payment.bill).toEqual(bill);
     expect(collection[0]).toEqual(payment);
     expect(collection.remove(payment)).toBeTruthy();
   });

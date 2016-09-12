@@ -23,7 +23,7 @@ export class Charge extends BillItem {
    * 
    * @type {Modifier}
    */
-  protected modifier :Modifier;
+  private _modifier :Modifier;
   /**
    * 
    * 
@@ -59,8 +59,8 @@ export class Charge extends BillItem {
     this.update(attributes);
   }
 
-  getModifier() :Modifier {
-    return this.modifier;
+  get modifier() :Modifier {
+    return this._modifier;
   }
 
   /**
@@ -89,16 +89,16 @@ export class Charge extends BillItem {
    */
   modify(modifierOrAttributes: ModifierOrAttributes = {}) :Modifier {
     if (modifierOrAttributes instanceof Modifier) {
-      this.modifier = modifierOrAttributes;
+      this._modifier = modifierOrAttributes;
     } else {
       let attributes = <IModifierAttributes> modifierOrAttributes;
       attributes.charge = this;
       if (attributes.bill) {
-        if (!this.bill) this.bill = attributes.bill;
+        if (!this.bill) this._bill = attributes.bill;
         else if (attributes.bill !== this.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
       } else attributes.bill = this.bill;
       if (this.modifier) this.bill.modifiers.remove(this.modifier);
-      this.modifier = new Modifier(attributes);
+      this._modifier = new Modifier(attributes);
       if (this.bill) {
         this.bill.modifiers.add(this.modifier);
         this.bill.charges.add(this);
@@ -109,7 +109,7 @@ export class Charge extends BillItem {
 
   deleteModifier() :boolean {
     // ? delete modifier
-    delete this.modifier;
+    delete this._modifier;
     return true;
   };
 
@@ -124,7 +124,7 @@ export class Charge extends BillItem {
   }
 
   update(attributes: IChargeAttributes = {}) :boolean {
-    if (attributes.bill) this.bill = attributes.bill;
+    if (attributes.bill) this._bill = attributes.bill;
     if (attributes.name) this.name = attributes.name;
     if (attributes.description) this.description = attributes.description;
     if (attributes.price) this.price = attributes.price;
@@ -132,20 +132,20 @@ export class Charge extends BillItem {
     if (attributes.modifier) {
       if (attributes.modifier instanceof Modifier) {
         let modifier = <Modifier> attributes.modifier;
-        let modifierBill = modifier.getBill();
+        let modifierBill = modifier.bill;
         if (modifierBill) {
-          if (!this.bill) this.bill = modifierBill;
+          if (!this.bill) this._bill = modifierBill;
           else if (this.bill !== modifierBill) throw new ReferenceError('Charge with modifier belonging to another bill.');
         } else modifier.update({ bill: this.bill });
-        if (modifier.getCharge() !== this) modifier.setCharge(this);
-        this.modifier = modifier; 
+        if (modifier.charge !== this) modifier.charge = this;
+        this._modifier = modifier; 
       } else {
         if (attributes.modifier.bill) {
-        if (!this.bill) this.bill = attributes.modifier.bill;
+        if (!this.bill) this._bill = attributes.modifier.bill;
           else if (this.bill !== attributes.modifier.bill) throw new ReferenceError('Charge with modifier belonging to another bill.');
         } else attributes.modifier.bill = this.bill;
         attributes.modifier.charge = this;
-        this.modifier = new Modifier(attributes.modifier);
+        this._modifier = new Modifier(attributes.modifier);
       }
       if (this.bill) this.bill.modifiers.add(this.modifier);
     }
@@ -154,4 +154,5 @@ export class Charge extends BillItem {
   }
 }
 
+Charge.validate('price', { presence: true, greaterThan: 0 });
 export { ChargesCollection } from './collection';
