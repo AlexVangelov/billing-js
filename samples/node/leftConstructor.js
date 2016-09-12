@@ -31,9 +31,9 @@ new Payment({ bill: bill, value: 1 });
 //Pay the rest
 new Payment({ bill: bill });
 
-console.log('Total: $' + bill.total().toFixed(2));
+console.log('Total: $' + bill.total.toFixed(2));
 console.log('Charges: $' + bill.charges.sum().toFixed(2) + ' (' + bill.charges.length + ')');
 console.log('Modifiers: $' + bill.modifiers.sum().toFixed(2) + ' (' + bill.modifiers.length + ')');
 console.log('Payments: $' + bill.payments.sum().toFixed(2) + ' (' + bill.payments.length + ')');
-console.log('Balance: $' + bill.balance().toFixed());
+console.log('Balance: $' + bill.balance.toFixed());
 //console.log(bill);

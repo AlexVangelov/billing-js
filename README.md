@@ -60,8 +60,8 @@ new Payment({ bill: bill });
 bill.charges    //Charge collection
 bill.modifiers  //Modifier collection
 bill.payments   //Payment collection
-bill.total()    //The whole number or amount (charges and modifiers)
-bill.balance()  //Bill remainder (total - payments)
+bill.total    //The whole number or amount (charges and modifiers)
+bill.balance  //Bill remainder (total - payments)
 ```
 
 ### Billing collections
