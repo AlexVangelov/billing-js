@@ -193,4 +193,24 @@ describe('Charge', () => {
       charge.modify({ bill: bill });
     }).not.toThrowError(ReferenceError);
   });
+
+  describe('validations', function() {
+    it('require bill', function() {
+      let charge = new Charge({ price: 1 });
+      expect(charge.isValid).toBeFalsy();
+      expect(charge.errors.bill).toEqual([{ name: 'blank', message: 'can\'t be blank' }]);
+    });
+
+    it('require price', function() {
+      let charge = new Charge();
+      expect(charge.isValid).toBeFalsy();
+      expect(charge.errors.price[0]).toEqual({ name: 'blank', message: 'can\'t be blank' });
+    });
+
+    it('require positive price', function() {
+      let charge = new Charge({ price: 0 });
+      expect(charge.isValid).toBeFalsy();
+      expect(charge.errors.price[1]).toEqual({ name: 'greaterThan', message: 'must be greater than 0' });
+    });
+  });
 });

@@ -100,4 +100,7 @@ export class Modifier extends BillItem {
   }
 }
 
+Modifier.validates('bill', { presence: true });
+Modifier.validates('value', { presence: true, lessThan: (self)=> { return self.charge.value; } });
+
 export { ModifiersCollection } from './collection';
