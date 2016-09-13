@@ -4,6 +4,7 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { IValidations } from './interface';
+import { ValidationErrors } from './validationErrors';
 
 /**
  * 
@@ -52,9 +53,9 @@ export abstract class ValidationModel {
 
   addError(property: string, mapKey: string, params: any = {}) {
     if (!this.errors) this._errors = {}
-    if (!this.errors[property]) this.errors[property] = [];
+    if (!this.errors[property]) this.errors[property] = new ValidationErrors();
     let message = (ValidationModel.MAP[mapKey] || '').replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
-    this.errors[property].push({ name: mapKey, message: message });
+    this.errors[property].add(mapKey, message);
   }
 
   get errors(): any {
