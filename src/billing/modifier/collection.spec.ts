@@ -10,7 +10,7 @@ import { Bill } from '../bill';
 import { Modifier } from '../modifier';
 import { Charge } from '../charge';
 
-describe('ChargesCollection', () => {
+describe('ModifiersCollection', () => {
   let bill;
   
   beforeEach(()=> {
@@ -28,7 +28,8 @@ describe('ChargesCollection', () => {
     expect(modifier instanceof Modifier).toBeTruthy();
     expect(modifier.bill).toEqual(bill);
     expect(collection.length).toEqual(1);
-    modifier = collection.new({ fixedValue: 2.5 });
+    let charge = bill.charges.new({ price: 1 });
+    modifier = collection.new({ fixedValue: 2.5, charge: charge });
     expect(modifier.bill).toEqual(bill);
     expect(modifier.value).toEqual(2.5);
     expect(bill.modifiers.sum()).toEqual(2.5);

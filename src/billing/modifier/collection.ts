@@ -6,6 +6,7 @@
 import { Modifier } from './index';
 import { Bill } from '../bill';
 import { BillCollection } from '../concerns/billCollection';
+import { BillItem } from '../concerns/billItem';
 import { IModifierAttributes } from './interface';
 
 /**
@@ -41,5 +42,20 @@ export class ModifiersCollection extends BillCollection {
     return sum;
   }
 
+  add(modifier: Modifier) :Modifier {
+    let modifierBill = modifier.bill;
+    if (modifierBill) {
+      if (modifierBill !== this.bill) throw new ReferenceError("Trying to add cross bill item. Use 'transfer'.");
+    } else modifier.update({ bill: this.bill });
+    if (!~this.indexOf(modifier)) {
+      this.forEach((m)=> {
+        if (!(<Modifier>m).charge && !modifier.charge) {
+          throw new ReferenceError('Bill may have only one global modifier');
+        }
+      });
+      this.push(modifier);
+    }
+    return modifier;
+  }
   
 }

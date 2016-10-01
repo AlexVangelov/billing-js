@@ -12,8 +12,9 @@ module.exports = {
   output: {
     path: __dirname + "/dist",
     filename: "[name].js",
-    libraryTarget: "var",
-    library: "billingJs"
+    libraryTarget: "umd",
+    library: "billingJs",
+    umdNamedDefine: true
   },
   resolve: {
     modulesDirectories: ['node_modules'],

@@ -137,4 +137,10 @@ describe('Modifier', () => {
       new Modifier({ bill: bill, charge: charge });
     }).not.toThrowError(ReferenceError);
   });
+
+  it('unique bill', ()=> {
+    let bill = new Bill();
+    bill.modifiers.new({ fixedValue: 1 });
+    expect(()=> { bill.modifiers.new({ fixedValue: 2 }); }).toThrowError(ReferenceError);
+  });
 });
