@@ -101,7 +101,7 @@ export class Modifier extends BillItem {
 }
 
 Modifier.validates('bill', { presence: true });
-Modifier.validates('value', { presence: true, 
+Modifier.validates('value', { notEqualTo: 0, 
   greaterThan: (self)=> { 
     if (self.charge) return -self.charge.value;
     else return self.bill ? -self.bill.total : 0; 

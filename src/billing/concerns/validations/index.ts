@@ -40,6 +40,7 @@ export abstract class ValidationModel {
     model_invalid: "Validation failed: %{errors}",
     not_a_number: "is not a number",
     not_an_integer: "must be an integer",
+    notEqualTo: "must be different from %{value}",
     odd: "must be odd",
     required: "must exist",
     taken: "has already been taken",
@@ -69,20 +70,24 @@ export abstract class ValidationModel {
       for (let v in validations) {
         switch (v) {
           case 'presence':
-            if (!this[property]) this.addError(property, 'blank');
+            if (typeof(this[property]) != 'number' && !this[property]) this.addError(property, 'blank');
             break;
           case 'greaterThan': {
             let count = (validations.greaterThan instanceof Function) ? validations.greaterThan(this) : validations.greaterThan;
             if (this[property] <= count) this.addError(property, 'greaterThan', { count: count })
           } break;
           case 'greaterThanOrEqualTo': {
-            let count = (validations.greaterThan instanceof Function) ? validations.greaterThan(this) : validations.greaterThan;
+            let count = (validations.greaterThanOrEqualTo instanceof Function) ? validations.greaterThanOrEqualTo(this) : validations.greaterThanOrEqualTo;
             if (this[property] < count) this.addError(property, 'greaterThanOrEqualTo', { count: count })
           } break;
           case 'lessThan': {
-            let count = (validations.lessThan instanceof Function) ? validations.lessThan() : validations.greaterThan;
+            let count = (validations.lessThan instanceof Function) ? validations.lessThan(this) : validations.greaterThan;
             if (this[property] >= count) this.addError(property, 'greaterThan', { count: count })
           } break;
+          case 'notEqualTo':
+            let value = (validations.notEqualTo instanceof Function) ? validations.notEqualTo(this) : validations.notEqualTo;
+            if (this[property] === value) this.addError(property, 'notEqualTo', { value: value });
+            break;
         }
       }
     }

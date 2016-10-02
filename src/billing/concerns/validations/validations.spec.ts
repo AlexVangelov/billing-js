@@ -32,7 +32,7 @@ describe('ValidationModel', () => {
       }
     }
     TestModeGreaterThan.validates('property', { greaterThan: 2 });
-    let testModel = new TestModeGreaterThan(-1);    
+    let testModel = new TestModeGreaterThan(2);    
     expect(testModel.isValid).toEqual(false);
     expect(testModel.errors[0]['property']).toEqual({ greaterThan: "must be greater than 2" });
     expect(testModel.errors.messages[0]).toEqual("Property must be greater than 2");
@@ -53,5 +53,23 @@ describe('ValidationModel', () => {
     expect(testModel.isValid).toEqual(false);
     expect(testModel.errors[0]['property']).toEqual({ greaterThan: 'must be greater than 3' });
     expect(testModel.errors.messages[0]).toEqual("Property must be greater than 3");
+  });
+
+  it('greatherThanOrequalTo', function() {
+    class TestModeGreaterThanOrEqualTo extends ValidationModel {
+      property: number;
+      constructor(property? :number) {
+        super();
+        this.property = property;
+      }
+      get getter() {
+        return this.property;
+      }
+    }
+    TestModeGreaterThanOrEqualTo.validates('getter', { greaterThanOrEqualTo: 2 });
+    let testModel = new TestModeGreaterThanOrEqualTo(-1);    
+    expect(testModel.isValid).toEqual(false);
+    expect(testModel.errors[0]['getter']).toEqual({ greaterThanOrEqualTo: 'must be greater than or equal to 2' });
+    expect(testModel.errors.messages[0]).toEqual("Getter must be greater than or equal to 2");
   });
 });

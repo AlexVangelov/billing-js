@@ -165,7 +165,7 @@ describe('Modifier', () => {
     let charge = new Charge({ price: 1 });
     let modifier = charge.modify({ percentRatio: 0 });
     expect(modifier.isValid).toBeFalsy();
-    expect(modifier.errors.messages).toContain("Value can't be blank");
+    expect(modifier.errors.messages).toContain("Value must be different from 0");
   });
 
   it ('update nothing', function() {

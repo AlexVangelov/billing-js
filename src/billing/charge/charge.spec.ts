@@ -201,12 +201,6 @@ describe('Charge', () => {
       expect(charge.errors.messages).toContain("Bill can't be blank");
     });
 
-    it('require price', function() {
-      let charge = new Charge();
-      expect(charge.isValid).toBeFalsy();
-      expect(charge.errors.messages).toContain("Price can't be blank");
-    });
-
     it('require positive price', function() {
       let charge = new Charge({ price: -1 });
       expect(charge.isValid).toBeFalsy();

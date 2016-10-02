@@ -5,4 +5,5 @@ export interface IValidations {
   greaterThan ?:NumberOrFunction;
   greaterThanOrEqualTo ?:NumberOrFunction;
   lessThan ?:NumberOrFunction;
+  notEqualTo ?:any;
 }
