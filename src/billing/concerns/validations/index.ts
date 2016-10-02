@@ -16,7 +16,7 @@ import { ValidationErrors } from './validationErrors';
 export abstract class ValidationModel {
   private static _validations: { [className: string]: { [property: string]: IValidations } } = {};
 
-  private _errors: any;
+  private _errors :ValidationErrors;
   /**
    * 
    * 
@@ -32,7 +32,7 @@ export abstract class ValidationModel {
     even: "must be even",
     exclusion: "is reserved",
     greaterThan: "must be greater than %{count}",
-    greater_than_or_equal_to: "must be greater than or equal to %{count}",
+    greaterThanOrEqualTo: "must be greater than or equal to %{count}",
     inclusion: "is not included in the list",
     invalid: "is invalid",
     less_than: "must be less than %{count}",
@@ -52,10 +52,9 @@ export abstract class ValidationModel {
   }
 
   addError(property: string, mapKey: string, params: any = {}) {
-    if (!this.errors) this._errors = {}
-    if (!this.errors[property]) this.errors[property] = new ValidationErrors();
+    if (!this._errors) this._errors = new ValidationErrors(property);
     let message = (ValidationModel.MAP[mapKey] || '').replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
-    this.errors[property].add(mapKey, message);
+    this._errors.add(property, mapKey, message);
   }
 
   get errors(): any {
@@ -75,6 +74,10 @@ export abstract class ValidationModel {
           case 'greaterThan': {
             let count = (validations.greaterThan instanceof Function) ? validations.greaterThan(this) : validations.greaterThan;
             if (this[property] <= count) this.addError(property, 'greaterThan', { count: count })
+          } break;
+          case 'greaterThanOrEqualTo': {
+            let count = (validations.greaterThan instanceof Function) ? validations.greaterThan(this) : validations.greaterThan;
+            if (this[property] < count) this.addError(property, 'greaterThanOrEqualTo', { count: count })
           } break;
           case 'lessThan': {
             let count = (validations.lessThan instanceof Function) ? validations.lessThan() : validations.greaterThan;

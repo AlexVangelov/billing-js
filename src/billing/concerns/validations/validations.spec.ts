@@ -19,8 +19,8 @@ describe('ValidationModel', () => {
     TestModelPresence.validates('property', { presence: true });
     let testModel = new TestModelPresence();    
     expect(testModel.isValid).toEqual(false);
-    expect(testModel.errors.property[0]).toEqual('blank');
-    expect(testModel.errors.property.messages).toEqual(["can't be blank"]);
+    expect(testModel.errors[0]['property']).toEqual({ blank: "can't be blank" });
+    expect(testModel.errors.messages[0]).toEqual("Property can't be blank");
   });
 
   it('greatherThan', function() {
@@ -34,8 +34,8 @@ describe('ValidationModel', () => {
     TestModeGreaterThan.validates('property', { greaterThan: 2 });
     let testModel = new TestModeGreaterThan(-1);    
     expect(testModel.isValid).toEqual(false);
-    expect(testModel.errors.property[0]).toEqual('greaterThan');
-    expect(testModel.errors.property.messages).toEqual(["must be greater than 2"]);
+    expect(testModel.errors[0]['property']).toEqual({ greaterThan: "must be greater than 2" });
+    expect(testModel.errors.messages[0]).toEqual("Property must be greater than 2");
   });
 
   it('greatherThan function', function() {
@@ -51,7 +51,7 @@ describe('ValidationModel', () => {
     TestModeGreaterThanFunc.validates('property', { greaterThan: (self)=> { return self.a + self.b; } });
     let testModel = new TestModeGreaterThanFunc(-1);    
     expect(testModel.isValid).toEqual(false);
-    expect(testModel.errors.property[0]).toEqual('greaterThan');
-    expect(testModel.errors.property.messages).toEqual(["must be greater than 3"]);
+    expect(testModel.errors[0]['property']).toEqual({ greaterThan: 'must be greater than 3' });
+    expect(testModel.errors.messages[0]).toEqual("Property must be greater than 3");
   });
 });

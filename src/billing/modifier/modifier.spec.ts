@@ -143,4 +143,33 @@ describe('Modifier', () => {
     bill.modifiers.new({ fixedValue: 1 });
     expect(()=> { bill.modifiers.new({ fixedValue: 2 }); }).toThrowError(ReferenceError);
   });
+
+  it('bill validation', ()=> {
+    let modifier = new Modifier({ percentRatio: 1 })
+    expect(modifier.isValid).toBeFalsy();
+    expect(modifier.errors.messages[0]).toEqual("Bill can't be blank");
+  });
+
+  it('percent or value validation', ()=> {
+    let bill = new Bill();
+    let modifier = bill.modifiers.new()
+    expect(modifier.isValid).toBeFalsy();
+  });
+
+  it('set charge by attributes not supported', function() {
+    let modifier = new Modifier({ fixedValue: 1 });
+    expect(()=>{ modifier.charge = <Charge>{ price: 1 }; }).toThrowError(ReferenceError);
+  });
+
+  it('zero charge modifier', function() {
+    let charge = new Charge({ price: 1 });
+    let modifier = charge.modify({ percentRatio: 0 });
+    expect(modifier.isValid).toBeFalsy();
+    expect(modifier.errors.messages).toContain("Value can't be blank");
+  });
+
+  it ('update nothing', function() {
+    let modifier = new Modifier();
+    expect(()=>{ modifier.update() }).not.toThrow();
+  });
 });

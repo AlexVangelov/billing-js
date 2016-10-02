@@ -8,7 +8,7 @@
 import { Billing } from './index';
 
 describe('Billing', () => {
-  it('works', () => {
+  it('works', ()=> {
     let billing = new Billing();
   });
 });

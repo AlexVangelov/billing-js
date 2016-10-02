@@ -16,3 +16,5 @@ export {
   Modifier as BillingModifier,
   Payment as BillingPayment
 }
+
+export default Billing;
