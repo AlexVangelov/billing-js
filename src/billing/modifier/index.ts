@@ -104,7 +104,7 @@ Modifier.validates('bill', {
   presence: true,
   invalid: { 
     if: (self :Modifier)=> {
-      if (self.bill) {
+      if (self.bill && !self.charge) {
         for (let m of self.bill.modifiers) {
           if (!(<Modifier>m).charge && m !== self) return true;
         }
