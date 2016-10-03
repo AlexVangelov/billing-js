@@ -157,5 +157,8 @@ export class Charge extends BillItem {
 Charge.validates('bill', { presence: true });
 Charge.validates('price', { greaterThan: 0 });
 Charge.validates('finalValue', { greaterThanOrEqualTo: 0 });
+Charge.validates('modifier', { invalid: (self)=> {
+  return self.modifier && !self.modifier.isValid;
+}});
 
 export { ChargesCollection } from './collection';

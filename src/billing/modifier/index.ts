@@ -100,7 +100,18 @@ export class Modifier extends BillItem {
   }
 }
 
-Modifier.validates('bill', { presence: true });
+Modifier.validates('bill', { 
+  presence: true,
+  invalid: { 
+    if: (self :Modifier)=> {
+      if (self.bill) {
+        for (let m of self.bill.modifiers) {
+          if (!(<Modifier>m).charge && m !== self) return true;
+        }
+      }
+    }, message: 'may have only one global modifier'
+  }
+});
 Modifier.validates('value', { notEqualTo: 0, 
   greaterThan: (self)=> { 
     if (self.charge) return -self.charge.value;

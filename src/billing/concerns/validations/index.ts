@@ -52,9 +52,10 @@ export abstract class ValidationModel {
     this._validations[className][property] = validations;
   }
 
-  addError(property: string, mapKey: string, params: any = {}) {
+  addError(property: string, mapKey: string = '', params: any = {}) {
     if (!this._errors) this._errors = new ValidationErrors(property);
-    let message = (ValidationModel.MAP[mapKey] || '').replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
+    let message = mapKey;
+    if (ValidationModel.MAP[mapKey]) message = (ValidationModel.MAP[mapKey]).replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
     this._errors.add(property, mapKey, message);
   }
 
@@ -74,15 +75,24 @@ export abstract class ValidationModel {
             break;
           case 'greaterThan': {
             let count = (validations.greaterThan instanceof Function) ? validations.greaterThan(this) : validations.greaterThan;
-            if (this[property] <= count) this.addError(property, 'greaterThan', { count: count })
+            if (this[property] <= count) this.addError(property, 'greaterThan', { count: count });
           } break;
           case 'greaterThanOrEqualTo': {
             let count = (validations.greaterThanOrEqualTo instanceof Function) ? validations.greaterThanOrEqualTo(this) : validations.greaterThanOrEqualTo;
-            if (this[property] < count) this.addError(property, 'greaterThanOrEqualTo', { count: count })
+            if (this[property] < count) this.addError(property, 'greaterThanOrEqualTo', { count: count });
+          } break;
+          case 'invalid': {
+            if (validations.invalid instanceof Boolean) {
+              if (validations.invalid) this.addError(property, 'invalid');
+            } else if (validations.invalid instanceof Function) {
+              if (validations.invalid(this)) this.addError(property, 'invalid');
+            } else {
+              if (validations.invalid.if && validations.invalid.if(this)) this.addError(property, validations.invalid.message || 'invalid');
+            }
           } break;
           case 'lessThan': {
             let count = (validations.lessThan instanceof Function) ? validations.lessThan(this) : validations.greaterThan;
-            if (this[property] >= count) this.addError(property, 'greaterThan', { count: count })
+            if (this[property] >= count) this.addError(property, 'greaterThan', { count: count });
           } break;
           case 'notEqualTo':
             let value = (validations.notEqualTo instanceof Function) ? validations.notEqualTo(this) : validations.notEqualTo;

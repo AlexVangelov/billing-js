@@ -47,14 +47,7 @@ export class ModifiersCollection extends BillCollection {
     if (modifierBill) {
       if (modifierBill !== this.bill) throw new ReferenceError("Trying to add cross bill item. Use 'transfer'.");
     } else modifier.update({ bill: this.bill });
-    if (!~this.indexOf(modifier)) {
-      this.forEach((m)=> {
-        if (!(<Modifier>m).charge && !modifier.charge) {
-          throw new ReferenceError('Bill may have only one global modifier');
-        }
-      });
-      this.push(modifier);
-    }
+    if (!~this.indexOf(modifier)) this.push(modifier);
     return modifier;
   }
   

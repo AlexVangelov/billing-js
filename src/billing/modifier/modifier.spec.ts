@@ -141,7 +141,9 @@ describe('Modifier', () => {
   it('unique bill', ()=> {
     let bill = new Bill();
     bill.modifiers.new({ fixedValue: 1 });
-    expect(()=> { bill.modifiers.new({ fixedValue: 2 }); }).toThrowError(ReferenceError);
+    let modifier = bill.modifiers.new({ fixedValue: 2 });
+    expect(modifier.isValid).toBeFalsy();
+    expect(modifier.errors.messages).toContain('Bill may have only one global modifier');
   });
 
   it('bill validation', ()=> {
