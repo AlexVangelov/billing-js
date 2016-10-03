@@ -64,7 +64,7 @@ export abstract class ValidationModel {
   }
 
   get isValid(): boolean {
-    delete this.errors;
+    delete this._errors;
     let modelValidations = ValidationModel._validations[(<any>this.constructor).name];
     for (let property in modelValidations) {
       let validations = modelValidations[property]
@@ -101,6 +101,6 @@ export abstract class ValidationModel {
         }
       }
     }
-    return !this.errors;
+    return !this._errors;
   }
 }

@@ -71,3 +71,31 @@ export class Bill extends ValidationModel {
     return new Bill(attributes);
   }
 }
+
+Bill.validates('charges', {
+  invalid: { 
+    if: (self)=> {
+      for (let charge of self.charges) {
+        if (!charge.isValid) return true;
+      }
+    }, message: 'are invalid'
+  }
+});
+Bill.validates('modifiers', {
+  invalid: { 
+    if: (self)=> {
+      for (let modifier of self.modifiers) {
+        if (!modifier.isValid) return true;
+      }
+    }, message: 'are invalid'
+  }
+});
+Bill.validates('payments', {
+  invalid: { 
+    if: (self)=> {
+      for (let payment of self.payments) {
+        if (!payment.isValid) return true;
+      }
+    }, message: 'are invalid'
+  }
+});
