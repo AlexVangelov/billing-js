@@ -24,9 +24,9 @@ bill.payments.new({ value: 1 }); //partial payment
 bill.payments.new(); //pay the rest
 
 // validations
-charge = bill.charges.new({ value: -2 });
+charge = bill.charges.new({ price: -2 });
 charge.isValid; // -> false
-charge.errors; // -> [{ price: { greaterThan: 'must be greater than 0' } }]
+charge.errors; // -> [{ price: { greaterThan: 'must be greater than 0' } }, { finalValue: { greaterThanOrEqualTo: 'must be greater than or equal to 0' } }]
 bill.isValid; // -> false
 bill.errors; // -> [{ charges: { invalid: 'are invalid' } }]
 ```

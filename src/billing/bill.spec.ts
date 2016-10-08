@@ -39,4 +39,15 @@ describe('Bill', ()=> {
     expect(bill.modifiers.length).toEqual(2);
     expect(bill.total).toEqual(7);
   });
+
+  it('custom error message format', function() {
+    let bill = new Bill();
+    let charge = bill.charges.new({ price: -2 });
+    expect(charge.isValid).toBeFalsy();
+    expect(charge.errors[0]).toEqual({ price: { greaterThan: 'must be greater than 0' } });
+    expect(charge.errors[1]).toEqual({ finalValue: { greaterThanOrEqualTo: 'must be greater than or equal to 0' } });
+    
+    expect(bill.isValid).toBeFalsy();
+    expect(bill.errors[0]).toEqual({ charges: Object({ invalid: 'are invalid' }) });
+  });
 });

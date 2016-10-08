@@ -6,6 +6,8 @@
 import { IValidations } from './interface';
 import { ValidationErrors } from './validationErrors';
 
+export declare type MapKeyOrMessage = String | { [key :string] :string };
+
 /**
  * 
  * 
@@ -52,10 +54,17 @@ export abstract class ValidationModel {
     this._validations[className][property] = validations;
   }
 
-  addError(property: string, mapKey: string = '', params: any = {}) {
+  addError(property: string, keyOrMessage :MapKeyOrMessage = '', params: any = {}) {
+    let mapKey :string;
+    let message :string;
     if (!this._errors) this._errors = new ValidationErrors(property);
-    let message = mapKey;
-    if (ValidationModel.MAP[mapKey]) message = (ValidationModel.MAP[mapKey]).replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
+    if (typeof keyOrMessage === 'string') {
+      mapKey = <string>keyOrMessage;
+      message = (ValidationModel.MAP[mapKey]).replace(/%{(\w+)}/g, (s, p1) => { return params[p1]; });
+    } else {
+      mapKey = (<any>keyOrMessage).mapKey;
+      message = (<any>keyOrMessage).message;
+    }
     this._errors.add(property, mapKey, message);
   }
 
@@ -87,7 +96,7 @@ export abstract class ValidationModel {
             } else if (validations.invalid instanceof Function) {
               if (validations.invalid(this)) this.addError(property, 'invalid');
             } else {
-              if (validations.invalid.if && validations.invalid.if(this)) this.addError(property, validations.invalid.message || 'invalid');
+              if (validations.invalid.if && validations.invalid.if(this)) this.addError(property, validations.invalid.message ? { mapKey: 'invalid', message: validations.invalid.message } : 'invalid');
             }
           } break;
           case 'lessThan': {
