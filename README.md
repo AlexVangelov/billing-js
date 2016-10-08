@@ -12,8 +12,8 @@ Billing Module JS
 ```javascript
 var Bill = require('billing').BillingBill;
 
-var bill = new Bill(); //new Bill and Charge
-bill.charges.new({ price: 1.2 }); //add simpel charge
+var bill = new Bill(); //new Bill
+bill.charges.new({ price: 1.2 }); //add charge
 
 var charge = bill.charges.new({ qty: 2.5, price: 2.4}); //charge with quantity
 charge.modify({ fixedValue: 1.5 }); //charge modifier
