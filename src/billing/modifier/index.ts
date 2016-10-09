@@ -113,9 +113,9 @@ Modifier.validates('bill', {
   }
 });
 Modifier.validates('value', { notEqualTo: 0, 
-  greaterThan: (self)=> { 
+  greaterThanOrEqualTo: (self)=> { 
     if (self.charge) return -self.charge.value;
-    else return self.bill ? -self.bill.total : 0; 
+    else return self.bill ? -self.bill.total + self.value : 0; 
   }
 });
 
