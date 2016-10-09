@@ -170,8 +170,17 @@ describe('Modifier', () => {
     expect(modifier.errors.messages).toContain("Value must be different from 0");
   });
 
-  it ('update nothing', function() {
+  it('update nothing', function() {
     let modifier = new Modifier();
     expect(()=>{ modifier.update() }).not.toThrow();
+  });
+
+  it('100% global', function() {
+    let bill = new Bill();
+    let modifier = bill.modifiers.new({ percentRatio: -1.0 });
+    bill.charges.new({ price: 1 });
+    expect(bill.balance).toEqual(0);
+    expect(modifier.isValid).toBeTruthy();
+    expect(bill.isValid).toBeTruthy();
   });
 });
