@@ -21,7 +21,6 @@ export interface IBillingConfig {
  * @class Billing
  */
 export class Billing {
-  nomenclature :any;
   /**
    * 
    * 
@@ -34,6 +33,7 @@ export class Billing {
    * 
    */
   constructor(config: IBillingConfig = {}) {
-    if (config.nomenclature) this.nomenclature = new Nomenclature(config.nomenclature);
+    if (config.nomenclature) Nomenclature.init(config.nomenclature);
   }
 }
+

@@ -8,7 +8,7 @@ export interface IPlu extends IStoreRecord {
   id ?:number;
   code :string;
   name :string;
-  description :string;
+  description ?:string;
   price :number;
-  department :Department;
+  departmentId :number;
 }

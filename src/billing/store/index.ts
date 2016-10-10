@@ -1,12 +1,19 @@
 import { IStoreRecord, IStoreConfig } from './interface';
 import { MemoryStore } from './memoryStore';
+import { IStore } from './interface';
 
 export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
 
-export module Store {
-  export function init(config :ArrayOrStoreConfig) {
+export abstract class Store {
+  protected static _store :IStore;
+
+  static find(id: number) :IStoreRecord {
+    return this._store.get(1);
+  }
+
+  static initStore(config :ArrayOrStoreConfig) {
     if (config instanceof Array) {
-      return new MemoryStore(config);
+      this._store = new MemoryStore(config);
     }
   }
 }

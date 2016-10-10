@@ -8,6 +8,8 @@ import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
 
+import { IBillAttributes } from './interface';
+
 export declare type GlobalModifier = Modifier;
 /**
  * 
@@ -19,7 +21,7 @@ export declare type GlobalModifier = Modifier;
 export class Bill extends ValidationModel {
   isSaved: boolean;
 
-  constructor(attributes :any = {}) {
+  constructor(attributes :IBillAttributes = {}) {
     super();
   }
 

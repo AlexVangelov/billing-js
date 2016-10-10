@@ -5,24 +5,20 @@
 
 /// <reference path="../../../typings/index.d.ts" />
 
-import { Nomenclature } from './index';
+import { Nomenclature, Plu, PaymentType } from './index';
 import { MemoryStore } from '../store';
 
 describe('Nomenclature', ()=> {
-  it('Default Memory Store', ()=> {
-    let n = new Nomenclature({
+  it('stores', function() {
+    Nomenclature.init({
       operators: [],
       taxGroups: [],
-      paymentTypes: [],
+      paymentTypes: [{ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true }],
       departments: [],
-      plus: [],
+      plus: [{ id: 1, code: '1', name: 'Test Plu', departmentId: 1, price: 1 }],
       currencies: []
     });
-    expect(n.operators instanceof MemoryStore).toBeTruthy();
-    expect(n.taxGroups instanceof MemoryStore).toBeTruthy();
-    expect(n.paymentTypes instanceof MemoryStore).toBeTruthy();
-    expect(n.departments instanceof MemoryStore).toBeTruthy();
-    expect(n.plus instanceof MemoryStore).toBeTruthy();
-    expect(n.currencies instanceof MemoryStore).toBeTruthy();
+    expect(Plu.find(1)).toEqual({ id: 1, code: '1', name: 'Test Plu', departmentId: 1, price: 1 });
+    expect(PaymentType.find(1)).toEqual({ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true });
   });
 });

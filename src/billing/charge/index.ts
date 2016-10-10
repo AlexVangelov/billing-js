@@ -8,6 +8,8 @@ import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
 
+import { Plu } from '../nomenclature';
+
 export declare type ModifierOrAttributes = Modifier | IModifierAttributes;
 
 /**
@@ -50,9 +52,24 @@ export class Charge extends BillItem {
   qty :number = 1;
 
   /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf Charge
+   */
+  pluId :number;
+
+  /**
    * Creates an instance of Charge.
    * 
    * @param {IChargeAttributes} [attributes={}]
+   */
+  /**
+   * Creates an instance of Charge.
+   * 
+   * @param {IChargeAttributes} [attributes={}]
+   * 
+   * @memberOf Charge
    */
   constructor(attributes: IChargeAttributes = {}) {
     super(attributes.bill);
@@ -164,6 +181,10 @@ export class Charge extends BillItem {
       if (this.modifier) json['modifier'] = this.modifier.toJson();
       return json;
     }
+  }
+
+  get plu() :Plu {
+    if (this.pluId) return Plu.find(this.pluId);
   }
 }
 

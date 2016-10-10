@@ -11,23 +11,11 @@ import { Currency } from './currency';
 import { Operator } from './operator';
 
 import { INomenclatureAttributes } from './interface';
-import { Store } from '../store';
-import { IStore, IStoreRecord } from '../store/interface';
 
-const NOMENCLATURES = ['operators', 'taxGroups', 'paymentTypes', 'departments', 'plus', 'currencies'];
-
-export class Nomenclature {
-  operators :IStore;
-  taxGroups :IStore;
-  paymentTypes :IStore;
-  departments :IStore;
-  plus :IStore;
-  currencies :IStore;
-
-  constructor(config :INomenclatureAttributes) {
-    for(let n of NOMENCLATURES) {
-      if (config[n]) this[n] = Store.init(config[n]);
-    }
+export module Nomenclature {
+  export function init(config :INomenclatureAttributes) {
+    if (config.plus) Plu.initStore(config.plus);
+    if (config.paymentTypes) PaymentType.initStore(config.paymentTypes);
   }
 }
 

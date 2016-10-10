@@ -8,7 +8,9 @@ export class MemoryStore implements IStore {
   }
 
   get(id :number) {
-    return {};
+    for (let i of this._items) {
+      if (i.id === id) return i;
+    }
   }
 
   query(filter :any) {
