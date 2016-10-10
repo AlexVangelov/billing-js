@@ -152,6 +152,19 @@ export class Charge extends BillItem {
     if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
     return true;
   }
+
+  toJson() :any {
+    if (this.isValid) {
+      let json = {
+        qty: this.qty,
+        price: this.price,
+        name: this.name
+      }
+      if (this.description) json['description'] = this.description;
+      if (this.modifier) json['modifier'] = this.modifier.toJson();
+      return json;
+    }
+  }
 }
 
 Charge.validates('bill', { presence: true });

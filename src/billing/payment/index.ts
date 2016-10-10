@@ -50,6 +50,12 @@ export class Payment extends BillItem {
     if (this.bill && !~this.bill.payments.indexOf(this)) this.bill.payments.add(this);
     return true;
   }
+
+  toJson() {
+    if (this.isValid) return {
+      value: this.value
+    }
+  }
 }
 
 export { PaymentsCollection } from './collection';

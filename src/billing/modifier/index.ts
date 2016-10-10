@@ -98,6 +98,15 @@ export class Modifier extends BillItem {
     if (this.bill && !~this.bill.modifiers.indexOf(this)) this.bill.modifiers.add(this);
     return true;
   }
+
+  toJson() {
+    if (this.isValid) {
+      let json = {};
+      if (this.percentRatio) json['percentRatio'] = this.percentRatio;
+      else json['fixedValue'] = this.fixedValue;
+      return json;
+    }
+  }
 }
 
 Modifier.validates('bill', { 

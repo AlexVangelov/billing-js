@@ -8,6 +8,12 @@ import { Charge } from './charge';
 import { Modifier } from './modifier';
 import { Payment } from './payment';
 
+import { INomenclatureAttributes } from './nomenclature/interface';
+import { Nomenclature } from './nomenclature';
+
+export interface IBillingConfig {
+  nomenclature ?:INomenclatureAttributes;
+}
 /**
  * 
  * 
@@ -15,6 +21,7 @@ import { Payment } from './payment';
  * @class Billing
  */
 export class Billing {
+  nomenclature :any;
   /**
    * 
    * 
@@ -26,6 +33,7 @@ export class Billing {
    * Creates an instance of Billing.
    * 
    */
-  constructor(config: any = {}) {
+  constructor(config: IBillingConfig = {}) {
+    if (config.nomenclature) this.nomenclature = new Nomenclature(config.nomenclature);
   }
 }

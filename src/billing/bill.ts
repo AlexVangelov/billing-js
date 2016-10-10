@@ -8,6 +8,7 @@ import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
 
+export declare type GlobalModifier = Modifier;
 /**
  * 
  * 
@@ -41,6 +42,12 @@ export class Bill extends ValidationModel {
    */
   payments :PaymentsCollection = new PaymentsCollection(this);
 
+  get modifier() :GlobalModifier {
+    for (let m of this.modifiers) {
+      if (!(<Modifier>m).charge) return <GlobalModifier>m;
+    }
+  }
+  
   /**
    * 
    * 
@@ -65,6 +72,16 @@ export class Bill extends ValidationModel {
     if (!this.modifiers.save()) success = success || true;
     if (!this.payments.save()) success = success || true;
     return this.isSaved = success;
+  }
+
+  toJson() :any {
+    if (this.isValid) {
+      let json = {};
+      if (this.charges.length) json['charges'] = this.charges.toJson();
+      if (this.payments.length) json['payments'] = this.payments.toJson();
+      if (this.modifier) json['modifier'] = this.modifier.toJson();
+      return json;
+    }
   }
 
   static new(attributes :any = {}) :Bill {
