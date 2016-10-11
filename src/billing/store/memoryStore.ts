@@ -1,7 +1,12 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
 import { IStore, IStoreRecord } from './interface';
 
 export class MemoryStore implements IStore {
-  private _items = [];
+  private _items :Array<IStoreRecord> = [];
 
   constructor(items :Array<IStoreRecord>) {
     this._items = items;

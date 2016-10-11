@@ -15,10 +15,12 @@ describe('Nomenclature', ()=> {
       taxGroups: [],
       paymentTypes: [{ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true }],
       departments: [],
-      plus: [{ id: 1, code: '1', name: 'Test Plu', departmentId: 1, price: 1 }],
+      plus: [{ id: 1, code: '2', name: 'Test Plu', departmentId: 3, price: 4 }],
       currencies: []
     });
-    expect(Plu.find(1)).toEqual({ id: 1, code: '1', name: 'Test Plu', departmentId: 1, price: 1 });
-    expect(PaymentType.find(1)).toEqual({ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true });
+    let plu = <Plu>Plu.find(1);
+    expect(plu instanceof Plu).toBeTruthy();
+    expect([plu.id, plu.code, plu.name, plu.departmentId, plu.price]).toEqual([1, '2', 'Test Plu',3, 4]);
+    //expect(PaymentType.find(1)).toEqual({ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true });
   });
 });

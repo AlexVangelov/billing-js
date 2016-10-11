@@ -21,35 +21,42 @@ export interface IChargeAttributes {
    * 
    * @type {Bill}
    */
-  bill?: Bill;
+  bill ?:Bill;
   /**
    * 
    * 
    * @type {string}
    */
-  name?: string;
+  name ?:string;
   /**
    * 
    * 
    * @type {number}
    */
-  qty?: number;
+  qty ?:number;
   /**
    * 
    * 
    * @type {number}
    */
-  price?: number;
+  price ?:number;
   /**
    * 
    * 
    * @type {string}
    */
-  description?: string;
+  description ?:string;
   /**
    * 
    * 
    * @type {ModifierObject}
    */
-  modifier?: ModifierObject;
+  modifier ?:ModifierObject;
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf IChargeAttributes
+   */
+  pluId ?:number;
 }

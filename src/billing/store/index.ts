@@ -1,14 +1,24 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
 import { IStoreRecord, IStoreConfig } from './interface';
 import { MemoryStore } from './memoryStore';
 import { IStore } from './interface';
 
 export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
 
-export abstract class Store {
+export class Store {
   protected static _store :IStore;
 
+  constructor(attributes :any = {}) {
+    if (attributes.store) (<any>this.constructor).initStore(attributes.store); 
+  }
+
   static find(id: number) :IStoreRecord {
-    return this._store.get(1);
+    let record = this._store.get(id);
+    if (record) return new this(record);
   }
 
   static initStore(config :ArrayOrStoreConfig) {

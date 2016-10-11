@@ -20,50 +20,27 @@ export declare type ModifierOrAttributes = Modifier | IModifierAttributes;
  * @extends {BillItem}
  */
 export class Charge extends BillItem {
-  /**
-   * 
-   * 
-   * @type {Modifier}
-   */
+
   private _modifier :Modifier;
-  /**
-   * 
-   * 
-   * @type {string}
-   */
-  name :string = '';
-  /**
-   * 
-   * 
-   * @type {string}
-   */
+
+  private _name :string;
+
+  get name() :string {
+    return this._name ? this._name : (this.plu ? this.plu.name : '');
+  }
+
+  set name(value :string) {
+    this._name = value;
+  }
+
   description :string;
-  /**
-   * 
-   * 
-   * @type {number}
-   */
+
   price :number = 0;
-  /**
-   * 
-   * 
-   * @type {number}
-   */
+
   qty :number = 1;
 
-  /**
-   * 
-   * 
-   * @type {number}
-   * @memberOf Charge
-   */
   pluId :number;
 
-  /**
-   * Creates an instance of Charge.
-   * 
-   * @param {IChargeAttributes} [attributes={}]
-   */
   /**
    * Creates an instance of Charge.
    * 
@@ -80,20 +57,10 @@ export class Charge extends BillItem {
     return this._modifier;
   }
 
-  /**
-   * 
-   * 
-   * @returns {number}
-   */
   get value() :number {
     return (this.qty * this.price);
   }
 
-  /**
-   * 
-   * 
-   * @returns {number}
-   */
   get finalValue() :number {
     return this.modifier ? this.value + this.modifier.value : this.value;
   }
@@ -130,11 +97,6 @@ export class Charge extends BillItem {
     return true;
   };
 
-  /**
-   * 
-   * 
-   * @returns {Boolean}
-   */
   delete():Boolean {
     if (this.bill) this.bill.charges.remove(this);
     return delete this;
@@ -146,6 +108,7 @@ export class Charge extends BillItem {
     if (attributes.description) this.description = attributes.description;
     if (attributes.price) this.price = attributes.price;
     if (attributes.qty) this.qty = attributes.qty;
+    if (attributes.pluId) this.pluId = attributes.pluId;
     if (attributes.modifier) {
       if (attributes.modifier instanceof Modifier) {
         let modifier = <Modifier> attributes.modifier;
@@ -184,7 +147,7 @@ export class Charge extends BillItem {
   }
 
   get plu() :Plu {
-    if (this.pluId) return Plu.find(this.pluId);
+    if (this.pluId) return <Plu>Plu.find(this.pluId);
   }
 }
 

@@ -9,6 +9,8 @@ import { Charge } from './index';
 import { Modifier } from '../modifier';
 import { Bill } from '../bill';
 
+import { Nomenclature } from '../nomenclature';
+
 describe('Charge', () => {
   it('default values', () => {
     let bill = new Bill();
@@ -205,6 +207,21 @@ describe('Charge', () => {
       let charge = new Charge({ price: -1 });
       expect(charge.isValid).toBeFalsy();
       expect(charge.errors.messages).toContain('Price must be greater than 0');
+    });
+  });
+
+  describe('nomenclature', function() {
+    beforeAll(function() {
+      Nomenclature.init({
+        plus: [{ id: 1, code: '1', name: 'Test Plu', description: 'Descr', departmentId: 1, price: 1.5 }],
+      })
+    });
+
+    it('inherit attributes from Plu', function() {
+      let charge = new Charge({ pluId: 1 });
+      expect(charge.name).toEqual('Test Plu');
+      // expect(charge.description).toEqual('Descr');
+      // expect(charge.price).toEqual(1.5);
     });
   });
 });
