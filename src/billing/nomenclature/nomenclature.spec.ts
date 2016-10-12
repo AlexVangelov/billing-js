@@ -5,7 +5,7 @@
 
 /// <reference path="../../../typings/index.d.ts" />
 
-import { Nomenclature, Plu, PaymentType } from './index';
+import * as Nomenclature from './index';
 import { MemoryStore } from '../store';
 
 describe('Nomenclature', ()=> {
@@ -18,9 +18,8 @@ describe('Nomenclature', ()=> {
       plus: [{ id: 1, code: '2', name: 'Test Plu', departmentId: 3, price: 4 }],
       currencies: []
     });
-    let plu = <Plu>Plu.find(1);
-    expect(plu instanceof Plu).toBeTruthy();
+    let plu = <Nomenclature.Plu>Nomenclature.Plu.find(1);
+    expect(plu instanceof Nomenclature.Plu).toBeTruthy();
     expect([plu.id, plu.code, plu.name, plu.departmentId, plu.price]).toEqual([1, '2', 'Test Plu',3, 4]);
-    //expect(PaymentType.find(1)).toEqual({ id: 1, code: '1', name: 'Test PT', isCash: true, isFiscal: true });
   });
 });

@@ -6,7 +6,7 @@
 import { Bills } from './collection';
 
 import { INomenclatureAttributes } from './nomenclature/interface';
-import { Nomenclature } from './nomenclature';
+import * as Nomenclature from './nomenclature';
 
 export interface IBillingConfig {
   nomenclature ?:INomenclatureAttributes;

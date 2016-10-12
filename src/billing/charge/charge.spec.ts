@@ -9,7 +9,7 @@ import { Charge } from './index';
 import { Modifier } from '../modifier';
 import { Bill } from '../bill';
 
-import { Nomenclature } from '../nomenclature';
+import * as Nomenclature from '../nomenclature';
 
 describe('Charge', () => {
   it('default values', () => {

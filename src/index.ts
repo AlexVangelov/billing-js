@@ -8,13 +8,15 @@ import { Bill } from './billing/bill';
 import { Charge } from './billing/charge';
 import { Modifier } from './billing/modifier';
 import { Payment } from './billing/payment';
+import * as Nomenclature from './billing/nomenclature';
 
 export {
   Billing,
   Bill as BillingBill,
   Charge as BillingCharge,
   Modifier as BillingModifier,
-  Payment as BillingPayment
+  Payment as BillingPayment,
+  Nomenclature as BillingNomenclature
 }
 
 export default Billing;

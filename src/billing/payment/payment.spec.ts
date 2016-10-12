@@ -8,7 +8,7 @@
 import { Payment } from './index';
 import { Bill } from '../bill';
 
-import { Nomenclature } from '../nomenclature';
+import * as Nomenclature from '../nomenclature';
 
 describe('Payment', () => {
   it('default values', () => {
