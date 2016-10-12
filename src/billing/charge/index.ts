@@ -8,7 +8,7 @@ import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
 
-import { Plu } from '../nomenclature';
+import { Plu, TaxGroup } from '../nomenclature';
 
 export declare type ModifierOrAttributes = Modifier | IModifierAttributes;
 
@@ -33,13 +33,35 @@ export class Charge extends BillItem {
     this._name = value;
   }
 
-  description :string;
+  private _description :string;
+  get description() :string {
+    return this._description ? this._description : (this.plu ? this.plu.description : '');
+  }
+  set description(value :string) {
+    this._description = value;
+  }
 
-  price :number = 0;
+  private _price :number;
+  get price() :number {
+    return this._price ? this._price : (this.plu ? this.plu.price : 0);
+  }
+  set price(value :number) {
+    this._price = value;
+  }
+
+  private _taxRatio :number;
+  get taxRatio() :number {
+    return this._taxRatio ? this._taxRatio : (this.taxGroup ? this.taxGroup.percentRatio : 0);
+  }
+  set taxRatio(value :number) {
+    this._taxRatio = value;
+  }
 
   qty :number = 1;
 
   pluId :number;
+
+  taxGroupId :number;
 
   /**
    * Creates an instance of Charge.
@@ -105,10 +127,12 @@ export class Charge extends BillItem {
   update(attributes: IChargeAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
     if (attributes.name) this.name = attributes.name;
-    if (attributes.description) this.description = attributes.description;
-    if (attributes.price) this.price = attributes.price;
+    if (attributes.description) this._description = attributes.description;
+    if (attributes.price) this._price = attributes.price;
     if (attributes.qty) this.qty = attributes.qty;
     if (attributes.pluId) this.pluId = attributes.pluId;
+    if (attributes.taxGroupId) this.taxGroupId = attributes.taxGroupId;
+    if (attributes.taxRatio) this._taxRatio = attributes.taxRatio;
     if (attributes.modifier) {
       if (attributes.modifier instanceof Modifier) {
         let modifier = <Modifier> attributes.modifier;
@@ -148,6 +172,10 @@ export class Charge extends BillItem {
 
   get plu() :Plu {
     if (this.pluId) return <Plu>Plu.find(this.pluId);
+  }
+
+  get taxGroup() {
+    if (this.taxGroupId) return <TaxGroup>TaxGroup.find(this.taxGroupId);
   }
 }
 

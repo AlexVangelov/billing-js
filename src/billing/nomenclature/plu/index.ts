@@ -11,6 +11,7 @@ export class Plu extends Store {
   id :number;
   code :string;
   name :string = '';
+  description :string;
   departmentId :number;
   price :number = 0;
 
@@ -18,6 +19,7 @@ export class Plu extends Store {
     super(attributes);
     if (attributes.id) this.id = attributes.id;
     if (attributes.name) this.name = attributes.name;
+    if (attributes.description) this.description = attributes.description;
     if (attributes.code) this.code = attributes.code;
     if (attributes.departmentId) this.departmentId = attributes.departmentId;
     if (attributes.price) this.price = attributes.price;

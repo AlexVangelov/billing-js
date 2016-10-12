@@ -49,6 +49,13 @@ export interface IChargeAttributes {
   /**
    * 
    * 
+   * @type {number}
+   * @memberOf IChargeAttributes
+   */
+  taxRatio ?:number;
+  /**
+   * 
+   * 
    * @type {ModifierObject}
    */
   modifier ?:ModifierObject;
@@ -59,4 +66,11 @@ export interface IChargeAttributes {
    * @memberOf IChargeAttributes
    */
   pluId ?:number;
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf IChargeAttributes
+   */
+  taxGroupId ?:number;
 }

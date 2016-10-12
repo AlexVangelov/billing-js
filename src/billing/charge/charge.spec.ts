@@ -214,14 +214,32 @@ describe('Charge', () => {
     beforeAll(function() {
       Nomenclature.init({
         plus: [{ id: 1, code: '1', name: 'Test Plu', description: 'Descr', departmentId: 1, price: 1.5 }],
+        taxGroups: [{ id: 1, code: '1', name: '20%', percentRatio: 0.2 }],
       })
     });
 
     it('inherit attributes from Plu', function() {
       let charge = new Charge({ pluId: 1 });
       expect(charge.name).toEqual('Test Plu');
-      // expect(charge.description).toEqual('Descr');
-      // expect(charge.price).toEqual(1.5);
+      expect(charge.description).toEqual('Descr');
+      expect(charge.price).toEqual(1.5);
+    });
+
+    it('inherit attributes from TaxGroup', function() {
+      let charge = new Charge({ taxGroupId: 1 });
+      expect(charge.taxRatio).toEqual(0.2);
+    });
+
+    it('own attributes takes precedence over relations', function() {
+      let charge = new Charge({ name: 'My Name', description: 'My Descriprion', price: 45, taxRatio: 0.09 });
+      charge.pluId = 1;
+      expect(charge.plu.name).toEqual('Test Plu');
+      expect(charge.name).toEqual('My Name');
+      expect(charge.description).toEqual('My Descriprion');
+      expect(charge.price).toEqual(45);
+      charge.taxGroupId = 1;
+      expect(charge.taxGroup.percentRatio).toEqual(0.2);
+      expect(charge.taxRatio).toEqual(0.09);
     });
   });
 });
