@@ -21,6 +21,14 @@ export class Store {
     if (record) return new this(record);
   }
 
+  static all() :Array<IStoreRecord> {
+    let records = this._store.query();
+    let self = this;
+    return records.map(function(record) {
+      return new self(record);
+    });
+  }
+
   static initStore(config :ArrayOrStoreConfig) {
     if (config instanceof Array) {
       this._store = new MemoryStore(config);
