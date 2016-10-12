@@ -95,4 +95,14 @@ export class Payment extends BillItem {
   }
 }
 
+Payment.validates('bill', { presence: true });
+Payment.validates('value', { greaterThan: 0 });
+Payment.validates('paymentType', {
+  invalid: {
+    if: (self)=> {
+      return self.paymentTypeId && ! self.paymentType;
+    }, message: 'is not included in the list'
+  }
+});
+
 export { PaymentsCollection } from './collection';

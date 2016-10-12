@@ -53,6 +53,27 @@ describe('Payment', () => {
     expect(bill.payments.length).toEqual(0);
   });
 
+  describe('validations', function() {
+    it('require bill', function() {
+      let payment = new Payment({ value: 1 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain("Bill can't be blank");
+    });
+
+    it('require positive value', function() {
+      let payment = new Payment({ value: -1 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain('Value must be greater than 0');
+    });
+
+    it('non existing paymentTypeId', function() {
+      let bill = new Bill();
+      let payment = bill.payments.new({ paymentTypeId: 101, value: 2 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain('PaymentType is not included in the list');
+    });
+  });
+
   describe('nomenclature', function() {
     beforeAll(function() {
       Nomenclature.init({
