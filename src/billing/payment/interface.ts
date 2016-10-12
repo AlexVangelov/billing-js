@@ -11,17 +11,45 @@ import { Bill } from '../bill';
  * @export
  * @interface IPaymentAttributes
  */
+/**
+ * 
+ * 
+ * @export
+ * @interface IPaymentAttributes
+ */
 export interface IPaymentAttributes {
   /**
    * 
    * 
    * @type {Bill}
    */
-  bill?: Bill;
+  bill ?:Bill;
   /**
    * 
    * 
    * @type {number}
    */
-  value?: number;
+  value ?:number;
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf IPaymentAttributes
+   */
+  name ?:string;
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf IPaymentAttributes
+   */
+  paymentTypeId ?:number;
+  /**
+   * 
+   * 
+   * @type {boolean}
+   * @memberOf IPaymentAttributes
+   */
+  isCash ?:boolean;
+  isFiscal ?:boolean;
 }
