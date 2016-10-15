@@ -7,7 +7,7 @@ import { ITaxGroup } from './interface';
 import { IStore } from '../../storable/interface';
 import { Storable } from '../../storable';
 
-export class TaxGroup extends Storable<TaxGroup> {
+export class TaxGroup extends Storable {
   id :number;
   code :string;
   name :string = '';

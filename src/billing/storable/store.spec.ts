@@ -7,7 +7,7 @@
 
 import { Storable } from './index';
 
-class TestClass extends Storable<TestClass> {
+class TestClass extends Storable {
   property :string;
   constructor(a :any = {}) {
     super(a);

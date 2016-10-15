@@ -9,7 +9,7 @@ import { IStore } from './interface';
 
 export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
 
-export class Storable<T> {
+export class Storable {
   protected static _store :IStore;
 
   constructor(attributes :any = {}) {
@@ -23,9 +23,8 @@ export class Storable<T> {
 
   static all() :Array<IStoreRecord> {
     let records = this._store.query();
-    let self = this;
-    return records.map(function(record) {
-      return new self(record);
+    return records.map((record) => {
+      return new this(record);
     });
   }
 

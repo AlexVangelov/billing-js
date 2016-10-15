@@ -2,7 +2,7 @@ import { Storable } from '../../storable';
 import { IDepartment } from './interface';
 import { TaxGroup } from '../index';
 
-export class Department extends Storable<Department> {
+export class Department extends Storable {
   id :number;
   code :string;
   name :string = '';

@@ -4,10 +4,10 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { IPaymentType } from './interface';
-import { IStore } from '../../store/interface';
+import { IStore } from '../../storable/interface';
 import { Storable } from '../../storable';
 
-export class PaymentType extends Storable<PaymentType> {
+export class PaymentType extends Storable {
   id :number;
   code :string;
   name :string;

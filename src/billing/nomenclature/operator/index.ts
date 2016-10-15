@@ -1,7 +1,7 @@
 import { IOperator } from './interface';
 import { Storable } from '../../storable';
 
-export class Operator extends Storable<Operator> {
+export class Operator extends Storable {
   id :number;
   code :string;
   name :string = '';

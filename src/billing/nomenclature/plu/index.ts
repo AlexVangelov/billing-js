@@ -8,7 +8,7 @@ import { IStore } from '../../storable/interface';
 import { Storable } from '../../storable';
 import { TaxGroup, Department } from '../index'; 
 
-export class Plu extends Storable<Plu> {
+export class Plu extends Storable {
   id :number;
   code :string;
   name :string = '';
