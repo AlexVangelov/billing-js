@@ -1,4 +1,4 @@
-import { IStoreRecord, IStoreConfig } from '../../store/interface';
+import { IStoreRecord, IStoreConfig } from '../../storable/interface';
 
 export declare type TOperatorsConfig = Array<IOperator> | IStoreConfig;
 

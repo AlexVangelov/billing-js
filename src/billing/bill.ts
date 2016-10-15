@@ -7,7 +7,7 @@ import { ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
-
+import { Operator } from './nomenclature';
 import { IBillAttributes } from './interface';
 
 export declare type GlobalModifier = Modifier;
@@ -37,6 +37,13 @@ export class Bill extends ValidationModel {
    * @type {ModifiersCollection}
    */
   modifiers :ModifiersCollection = new ModifiersCollection(this);
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf Bill
+   */
+  operatorId :number;
   /**
    * 
    * 
@@ -84,6 +91,10 @@ export class Bill extends ValidationModel {
       if (this.modifier) json['modifier'] = this.modifier.toJson();
       return json;
     }
+  }
+
+  get operator() {
+    if (this.operatorId) return <Operator>Operator.find(this.operatorId);
   }
 
   static new(attributes :any = {}) :Bill {

@@ -73,4 +73,11 @@ export interface IChargeAttributes {
    * @memberOf IChargeAttributes
    */
   taxGroupId ?:number;
+  /**
+   * 
+   * 
+   * @type {number}
+   * @memberOf IChargeAttributes
+   */
+  departmentId ?:number;
 }

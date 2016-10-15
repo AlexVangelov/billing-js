@@ -5,9 +5,9 @@
 
 import { IPaymentType } from './interface';
 import { IStore } from '../../store/interface';
-import { Store } from '../../store';
+import { Storable } from '../../storable';
 
-export class PaymentType extends Store {
+export class PaymentType extends Storable<PaymentType> {
   id :number;
   code :string;
   name :string;

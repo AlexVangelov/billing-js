@@ -71,7 +71,7 @@ export class ChargesCollection extends BillCollection {
   sum() :number {
     let sum = 0;
     this.forEach((charge)=> {
-      sum += (<Charge> charge).value;
+      sum += (<Charge>charge).value;
     });
     return sum;
   }
@@ -84,7 +84,7 @@ export class ChargesCollection extends BillCollection {
   finalSum() :number {
     let sum = 0;
     this.forEach((charge)=> {
-      sum += (<Charge> charge).finalValue;
+      sum += (<Charge>charge).finalValue;
     });
     return sum;
   }

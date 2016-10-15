@@ -5,9 +5,9 @@
 
 /// <reference path="../../../typings/index.d.ts" />
 
-import { Store } from './index';
+import { Storable } from './index';
 
-class TestClass extends Store {
+class TestClass extends Storable<TestClass> {
   property :string;
   constructor(a :any = {}) {
     super(a);
@@ -15,7 +15,7 @@ class TestClass extends Store {
   }
 }
 
-describe('Store', ()=> {
+describe('Storable', ()=> {
   it('attach to a model', function() {
     let testClass = new TestClass({ store: [{ id: 100, property: 'works' }] });
     let test = <TestClass>TestClass.find(100);

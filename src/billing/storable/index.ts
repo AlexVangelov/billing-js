@@ -9,7 +9,7 @@ import { IStore } from './interface';
 
 export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
 
-export class Store {
+export class Storable<T> {
   protected static _store :IStore;
 
   constructor(attributes :any = {}) {

@@ -4,10 +4,10 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { ITaxGroup } from './interface';
-import { IStore } from '../../store/interface';
-import { Store } from '../../store';
+import { IStore } from '../../storable/interface';
+import { Storable } from '../../storable';
 
-export class TaxGroup extends Store {
+export class TaxGroup extends Storable<TaxGroup> {
   id :number;
   code :string;
   name :string = '';

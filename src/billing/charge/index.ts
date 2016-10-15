@@ -8,7 +8,7 @@ import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
 
-import { Plu, TaxGroup } from '../nomenclature';
+import { Plu, TaxGroup, Department } from '../nomenclature';
 
 export declare type ModifierOrAttributes = Modifier | IModifierAttributes;
 
@@ -51,10 +51,15 @@ export class Charge extends BillItem {
 
   private _taxRatio :number;
   get taxRatio() :number {
-    return this._taxRatio ? this._taxRatio : (this.taxGroup ? this.taxGroup.percentRatio : 0);
-  }
-  set taxRatio(value :number) {
-    this._taxRatio = value;
+    let taxRercentRatio :number;
+    if (this._taxRatio) taxRercentRatio = this._taxRatio;
+    if (!taxRercentRatio)
+      if (this.taxGroup) taxRercentRatio = this.taxGroup.percentRatio;
+    if (!taxRercentRatio)
+      if (this.department) taxRercentRatio = this.department.taxRatio;
+    if (!taxRercentRatio)
+      if (this.plu) taxRercentRatio = this.plu.taxRatio
+    return taxRercentRatio || 0;
   }
 
   qty :number = 1;
@@ -62,6 +67,8 @@ export class Charge extends BillItem {
   pluId :number;
 
   taxGroupId :number;
+
+  departmentId :number;
 
   /**
    * Creates an instance of Charge.
@@ -176,6 +183,10 @@ export class Charge extends BillItem {
 
   get taxGroup() {
     if (this.taxGroupId) return <TaxGroup>TaxGroup.find(this.taxGroupId);
+  }
+
+  get department() {
+    if (this.departmentId) return <Department>Department.find(this.departmentId);
   }
 }
 

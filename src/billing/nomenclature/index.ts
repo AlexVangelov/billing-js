@@ -7,7 +7,6 @@ import { PaymentType } from './paymentType';
 import { TaxGroup } from './taxGroup';
 import { Department } from './department';
 import { Plu } from './plu';
-import { Currency } from './currency';
 import { Operator } from './operator';
 
 import { INomenclatureAttributes } from './interface';
@@ -23,6 +22,5 @@ export {
   TaxGroup,
   Department,
   Plu,
-  Currency,
   Operator
 }
