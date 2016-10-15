@@ -25,7 +25,7 @@ export class Plu extends Storable {
   }
 
   get department() :Department {
-    if (this.departmentId) return <Department>Department.find(this.departmentId);
+    if (this.departmentId) return Department.find(this.departmentId);
   }
 
   constructor(attributes :IPlu) {

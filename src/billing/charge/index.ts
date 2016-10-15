@@ -178,15 +178,15 @@ export class Charge extends BillItem {
   }
 
   get plu() :Plu {
-    if (this.pluId) return <Plu>Plu.find(this.pluId);
+    if (this.pluId) return Plu.find(this.pluId);
   }
 
   get taxGroup() {
-    if (this.taxGroupId) return <TaxGroup>TaxGroup.find(this.taxGroupId);
+    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
   }
 
   get department() {
-    if (this.departmentId) return <Department>Department.find(this.departmentId);
+    if (this.departmentId) return Department.find(this.departmentId);
   }
 }
 

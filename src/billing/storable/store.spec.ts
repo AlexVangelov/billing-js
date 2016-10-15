@@ -18,7 +18,7 @@ class TestClass extends Storable {
 describe('Storable', ()=> {
   it('attach to a model', function() {
     let testClass = new TestClass({ store: [{ id: 100, property: 'works' }] });
-    let test = <TestClass>TestClass.find(100);
+    let test = TestClass.find(100);
     expect(test instanceof TestClass).toBeTruthy();
     expect(test.property).toEqual('works');
   });
@@ -29,10 +29,10 @@ describe('Storable', ()=> {
       { id: 101, property: 'Two' }
     ]});
     expect(TestClass.find(99)).toBeUndefined();
-    let item = <TestClass>TestClass.find(100);
+    let item = TestClass.find(100);
     expect(item instanceof TestClass).toBeTruthy();
     expect(item.property).toEqual('One');
-    item = <TestClass>TestClass.find(101);
+    item = TestClass.find(101);
     expect(item.property).toEqual('Two');
   });
 

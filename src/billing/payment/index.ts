@@ -91,7 +91,7 @@ export class Payment extends BillItem {
   }
 
   get paymentType() {
-    if (this.paymentTypeId) return <PaymentType>PaymentType.find(this.paymentTypeId);
+    if (this.paymentTypeId) return PaymentType.find(this.paymentTypeId);
   }
 }
 

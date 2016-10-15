@@ -94,7 +94,7 @@ export class Bill extends ValidationModel {
   }
 
   get operator() {
-    if (this.operatorId) return <Operator>Operator.find(this.operatorId);
+    if (this.operatorId) return Operator.find(this.operatorId);
   }
 
   static new(attributes :any = {}) :Bill {

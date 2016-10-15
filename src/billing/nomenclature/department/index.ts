@@ -13,7 +13,7 @@ export class Department extends Storable {
   }
 
   get taxGroup() :TaxGroup {
-    if (this.taxGroupId) return <TaxGroup>TaxGroup.find(this.taxGroupId);
+    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
   }
 
   constructor(attributes :IDepartment) {
