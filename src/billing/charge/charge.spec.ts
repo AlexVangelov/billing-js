@@ -196,6 +196,59 @@ describe('Charge', () => {
     }).not.toThrowError(ReferenceError);
   });
 
+  it('set description', function() {
+    let charge = new Charge({ price: 1 });
+    expect(charge.description).toEqual('');
+    charge.description = 'Fresh';
+    expect(charge.description).toEqual('Fresh');
+  });
+
+  it('set price', function() {
+    let charge = new Charge({ pluId: 1 });
+    expect(charge.price).toEqual(0);
+    charge.price = 1.26;
+    expect(charge.price).toEqual(1.26);
+  });
+
+  it('set modifier', function() {
+    let charge = new Charge({ price: 1 });
+    let modifier = new Modifier({ fixedValue: 1, charge: charge });
+    charge.modifier = modifier;
+    expect(charge.finalValue).toEqual(2);
+  });
+
+  it('set chross bill modifier should raise exception', function() {
+    let bill = new Bill();
+    let modifier = bill.modifiers.new({ fixedValue: 1 });
+    let bill2 = new Bill();
+    expect(()=> { bill2.charges.new({ price: 1, modifier: modifier }) }).toThrowError(ReferenceError);
+  });
+
+  it('set same bill modifier should pass', function() {
+    let bill = new Bill();
+    let modifier = bill.modifiers.new({ fixedValue: 1 });
+    expect(()=> { bill.charges.new({ price: 1, modifier: modifier }) }).not.toThrowError();
+  });
+
+  it('modify nothing', function() {
+    let charge = new Charge({ price: 1 });
+    let modifier = charge.modify();
+    expect(modifier instanceof Modifier).toBeTruthy();
+    expect(charge.finalValue).toEqual(1);
+  });
+
+  it('update nothing', function() {
+    let charge = new Charge({ price: 1 });
+    expect(charge.update()).toBeTruthy();
+  });
+
+  it('set modifier should adopt charge', function() {
+    let charge = new Charge({ price: 1 });
+    let modifier = new Modifier({ fixedValue: 1 });
+    charge.modifier = modifier;
+    expect(modifier.charge).toEqual(charge);
+  });
+
   describe('validations', function() {
     it('require bill', function() {
       let charge = new Charge({ price: 1 });
@@ -208,14 +261,27 @@ describe('Charge', () => {
       expect(charge.isValid).toBeFalsy();
       expect(charge.errors.messages).toContain('Price must be greater than 0');
     });
+
+    it('invalid modifier', function() {
+      let charge = new Charge({ price: 1 });
+      charge.modify();
+      expect(charge.isValid).toBeFalsy();
+      expect(charge.errors.messages).toContain('Modifier is invalid');
+    });
   });
 
   describe('nomenclature', function() {
     beforeAll(function() {
       Nomenclature.init({
-        plus: [{ id: 1, code: '1', name: 'Test Plu', description: 'Descr', departmentId: 1, price: 1.5 }],
-        taxGroups: [{ id: 1, code: '1', name: '20%', percentRatio: 0.2 }],
-      })
+        plus: [
+          { id: 1, code: '1', name: 'Test Plu', description: 'Descr', departmentId: 1, price: 1.5 },
+          { id: 2, code: '2', name: 'Test Plu2', departmentId: 1, price: 1.5 }
+        ],
+        taxGroups: [
+          { id: 1, code: '1', name: '20%', percentRatio: 0.2 },
+          { id: 2, code: '2', name: '9%', percentRatio: 0.09 }
+        ],
+      });
     });
 
     it('inherit attributes from Plu', function() {
@@ -240,6 +306,93 @@ describe('Charge', () => {
       charge.taxGroupId = 1;
       expect(charge.taxGroup.percentRatio).toEqual(0.2);
       expect(charge.taxRatio).toEqual(0.09);
+    });
+
+    it('missing nomenclature should not throw exteptions', function() {
+      let charge = new Charge({ pluId: 2 });
+      expect(()=> { charge.taxRatio; }).not.toThrow();
+      expect(charge.department).toBeUndefined();
+    });
+
+    it('direct department', function() {
+      Nomenclature.init({
+        departments: [
+          { id: 1, code: '1', name: 'D', taxGroupId: 1 },
+          { id: 2, code: '2', name: 'E', taxGroupId: 2 }
+        ]
+      });
+      let charge = new Charge({ price: 3 });
+      expect(charge.taxRatio).toEqual(0);
+      charge.departmentId = 1;
+      expect(charge.department.taxRatio).toEqual(0.2);
+      expect(charge.taxRatio).toEqual(0.2);
+      charge.update({ departmentId: 2 });
+      expect(charge.taxRatio).toEqual(0.09);
+    });
+
+    it('update nomenclature direct', function() {
+      let charge = new Charge({ price: 3 });
+      charge.update({ plu: Nomenclature.Plu.find(1) });
+      expect(charge.pluId).toEqual(1);
+      charge.update({ taxGroup: Nomenclature.TaxGroup.find(1) });
+      expect(charge.taxGroupId).toEqual(1);
+      charge.update({ department: Nomenclature.Department.find(2) });
+      expect(charge.departmentId).toEqual(2);
+    });
+  });
+
+  describe('toJson', function() {
+    let bill :Bill;
+    let charge :Charge;
+    beforeEach(function() {
+      Nomenclature.init({
+        plus: [
+          { id: 1, code: '1', name: 'Test Plu', description: 'Descr', departmentId: 1, price: 1.5 }
+        ],
+        taxGroups: [
+          { id: 1, code: '1', name: '20%', percentRatio: 0.2 }
+        ],
+        departments: [
+          { id: 1, code: '1', name: 'D', taxGroupId: 1 }
+        ]
+      });
+      bill = new Bill();
+      charge = bill.charges.new({ pluId: 1, modifier: { fixedValue: 1 } });
+    });
+
+    it('invalid', function() {
+      let charge = new Charge();
+      expect(charge.toJson()).toBeUndefined();
+    });
+
+    it('minimal', function() {
+      let charge = bill.charges.new({ price: 1 });
+      expect(charge.toJson()).toEqual({ qty: 1, price: 1, name: '' });
+      expect(charge.toJson(true)).toEqual({ qty: 1, price: 1, name: '' });
+    });
+
+    it('without nomenclature', function() {
+      expect(charge.toJson()).toEqual({ 
+        qty: 1, price: 1.5, name: 'Test Plu', description: 'Descr', taxRatio: 0.2,
+        modifier: { fixedValue: 1 }
+      });
+    });
+
+    it('use nomenclature ids', function() {
+      expect(charge.toJson(true)).toEqual({ 
+        qty: 1, price: 1.5, name: 'Test Plu', description: 'Descr', taxRatio: 0.2,
+        modifier: { fixedValue: 1 }, pluId: 1
+      });
+      charge.departmentId = 1;
+      expect(charge.toJson(true)).toEqual({ 
+        qty: 1, price: 1.5, name: 'Test Plu', description: 'Descr', taxRatio: 0.2,
+        modifier: { fixedValue: 1 }, pluId: 1, departmentId: 1
+      });
+      charge.taxGroupId = 1;
+      expect(charge.toJson(true)).toEqual({ 
+        qty: 1, price: 1.5, name: 'Test Plu', description: 'Descr', taxRatio: 0.2,
+        modifier: { fixedValue: 1 }, pluId: 1, departmentId: 1, taxGroupId: 1
+      });
     });
   });
 });

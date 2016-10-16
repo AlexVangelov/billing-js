@@ -53,6 +53,19 @@ describe('Payment', () => {
     expect(bill.payments.length).toEqual(0);
   });
 
+  it('update nothing', function() {
+    let payment = new Payment();
+    expect(()=>{ payment.update() }).not.toThrow();
+  });
+  
+  it('no paymentType defaults', function() {
+    let payment = new Payment();
+    expect(payment.paymentType).toBeUndefined();
+    expect(payment.name).toEqual('');
+    expect(payment.isCash).toBeTruthy();
+    expect(payment.isFiscal).toBeTruthy();
+  });
+
   describe('validations', function() {
     it('require bill', function() {
       let payment = new Payment({ value: 1 });
@@ -77,7 +90,10 @@ describe('Payment', () => {
   describe('nomenclature', function() {
     beforeAll(function() {
       Nomenclature.init({
-        paymentTypes: [{ id: 1, code: '1', name: 'Custom', isCash: false, isFiscal: false }]
+        paymentTypes: [
+          { id: 1, code: '1', name: 'Custom', isCash: false, isFiscal: false },
+          { id: 2, code: '2', name: 'Custom2', isCash: true, isFiscal: false }
+        ]
       })
     });
 
@@ -95,6 +111,13 @@ describe('Payment', () => {
       expect(payment.name).toEqual('Cash');
       expect(payment.isCash).toBeTruthy();
       expect(payment.isFiscal).toBeTruthy();
+    });
+
+    it('set/update nomenclature direct', function() {
+      let payment = new Payment();
+      payment.paymentType = Nomenclature.PaymentType.find(1);
+      expect(payment.paymentTypeId).toEqual(1);
+      payment.update({ paymentType: Nomenclature.PaymentType.find(2) });
     });
   });
 });

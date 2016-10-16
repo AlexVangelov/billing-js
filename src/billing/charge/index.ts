@@ -85,6 +85,16 @@ export class Charge extends BillItem {
   get modifier() :Modifier {
     return this._modifier;
   }
+  set modifier(modifier :Modifier) {
+    let modifierBill = modifier.bill;
+    if (modifierBill) {
+      if (!this.bill) this._bill = modifierBill;
+      else if (this.bill !== modifierBill) throw new ReferenceError('Charge with modifier belonging to another bill.');
+    } else modifier.update({ bill: this.bill });
+    if (modifier.charge !== this) modifier.charge = this;
+    this._modifier = modifier;
+    if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
+  }
 
   get value() :number {
     return (this.qty * this.price);
@@ -146,14 +156,7 @@ export class Charge extends BillItem {
     if (attributes.departmentId) this.departmentId = attributes.departmentId;
     if (attributes.modifier) {
       if (attributes.modifier instanceof Modifier) {
-        let modifier = <Modifier> attributes.modifier;
-        let modifierBill = modifier.bill;
-        if (modifierBill) {
-          if (!this.bill) this._bill = modifierBill;
-          else if (this.bill !== modifierBill) throw new ReferenceError('Charge with modifier belonging to another bill.');
-        } else modifier.update({ bill: this.bill });
-        if (modifier.charge !== this) modifier.charge = this;
-        this._modifier = modifier; 
+        this.modifier = attributes.modifier; 
       } else {
         if (attributes.modifier.bill) {
         if (!this.bill) this._bill = attributes.modifier.bill;
@@ -161,22 +164,28 @@ export class Charge extends BillItem {
         } else attributes.modifier.bill = this.bill;
         attributes.modifier.charge = this;
         this._modifier = new Modifier(attributes.modifier);
+        if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
       }
-      if (this.bill) this.bill.modifiers.add(this.modifier);
     }
     if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
     return true;
   }
 
-  toJson() :any {
+  toJson(useNomenclatureIds = false) :any {
     if (this.isValid) {
       let json = {
-        qty: this.qty,
-        price: this.price,
-        name: this.name
-      }
+        qty: this.qty
+      };
+      json['price'] = this.price;
+      json['name'] = this.name;
       if (this.description) json['description'] = this.description;
       if (this.modifier) json['modifier'] = this.modifier.toJson();
+      if (this.taxRatio) json['taxRatio'] = this.taxRatio;
+      if (useNomenclatureIds) {
+        if (this.pluId) json['pluId'] = this.pluId;
+        if (this.departmentId) json['departmentId'] = this.departmentId;
+        if (this.taxGroupId) json['taxGroupId'] = this.taxGroupId;
+      }
       return json;
     }
   }

@@ -74,12 +74,12 @@ export class Payment extends BillItem {
 
   update(attributes: IPaymentAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
-    if (attributes.name) this._name = attributes.name;
+    if (attributes.name) this.name = attributes.name;
     if (attributes.value) this.value = attributes.value;
     if (attributes.paymentType) this.paymentType = attributes.paymentType;
     if (attributes.paymentTypeId) this.paymentTypeId = attributes.paymentTypeId;
-    if (attributes.isCash) this._isCash = attributes.isCash;
-    if (attributes.isFiscal) this._isFiscal = attributes.isFiscal;
+    if (attributes.isCash) this.isCash = attributes.isCash;
+    if (attributes.isFiscal) this.isFiscal = attributes.isFiscal;
     if (attributes.value) this.value = attributes.value;
     if (this.bill && !~this.bill.payments.indexOf(this)) this.bill.payments.add(this);
     return true;

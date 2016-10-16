@@ -22,11 +22,13 @@ export abstract class Storable {
   }
 
   static find<T extends Storable>(this: IStorableClass<T>, id: number) :T {
+    if (!this._store) return;
     let record = this._store.get(id);
     if (record) return new this(record);
   }
 
   static all<T extends Storable>(this: IStorableClass<T>) :Array<IStoreRecord> {
+    if (!this._store) return;
     let records = this._store.query();
     return records.map((record) => {
       return new this(record);

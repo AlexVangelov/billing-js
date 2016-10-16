@@ -183,4 +183,18 @@ describe('Modifier', () => {
     expect(modifier.isValid).toBeTruthy();
     expect(bill.isValid).toBeTruthy();
   });
+
+  describe('toJson', function() {
+    it('invalid', function() {
+      let modifier = new Modifier();
+      expect(modifier.toJson()).toBeUndefined();
+    });
+
+    it('minimal', function() {
+      let bill = new Bill();
+      let modifier = bill.modifiers.new({ percentRatio: 0.5 });
+      bill.charges.new({ price: 1});
+      expect(modifier.toJson()).toEqual({ percentRatio: 0.5 });
+    });
+  });
 });
