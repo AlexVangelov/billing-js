@@ -5,7 +5,7 @@ export declare type TPluConfig = Array<IPlu> | IStoreConfig;
 import { Department } from '../department';
 
 export interface IPlu extends IStoreRecord {
-  id ?:number;
+  id :number;
   code :string;
   name :string;
   description ?:string;

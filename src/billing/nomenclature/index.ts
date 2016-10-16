@@ -15,6 +15,8 @@ export function init(config :INomenclatureAttributes) {
   if (config.plus) Plu.initStore(config.plus);
   if (config.paymentTypes) PaymentType.initStore(config.paymentTypes);
   if (config.taxGroups) TaxGroup.initStore(config.taxGroups);
+  if (config.departments) Department.initStore(config.departments);
+  if (config.operators) Operator.initStore(config.operators);
 }
 
 export {

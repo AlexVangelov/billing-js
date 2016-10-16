@@ -76,6 +76,7 @@ export class Payment extends BillItem {
     if (attributes.bill) this._bill = attributes.bill;
     if (attributes.name) this._name = attributes.name;
     if (attributes.value) this.value = attributes.value;
+    if (attributes.paymentType) this.paymentType = attributes.paymentType;
     if (attributes.paymentTypeId) this.paymentTypeId = attributes.paymentTypeId;
     if (attributes.isCash) this._isCash = attributes.isCash;
     if (attributes.isFiscal) this._isFiscal = attributes.isFiscal;
@@ -92,6 +93,9 @@ export class Payment extends BillItem {
 
   get paymentType() {
     if (this.paymentTypeId) return PaymentType.find(this.paymentTypeId);
+  }
+  set paymentType(paymentType :PaymentType) {
+    this.paymentTypeId = paymentType.id;
   }
 }
 

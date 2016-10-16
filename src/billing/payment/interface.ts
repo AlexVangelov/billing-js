@@ -4,6 +4,7 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { Bill } from '../bill';
+import { PaymentType } from '../nomenclature';
 
 /**
  * 
@@ -44,6 +45,7 @@ export interface IPaymentAttributes {
    * @memberOf IPaymentAttributes
    */
   paymentTypeId ?:number;
+  paymentType ?:PaymentType;
   /**
    * 
    * 

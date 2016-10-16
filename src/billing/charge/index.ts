@@ -137,9 +137,13 @@ export class Charge extends BillItem {
     if (attributes.description) this._description = attributes.description;
     if (attributes.price) this._price = attributes.price;
     if (attributes.qty) this.qty = attributes.qty;
+    if (attributes.plu) this.plu = attributes.plu;
     if (attributes.pluId) this.pluId = attributes.pluId;
+    if (attributes.taxGroup) this.taxGroup = attributes.taxGroup;
     if (attributes.taxGroupId) this.taxGroupId = attributes.taxGroupId;
     if (attributes.taxRatio) this._taxRatio = attributes.taxRatio;
+    if (attributes.department) this.department = attributes.department;
+    if (attributes.departmentId) this.departmentId = attributes.departmentId;
     if (attributes.modifier) {
       if (attributes.modifier instanceof Modifier) {
         let modifier = <Modifier> attributes.modifier;
@@ -180,13 +184,22 @@ export class Charge extends BillItem {
   get plu() :Plu {
     if (this.pluId) return Plu.find(this.pluId);
   }
+  set plu(plu :Plu) {
+    this.pluId = plu.id;
+  }
 
   get taxGroup() {
     if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
   }
+  set taxGroup(taxGroup :TaxGroup) {
+    this.taxGroupId = taxGroup.id;
+  }
 
   get department() {
     if (this.departmentId) return Department.find(this.departmentId);
+  }
+  set department(department :Department) {
+    this.departmentId = department.id;
   }
 }
 

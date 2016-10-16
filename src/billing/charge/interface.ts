@@ -6,6 +6,7 @@
 import { Bill } from '../bill';
 import { Modifier } from '../modifier';
 import { IModifierAttributes } from '../modifier/interface';
+import { Plu, TaxGroup, Department } from '../nomenclature';
 
 export type ModifierObject = Modifier | IModifierAttributes;
 
@@ -66,6 +67,7 @@ export interface IChargeAttributes {
    * @memberOf IChargeAttributes
    */
   pluId ?:number;
+  plu ?:Plu;
   /**
    * 
    * 
@@ -73,6 +75,7 @@ export interface IChargeAttributes {
    * @memberOf IChargeAttributes
    */
   taxGroupId ?:number;
+  taxGroup ?:TaxGroup;
   /**
    * 
    * 
@@ -80,4 +83,5 @@ export interface IChargeAttributes {
    * @memberOf IChargeAttributes
    */
   departmentId ?:number;
+  department ?:Department;
 }
