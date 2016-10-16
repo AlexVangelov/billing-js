@@ -3,7 +3,7 @@ import { Storable } from '../../storable';
 
 export class Operator extends Storable {
   id :number;
-  code :string;
+  code ?:string;
   name :string = '';
 
   constructor(attributes :IOperator) {

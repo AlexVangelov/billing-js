@@ -9,7 +9,7 @@ import { Storable } from '../../storable';
 
 export class PaymentType extends Storable {
   id :number;
-  code :string;
+  code ?:string;
   name :string;
   isCash :boolean;
   isFiscal :boolean;

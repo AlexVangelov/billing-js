@@ -73,7 +73,7 @@ export abstract class BillCollection extends Array<BillItem> {
     return success;
   }
 
-  toJson() :any {
-    return this.map((item)=> item.toJson() );
+  toJson(useNomenclatureIds = false) :any {
+    return this.map((item)=> item.toJson(useNomenclatureIds) );
   }
 }

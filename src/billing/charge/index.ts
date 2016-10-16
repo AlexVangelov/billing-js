@@ -26,9 +26,12 @@ export class Charge extends BillItem {
   private _name :string;
 
   get name() :string {
-    return this._name ? this._name : (this.plu ? this.plu.name : '');
+    let name :string;
+    if (this._name) name = this._name;
+    if (!name) if (this.plu) name = this.plu.name;
+    if (!name) if (this.department) name = this.department.name;
+    return name || '';
   }
-
   set name(value :string) {
     this._name = value;
   }

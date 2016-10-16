@@ -4,7 +4,7 @@ export declare type TDepartmentConfig = Array<IDepartment> | IStoreConfig;
 
 export interface IDepartment extends IStoreRecord {
   id :number;
-  code :string;
+  code ?:string;
   name :string;
   taxGroupId :number;
 }

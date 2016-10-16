@@ -85,9 +85,18 @@ export class Payment extends BillItem {
     return true;
   }
 
-  toJson() {
-    if (this.isValid) return {
-      value: this.value
+  toJson(useNomenclatureIds = false) {
+    if (this.isValid) {
+      let json = {
+        name: this.name,
+        value: this.value,
+        isCash: this.isCash,
+        isFiscal: this.isFiscal
+      }
+      if (useNomenclatureIds) {
+        if (this.paymentTypeId) json['paymentTypeId'] = this.paymentTypeId;
+      }
+      return json;
     }
   }
 

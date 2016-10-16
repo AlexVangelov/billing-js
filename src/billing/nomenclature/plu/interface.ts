@@ -6,7 +6,7 @@ import { Department } from '../department';
 
 export interface IPlu extends IStoreRecord {
   id :number;
-  code :string;
+  code ?:string;
   name :string;
   description ?:string;
   price :number;

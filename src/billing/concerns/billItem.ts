@@ -69,5 +69,5 @@ export abstract class BillItem extends ValidationModel {
     return this.isSaved;
   }
 
-  toJson() :any {}
+  toJson(useNomenclatureIds = false) :any {}
 }

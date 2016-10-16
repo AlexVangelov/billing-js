@@ -83,11 +83,11 @@ export class Bill extends ValidationModel {
     return this.isSaved = success;
   }
 
-  toJson() :any {
+  toJson(useNomenclatureIds = false) :any {
     if (this.isValid) {
       let json = {};
-      if (this.charges.length) json['charges'] = this.charges.toJson();
-      if (this.payments.length) json['payments'] = this.payments.toJson();
+      if (this.charges.length) json['charges'] = this.charges.toJson(useNomenclatureIds);
+      if (this.payments.length) json['payments'] = this.payments.toJson(useNomenclatureIds);
       if (this.modifier) json['modifier'] = this.modifier.toJson();
       return json;
     }

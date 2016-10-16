@@ -285,7 +285,9 @@ describe('Charge', () => {
     });
 
     it('inherit attributes from Plu', function() {
-      let charge = new Charge({ pluId: 1 });
+      let bill = new Bill();
+      let charge = bill.charges.new({ pluId: 1 });
+      expect(charge.isValid).toBeTruthy();
       expect(charge.name).toEqual('Test Plu');
       expect(charge.description).toEqual('Descr');
       expect(charge.price).toEqual(1.5);

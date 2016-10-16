@@ -4,8 +4,8 @@ import { TaxGroup } from '../index';
 
 export class Department extends Storable {
   id :number;
-  code :string;
-  name :string = '';
+  code ?:string;
+  name :string;
   taxGroupId: number;
 
   get taxRatio() :number {

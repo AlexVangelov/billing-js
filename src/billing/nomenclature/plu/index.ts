@@ -10,11 +10,19 @@ import { TaxGroup, Department } from '../index';
 
 export class Plu extends Storable {
   id :number;
-  code :string;
-  name :string = '';
+  code ?:string;
   description :string;
   departmentId :number;
   price :number = 0;
+
+  private _name :string;
+  get name() {
+    if (this._name) return this._name;
+    else if (this.department) return this.department.name;
+  }
+  set name(name :string) {
+    this._name = name;
+  }
 
   get taxRatio() :number {
     if (this.taxGroup) return this.taxGroup.percentRatio;

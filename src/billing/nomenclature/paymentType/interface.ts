@@ -4,7 +4,7 @@ export declare type TPaymentTypeConfig = Array<IPaymentType> | IStoreConfig;
 
 export interface IPaymentType extends IStoreRecord {
   id :number;
-  code :string;
+  code ?:string;
   name :string;
   isCash :boolean;
   isFiscal :boolean;
