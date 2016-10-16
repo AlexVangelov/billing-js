@@ -8,6 +8,8 @@
 import { Payment } from './index';
 import { Bill } from '../bill';
 
+import * as Nomenclature from '../nomenclature';
+
 describe('Payment', () => {
   it('default values', () => {
     let payment = new Payment();
@@ -49,5 +51,73 @@ describe('Payment', () => {
     expect(bill.payments.length).toEqual(1);
     expect(payment.delete()).toBeTruthy();
     expect(bill.payments.length).toEqual(0);
+  });
+
+  it('update nothing', function() {
+    let payment = new Payment();
+    expect(()=>{ payment.update() }).not.toThrow();
+  });
+  
+  it('no paymentType defaults', function() {
+    let payment = new Payment();
+    expect(payment.paymentType).toBeUndefined();
+    expect(payment.name).toEqual('');
+    expect(payment.isCash).toBeTruthy();
+    expect(payment.isFiscal).toBeTruthy();
+  });
+
+  describe('validations', function() {
+    it('require bill', function() {
+      let payment = new Payment({ value: 1 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain("Bill can't be blank");
+    });
+
+    it('require positive value', function() {
+      let payment = new Payment({ value: -1 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain('Value must be greater than 0');
+    });
+
+    it('non existing paymentTypeId', function() {
+      let bill = new Bill();
+      let payment = bill.payments.new({ paymentTypeId: 101, value: 2 });
+      expect(payment.isValid).toBeFalsy();
+      expect(payment.errors.messages).toContain('PaymentType is not included in the list');
+    });
+  });
+
+  describe('nomenclature', function() {
+    beforeAll(function() {
+      Nomenclature.init({
+        paymentTypes: [
+          { id: 1, code: '1', name: 'Custom', isCash: false, isFiscal: false },
+          { id: 2, code: '2', name: 'Custom2', isCash: true, isFiscal: false }
+        ]
+      })
+    });
+
+    it('inherit attributes from PaymentType', function() {
+      let payment = new Payment({ paymentTypeId: 1 });
+      expect(payment.name).toEqual('Custom');
+      expect(payment.isCash).toBeFalsy();
+      expect(payment.isFiscal).toBeFalsy;
+    });
+
+    it('own attributes takes precedence over relations', function() {
+      let payment = new Payment({ value: 1, name: 'Cash', isCash: true, isFiscal: true });
+      payment.paymentTypeId = 1;
+      expect(payment.paymentType.isCash).toBeFalsy();
+      expect(payment.name).toEqual('Cash');
+      expect(payment.isCash).toBeTruthy();
+      expect(payment.isFiscal).toBeTruthy();
+    });
+
+    it('set/update nomenclature direct', function() {
+      let payment = new Payment();
+      payment.paymentType = Nomenclature.PaymentType.find(1);
+      expect(payment.paymentTypeId).toEqual(1);
+      payment.update({ paymentType: Nomenclature.PaymentType.find(2) });
+    });
   });
 });

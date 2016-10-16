@@ -7,7 +7,10 @@ import { ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
+import { Operator } from './nomenclature';
+import { IBillAttributes } from './interface';
 
+export declare type GlobalModifier = Modifier;
 /**
  * 
  * 
@@ -18,7 +21,7 @@ import { ValidationModel } from './concerns/validations';
 export class Bill extends ValidationModel {
   isSaved: boolean;
 
-  constructor(attributes :any = {}) {
+  constructor(attributes :IBillAttributes = {}) {
     super();
   }
 
@@ -37,10 +40,23 @@ export class Bill extends ValidationModel {
   /**
    * 
    * 
+   * @type {number}
+   * @memberOf Bill
+   */
+  operatorId :number;
+  /**
+   * 
+   * 
    * @type {PaymentsCollection}
    */
   payments :PaymentsCollection = new PaymentsCollection(this);
 
+  get modifier() :GlobalModifier {
+    for (let m of this.modifiers) {
+      if (!(<Modifier>m).charge) return <GlobalModifier>m;
+    }
+  }
+  
   /**
    * 
    * 
@@ -65,6 +81,20 @@ export class Bill extends ValidationModel {
     if (!this.modifiers.save()) success = success || true;
     if (!this.payments.save()) success = success || true;
     return this.isSaved = success;
+  }
+
+  toJson(useNomenclatureIds = false) :any {
+    if (this.isValid) {
+      let json = {};
+      if (this.charges.length) json['charges'] = this.charges.toJson(useNomenclatureIds);
+      if (this.payments.length) json['payments'] = this.payments.toJson(useNomenclatureIds);
+      if (this.modifier) json['modifier'] = this.modifier.toJson();
+      return json;
+    }
+  }
+
+  get operator() {
+    if (this.operatorId) return Operator.find(this.operatorId);
   }
 
   static new(attributes :any = {}) :Bill {

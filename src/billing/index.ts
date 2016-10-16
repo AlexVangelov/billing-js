@@ -3,29 +3,18 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-import { Bill } from './bill';
-import { Charge } from './charge';
-import { Modifier } from './modifier';
-import { Payment } from './payment';
+import { Bills } from './collection';
 
-/**
- * 
- * 
- * @export
- * @class Billing
- */
-export class Billing {
-  /**
-   * 
-   * 
-   * @type {Array<Bill>}
-   */
-  bills :Array<Bill> = [];
-  
-  /**
-   * Creates an instance of Billing.
-   * 
-   */
-  constructor(config: any = {}) {
+import { INomenclatureAttributes } from './nomenclature/interface';
+import * as Nomenclature from './nomenclature';
+
+export interface IBillingConfig {
+  nomenclature ?:INomenclatureAttributes;
+}
+
+export module Billing {
+  export var bills :Bills = new Bills();
+  export function config(config: IBillingConfig = {}) {
+    if (config.nomenclature) Nomenclature.init(config.nomenclature);
   }
 }

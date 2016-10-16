@@ -72,4 +72,8 @@ export abstract class BillCollection extends Array<BillItem> {
     });
     return success;
   }
+
+  toJson(useNomenclatureIds = false) :any {
+    return this.map((item)=> item.toJson(useNomenclatureIds) );
+  }
 }
