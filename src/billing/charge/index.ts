@@ -194,21 +194,33 @@ export class Charge extends BillItem {
   }
 
   get plu() :Plu {
-    if (this.pluId) return Plu.find(this.pluId);
+    let _plu :Plu;
+    if (this.pluId) Plu.find(this.pluId, (plu)=> {
+      _plu = plu;
+    });
+    return _plu;
   }
   set plu(plu :Plu) {
     this.pluId = plu.id;
   }
 
   get taxGroup() {
-    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
+    let _taxGroup :TaxGroup;
+    if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
+      _taxGroup = taxGroup;
+    });
+    return _taxGroup;
   }
   set taxGroup(taxGroup :TaxGroup) {
     this.taxGroupId = taxGroup.id;
   }
 
   get department() {
-    if (this.departmentId) return Department.find(this.departmentId);
+    let _department :Department;
+    if (this.departmentId) Department.find(this.departmentId, (department)=> {
+      _department = department;
+    });
+    return _department;
   }
   set department(department :Department) {
     this.departmentId = department.id;

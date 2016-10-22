@@ -16,29 +16,53 @@ export interface IStorableClass<T extends Storable> {
 
 export abstract class Storable {
   static _store :IStore;
+  private _queueSize :number = 0;
+  private _reposeCallback;
 
   constructor(attributes :any = {}) {
     if (attributes.store) (<any>this.constructor).initStore(attributes.store); 
   }
 
-  static find<T extends Storable>(this: IStorableClass<T>, id: number) :T {
-    if (!this._store) return;
-    let record = this._store.get(id);
-    if (record) return new this(record);
+  incQueue() {
+    this._queueSize = this._queueSize + 1;
+  }
+  decQueue() {
+    this._queueSize = this._queueSize - 1;
+    if (!this._queueSize && this._reposeCallback) this._reposeCallback();
   }
 
-  static all<T extends Storable>(this: IStorableClass<T>) :Array<IStoreRecord> {
+  repose(reposeCallback :() => any) {
+    if (!this._queueSize) reposeCallback();
+    else this._reposeCallback = reposeCallback;
+  }
+
+  static find<T extends Storable>(this: IStorableClass<T>, id: number, callback :(item: T) => any) :T {
     if (!this._store) return;
-    let records = this._store.query();
-    return records.map((record) => {
-      return new this(record);
+    this._store.findById(id, (err, record)=> {
+      if (err) {
+        console.error(err);
+        callback(undefined);
+      } else callback(new this(record));
     });
   }
 
-  static initStore(config :ArrayOrStoreConfig) {
+  static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :Array<T> {
+    if (!this._store) return;
+    let records :Array<T> = [];
+    this._store.find({}, (err, records)=> {
+      if (err) {
+        console.error(err);
+        callback(undefined);
+      } else callback(records.map((record)=> {
+        return new this(record);
+      }));
+    });
+  }
+
+  static initStore(config :ArrayOrStoreConfig | any) {
     if (config instanceof Array) {
       this._store = new MemoryStore(config);
-    }
+    } else this._store = config;
   }
 }
 

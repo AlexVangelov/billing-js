@@ -6,3 +6,4 @@ typings/
 *.d.ts
 *.log
 *.tgz
+/samples/node/mongooseStoreSampleProject

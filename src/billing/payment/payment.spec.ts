@@ -115,9 +115,12 @@ describe('Payment', () => {
 
     it('set/update nomenclature direct', function() {
       let payment = new Payment();
-      payment.paymentType = Nomenclature.PaymentType.find(1);
+      let p: Nomenclature.PaymentType;
+      Nomenclature.PaymentType.find(1, (r)=> payment.paymentType = r );
       expect(payment.paymentTypeId).toEqual(1);
-      payment.update({ paymentType: Nomenclature.PaymentType.find(2) });
+      Nomenclature.PaymentType.find(2, (r)=> p = r);
+      payment.update({ paymentType: p });
+      expect(payment.paymentTypeId).toEqual(2);
     });
   });
 });

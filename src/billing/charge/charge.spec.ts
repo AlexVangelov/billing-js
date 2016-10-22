@@ -334,11 +334,15 @@ describe('Charge', () => {
 
     it('update nomenclature direct', function() {
       let charge = new Charge({ price: 3 });
-      charge.update({ plu: Nomenclature.Plu.find(1) });
+      let plu: Nomenclature.Plu, taxGroup :Nomenclature.TaxGroup, department: Nomenclature.Department;
+      Nomenclature.Plu.find(1, (r)=> plu = r );
+      charge.update({ plu: plu });
       expect(charge.pluId).toEqual(1);
-      charge.update({ taxGroup: Nomenclature.TaxGroup.find(1) });
+      Nomenclature.TaxGroup.find(1, (r)=> taxGroup = r );
+      charge.update({ taxGroup: taxGroup });
       expect(charge.taxGroupId).toEqual(1);
-      charge.update({ department: Nomenclature.Department.find(2) });
+      Nomenclature.Department.find(2, (r)=> department = r );
+      charge.update({ department: department });
       expect(charge.departmentId).toEqual(2);
     });
   });

@@ -33,7 +33,11 @@ export class Plu extends Storable {
   }
 
   get department() :Department {
-    if (this.departmentId) return Department.find(this.departmentId);
+    let _departpent :Department;
+    if (this.departmentId) Department.find(this.departmentId, (department)=> {
+      _departpent = department;
+    });
+    return _departpent;
   }
 
   constructor(attributes :IPlu) {

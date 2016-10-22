@@ -7,6 +7,6 @@ export interface IStoreConfig {
 }
 
 export interface IStore {
-  get(id :number) :IStoreRecord;
-  query(filter ?:any) :Array<IStoreRecord>;
+  findById(id :number, callback :any);
+  find(conditions :any, callback :any);
 }

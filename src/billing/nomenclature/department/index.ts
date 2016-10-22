@@ -1,3 +1,8 @@
+// Copyright (c) 2016 AlexV <email@data.bg>
+// 
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+
 import { Storable } from '../../storable';
 import { IDepartment } from './interface';
 import { TaxGroup } from '../index';
@@ -13,7 +18,11 @@ export class Department extends Storable {
   }
 
   get taxGroup() :TaxGroup {
-    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
+    let _taxGroup :TaxGroup
+    if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
+      _taxGroup = taxGroup;
+    });
+    return _taxGroup;
   }
 
   constructor(attributes :IDepartment) {
