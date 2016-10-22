@@ -203,11 +203,12 @@ describe('Charge', () => {
     expect(charge.description).toEqual('Fresh');
   });
 
-  it('set price', function() {
+  it('set price', function(done) {
     let charge = new Charge({ pluId: 1 });
     expect(charge.price).toEqual(0);
     charge.price = 1.26;
     expect(charge.price).toEqual(1.26);
+    done();
   });
 
   it('set modifier', function() {
@@ -310,10 +311,11 @@ describe('Charge', () => {
       expect(charge.taxRatio).toEqual(0.09);
     });
 
-    it('missing nomenclature should not throw exteptions', function() {
+    it('missing nomenclature should not throw exteptions', function(done) {
       let charge = new Charge({ pluId: 2 });
       expect(()=> { charge.taxRatio; }).not.toThrow();
       expect(charge.department).toBeUndefined();
+      done();
     });
 
     it('direct department', function() {

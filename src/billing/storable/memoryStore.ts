@@ -18,7 +18,12 @@ export class MemoryStore implements IStore {
         return callback(undefined, i);
       }
     }
-    return callback({ error: 'not_found' });
+    return callback(new Error('Not Found'));
+  }
+
+  findOne(conditions: any, callback: any) {
+    if (this._items.length > 0) return callback(undefined, this._items[0]);
+    else return callback(new Error('Not Found'));
   }
 
   find(conditions :any, callback :any) {

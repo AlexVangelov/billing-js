@@ -21,6 +21,8 @@ export class Department extends Storable {
     let _taxGroup :TaxGroup
     if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
       _taxGroup = taxGroup;
+    }).catch((err)=> {
+      console.warn(`Plu#taxGroup ${this.taxGroupId} ${err.message}`);
     });
     return _taxGroup;
   }

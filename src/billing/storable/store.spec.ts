@@ -24,22 +24,42 @@ describe('Storable', ()=> {
     expect(test.property).toEqual('works');
   });
 
-  it('find', function() {
+  it('find', (done)=> {
     new TestClass({ store: [
       { id: 100, property: 'One' },
       { id: 101, property: 'Two' }
     ]});
     let item :TestClass;
-    TestClass.find(99, (r)=> item = r);
-    expect(item).toBeUndefined();
     TestClass.find(100, (r)=> item = r);
     expect(item instanceof TestClass).toBeTruthy();
     expect(item.property).toEqual('One');
     TestClass.find(101, (r)=> item = r);
     expect(item.property).toEqual('Two');
+    done();
   });
 
-  it('all', function() {
+  it('find non existing catch', (done)=> {
+    new TestClass({ store: [
+      { id: 100, property: 'One' },
+      { id: 101, property: 'Two' }
+    ]});
+    let item :TestClass;
+    TestClass.find(99, (r)=> item = r).catch((err)=> {
+      expect(err).toEqual(new Error('Not Found'));
+      done();
+    });
+    expect(item).toBeUndefined();
+  })
+
+  it('find catchable', ()=> {
+    new TestClass({ store: [
+      { id: 1, property: 'One' }
+    ]});
+    let catchable = TestClass.find(1,()=>{});
+    expect(catchable.catch).toBeDefined();
+  });
+
+  it('all', ()=> {
     new TestClass({ store: [
       { id: 100, property: 'One' },
       { id: 101, property: 'Two' }

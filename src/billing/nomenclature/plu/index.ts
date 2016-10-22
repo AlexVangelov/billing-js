@@ -36,6 +36,8 @@ export class Plu extends Storable {
     let _departpent :Department;
     if (this.departmentId) Department.find(this.departmentId, (department)=> {
       _departpent = department;
+    }).catch((err)=> {
+      console.warn(`Plu#department ${this.departmentId} ${err.message}`);
     });
     return _departpent;
   }

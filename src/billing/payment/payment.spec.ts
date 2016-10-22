@@ -79,11 +79,12 @@ describe('Payment', () => {
       expect(payment.errors.messages).toContain('Value must be greater than 0');
     });
 
-    it('non existing paymentTypeId', function() {
+    it('non existing paymentTypeId', function(done) {
       let bill = new Bill();
       let payment = bill.payments.new({ paymentTypeId: 101, value: 2 });
       expect(payment.isValid).toBeFalsy();
       expect(payment.errors.messages).toContain('PaymentType is not included in the list');
+      done();
     });
   });
 

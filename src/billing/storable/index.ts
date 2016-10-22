@@ -14,6 +14,19 @@ export interface IStorableClass<T extends Storable> {
   new (...a: any[]): T
 }
 
+export class StoreCatchable {
+  _catchCallback :(err: any)=> any;
+  catch(catchCallback :(err: any)=> any) {
+    this._catchCallback = catchCallback;
+  };
+  throwAsync(err :any) {
+    setTimeout(()=> {
+      if (this._catchCallback) this._catchCallback(err);
+      else throw err;
+    }, 0);
+  }
+}
+
 export abstract class Storable {
   static _store :IStore;
   private _queueSize :number = 0;
@@ -36,27 +49,51 @@ export abstract class Storable {
     else this._reposeCallback = reposeCallback;
   }
 
-  static find<T extends Storable>(this: IStorableClass<T>, id: number, callback :(item: T) => any) :T {
-    if (!this._store) return;
-    this._store.findById(id, (err, record)=> {
-      if (err) {
-        console.error(err);
-        callback(undefined);
-      } else callback(new this(record));
-    });
+  static find<T extends Storable>(this: IStorableClass<T>, id: number, callback :(item: T) => any) :StoreCatchable {
+    let catchable = new StoreCatchable();
+    if (!this._store) {
+      let className = (<any>this).name;
+      catchable.throwAsync(new Error(`${className} store is not configured!`));
+    } else {
+      this._store.findById(id, (err, record)=> {
+        if (err) catchable.throwAsync(err);
+        else if (!record) catchable.throwAsync(new Error('Not Found'));
+        else callback(new this(record));
+      });
+    }
+    return catchable;
   }
 
-  static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :Array<T> {
-    if (!this._store) return;
-    let records :Array<T> = [];
-    this._store.find({}, (err, records)=> {
-      if (err) {
-        console.error(err);
-        callback(undefined);
-      } else callback(records.map((record)=> {
-        return new this(record);
-      }));
-    });
+  static findOne<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :(item: T) => any) :StoreCatchable {
+    let catchable = new StoreCatchable();
+    if (!this._store) {
+      let className = (<any>this).name;
+      catchable.throwAsync(new Error(`${className} store is not configured!`));
+    } else {
+      this._store.findOne(conditions, (err, record)=> {
+        if (err) catchable.throwAsync(err);
+        else if (!record) catchable.throwAsync(new Error('Not Found'));
+        else callback(new this(record));
+      });
+    }
+    return catchable;
+  }
+
+  static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :StoreCatchable {
+    let catchable = new StoreCatchable();
+    if (!this._store) {
+      let className = (<any>this).name;
+      catchable.throwAsync(new Error(`${className} store is not configured!`));
+    } else {
+      this._store.find({}, (err, records)=> {
+        if (err) {
+          catchable.throwAsync(err);
+        } else callback(records.map((record)=> {
+          return new this(record);
+        }));
+      });
+    }
+    return catchable;
   }
 
   static initStore(config :ArrayOrStoreConfig | any) {

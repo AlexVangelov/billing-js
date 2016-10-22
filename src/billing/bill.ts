@@ -98,6 +98,8 @@ export class Bill extends ValidationModel {
     if (this.operatorId) {
       Operator.find(this.operatorId, (operator)=> {
         _operator = operator;
+      }).catch((err)=> {
+        console.warn(`Bill#operator ${this.operatorId} ${err.message}`);
       });
     }
     return _operator;

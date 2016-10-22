@@ -102,7 +102,11 @@ export class Payment extends BillItem {
 
   get paymentType() {
     let _paymentType :PaymentType;
-    if (this.paymentTypeId) PaymentType.find(this.paymentTypeId, (r)=> _paymentType = r);
+    if (this.paymentTypeId) PaymentType.find(this.paymentTypeId, (r)=> {
+      _paymentType = r;
+    }).catch((err)=> {
+      console.warn(`Payment#paymentType ${this.paymentTypeId} ${err.message}`);
+    });;
     return _paymentType;
   }
   set paymentType(paymentType :PaymentType) {

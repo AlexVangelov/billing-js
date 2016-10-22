@@ -9,4 +9,5 @@ export interface IStoreConfig {
 export interface IStore {
   findById(id :number, callback :any);
   find(conditions :any, callback :any);
+  findOne(conditions :any, callback :any);
 }

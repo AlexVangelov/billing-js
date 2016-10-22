@@ -197,6 +197,8 @@ export class Charge extends BillItem {
     let _plu :Plu;
     if (this.pluId) Plu.find(this.pluId, (plu)=> {
       _plu = plu;
+    }).catch((err)=> {
+      console.warn(`Charge#plu ${this.pluId} ${err.message}`);
     });
     return _plu;
   }
@@ -208,6 +210,8 @@ export class Charge extends BillItem {
     let _taxGroup :TaxGroup;
     if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
       _taxGroup = taxGroup;
+    }).catch((err)=> {
+      console.warn(`Charge#taxGroup ${this.taxGroupId} ${err.message}`);
     });
     return _taxGroup;
   }
@@ -219,6 +223,8 @@ export class Charge extends BillItem {
     let _department :Department;
     if (this.departmentId) Department.find(this.departmentId, (department)=> {
       _department = department;
+    }).catch((err)=> {
+      console.warn(`Charge#department ${this.departmentId} ${err.message}`);
     });
     return _department;
   }
