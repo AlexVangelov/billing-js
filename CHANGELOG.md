@@ -1,3 +1,7 @@
+## 1.0.0-alpha.1
+
+  - Prepare for asynchronous storages (api/db).
+
 ## 0.0.7
 
   - Adding nomenclature
