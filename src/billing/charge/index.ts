@@ -7,6 +7,7 @@ import { BillItem } from '../concerns/billItem';
 import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
+import { ChargesCollection } from './collection';
 
 import { Plu, TaxGroup, Department } from '../nomenclature';
 
@@ -194,21 +195,39 @@ export class Charge extends BillItem {
   }
 
   get plu() :Plu {
-    if (this.pluId) return Plu.find(this.pluId);
+    let _plu :Plu;
+    if (this.pluId) Plu.find(this.pluId, (plu)=> {
+      _plu = plu;
+    }).catch((err)=> {
+      console.warn(`Charge#plu ${this.pluId} ${err.message}`);
+    });
+    return _plu;
   }
   set plu(plu :Plu) {
     this.pluId = plu.id;
   }
 
   get taxGroup() {
-    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
+    let _taxGroup :TaxGroup;
+    if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
+      _taxGroup = taxGroup;
+    }).catch((err)=> {
+      console.warn(`Charge#taxGroup ${this.taxGroupId} ${err.message}`);
+    });
+    return _taxGroup;
   }
   set taxGroup(taxGroup :TaxGroup) {
     this.taxGroupId = taxGroup.id;
   }
 
   get department() {
-    if (this.departmentId) return Department.find(this.departmentId);
+    let _department :Department;
+    if (this.departmentId) Department.find(this.departmentId, (department)=> {
+      _department = department;
+    }).catch((err)=> {
+      console.warn(`Charge#department ${this.departmentId} ${err.message}`);
+    });
+    return _department;
   }
   set department(department :Department) {
     this.departmentId = department.id;
@@ -222,4 +241,4 @@ Charge.validates('modifier', { invalid: (self)=> {
   return self.modifier && !self.modifier.isValid;
 }});
 
-export { ChargesCollection } from './collection';
+export { ChargesCollection };

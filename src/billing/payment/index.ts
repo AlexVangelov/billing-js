@@ -7,6 +7,7 @@ import { BillItem } from '../concerns/billItem';
 import { IPaymentAttributes } from './interface';
 
 import { PaymentType } from '../nomenclature';
+import { PaymentsCollection } from './collection';
 
 /**
  * 
@@ -101,7 +102,13 @@ export class Payment extends BillItem {
   }
 
   get paymentType() {
-    if (this.paymentTypeId) return PaymentType.find(this.paymentTypeId);
+    let _paymentType :PaymentType;
+    if (this.paymentTypeId) PaymentType.find(this.paymentTypeId, (r)=> {
+      _paymentType = r;
+    }).catch((err)=> {
+      console.warn(`Payment#paymentType ${this.paymentTypeId} ${err.message}`);
+    });;
+    return _paymentType;
   }
   set paymentType(paymentType :PaymentType) {
     this.paymentTypeId = paymentType.id;
@@ -118,4 +125,4 @@ Payment.validates('paymentType', {
   }
 });
 
-export { PaymentsCollection } from './collection';
+export { PaymentsCollection };

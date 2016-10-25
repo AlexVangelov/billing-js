@@ -6,6 +6,7 @@
 import { BillItem } from '../concerns/billItem';
 import { Charge } from '../charge';
 import { IModifierAttributes } from './interface';
+import { ModifiersCollection } from './collection';
 
 /**
  * 
@@ -128,4 +129,4 @@ Modifier.validates('value', { notEqualTo: 0,
   }
 });
 
-export { ModifiersCollection } from './collection';
+export { ModifiersCollection };

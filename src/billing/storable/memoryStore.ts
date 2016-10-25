@@ -12,13 +12,21 @@ export class MemoryStore implements IStore {
     this._items = items;
   }
 
-  get(id :number) {
+  findById(id: number, callback: any) {
     for (let i of this._items) {
-      if (i.id === id) return i;
+      if (i.id === id) {
+        return callback(undefined, i);
+      }
     }
+    return callback(new Error('Not Found'));
   }
 
-  query(filter :any) {
-    return this._items;
+  findOne(conditions: any, callback: any) {
+    if (this._items.length > 0) return callback(undefined, this._items[0]);
+    else return callback(new Error('Not Found'));
+  }
+
+  find(conditions :any, callback :any) {
+    return callback(undefined, this._items);
   }
 }

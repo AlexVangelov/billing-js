@@ -94,7 +94,15 @@ export class Bill extends ValidationModel {
   }
 
   get operator() {
-    if (this.operatorId) return Operator.find(this.operatorId);
+    let _operator :Operator;
+    if (this.operatorId) {
+      Operator.find(this.operatorId, (operator)=> {
+        _operator = operator;
+      }).catch((err)=> {
+        console.warn(`Bill#operator ${this.operatorId} ${err.message}`);
+      });
+    }
+    return _operator;
   }
 
   static new(attributes :any = {}) :Bill {

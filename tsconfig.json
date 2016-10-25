@@ -3,9 +3,6 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-    "types": [
-      "jasmine"
-    ],
     "outDir": "./lib",
     "declaration": false
   },
@@ -14,5 +11,9 @@
   ],
   "files": [
     "src/index.ts"
-  ]
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "resolveGlobs": true,
+    "forkChecker": true
+  }
 }

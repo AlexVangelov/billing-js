@@ -203,11 +203,12 @@ describe('Charge', () => {
     expect(charge.description).toEqual('Fresh');
   });
 
-  it('set price', function() {
+  it('set price', function(done) {
     let charge = new Charge({ pluId: 1 });
     expect(charge.price).toEqual(0);
     charge.price = 1.26;
     expect(charge.price).toEqual(1.26);
+    done();
   });
 
   it('set modifier', function() {
@@ -310,10 +311,11 @@ describe('Charge', () => {
       expect(charge.taxRatio).toEqual(0.09);
     });
 
-    it('missing nomenclature should not throw exteptions', function() {
+    it('missing nomenclature should not throw exteptions', function(done) {
       let charge = new Charge({ pluId: 2 });
       expect(()=> { charge.taxRatio; }).not.toThrow();
       expect(charge.department).toBeUndefined();
+      done();
     });
 
     it('direct department', function() {
@@ -334,11 +336,15 @@ describe('Charge', () => {
 
     it('update nomenclature direct', function() {
       let charge = new Charge({ price: 3 });
-      charge.update({ plu: Nomenclature.Plu.find(1) });
+      let plu: Nomenclature.Plu, taxGroup :Nomenclature.TaxGroup, department: Nomenclature.Department;
+      Nomenclature.Plu.find(1, (r)=> plu = r );
+      charge.update({ plu: plu });
       expect(charge.pluId).toEqual(1);
-      charge.update({ taxGroup: Nomenclature.TaxGroup.find(1) });
+      Nomenclature.TaxGroup.find(1, (r)=> taxGroup = r );
+      charge.update({ taxGroup: taxGroup });
       expect(charge.taxGroupId).toEqual(1);
-      charge.update({ department: Nomenclature.Department.find(2) });
+      Nomenclature.Department.find(2, (r)=> department = r );
+      charge.update({ department: department });
       expect(charge.departmentId).toEqual(2);
     });
   });
