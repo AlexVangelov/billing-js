@@ -7,6 +7,7 @@ import { BillItem } from '../concerns/billItem';
 import { IPaymentAttributes } from './interface';
 
 import { PaymentType } from '../nomenclature';
+import { PaymentsCollection } from './collection';
 
 /**
  * 
@@ -124,4 +125,4 @@ Payment.validates('paymentType', {
   }
 });
 
-export { PaymentsCollection } from './collection';
+export { PaymentsCollection };

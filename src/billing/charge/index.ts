@@ -7,6 +7,7 @@ import { BillItem } from '../concerns/billItem';
 import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
+import { ChargesCollection } from './collection';
 
 import { Plu, TaxGroup, Department } from '../nomenclature';
 
@@ -240,4 +241,4 @@ Charge.validates('modifier', { invalid: (self)=> {
   return self.modifier && !self.modifier.isValid;
 }});
 
-export { ChargesCollection } from './collection';
+export { ChargesCollection };
