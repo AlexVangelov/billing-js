@@ -85,7 +85,10 @@ export class Modifier extends BillItem {
     if (attributes.bill) this._bill = attributes.bill;
     if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
     if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
-    if (attributes.charge) this._charge = attributes.charge;
+    if (attributes.charge) {
+      if (this.charge) this.charge.deleteModifier();
+      this._charge = attributes.charge;
+    }
     if (this.charge) {
       let chargeBill = this.charge.bill;
       if (chargeBill) {

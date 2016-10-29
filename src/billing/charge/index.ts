@@ -95,7 +95,10 @@ export class Charge extends BillItem {
       if (!this.bill) this._bill = modifierBill;
       else if (this.bill !== modifierBill) throw new ReferenceError('Charge with modifier belonging to another bill.');
     } else modifier.update({ bill: this.bill });
-    if (modifier.charge !== this) modifier.charge = this;
+    if (modifier.charge !== this) {
+      if (modifier.charge) modifier.charge.deleteModifier();
+      modifier.charge = this;
+    }
     this._modifier = modifier;
     if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
   }

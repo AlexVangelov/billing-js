@@ -120,7 +120,7 @@ Payment.validates('value', { greaterThan: 0 });
 Payment.validates('paymentType', {
   invalid: {
     if: (self)=> {
-      return self.paymentTypeId && ! self.paymentType;
+      return self.paymentTypeId && !self.paymentType;
     }, message: 'is not included in the list'
   }
 });

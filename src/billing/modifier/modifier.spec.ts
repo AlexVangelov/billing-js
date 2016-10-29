@@ -175,6 +175,19 @@ describe('Modifier', () => {
     expect(()=>{ modifier.update() }).not.toThrow();
   });
 
+  it('update charge', ()=> {
+    let modifier = new Modifier({ fixedValue: 1 });
+    let charge1 = new Charge({ price: 1, modifier: modifier });
+    let charge2 = new Charge({ price: 2 });
+    expect(charge1.modifier).toEqual(modifier);
+    expect(modifier.charge).toEqual(charge1);
+    modifier.update({ charge: charge2 });
+    expect(modifier.charge).toEqual(charge2);
+    expect(charge2.modifier).toEqual(modifier);
+    expect(charge1).not.toEqual(charge2);
+    expect(charge1.modifier).toBeUndefined();
+  });
+
   it('100% global', function() {
     let bill = new Bill();
     let modifier = bill.modifiers.new({ percentRatio: -1.0 });

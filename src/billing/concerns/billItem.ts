@@ -18,7 +18,7 @@ export declare type BillItemAttributes = IChargeAttributes | IModifierAttributes
  * @class BillItem
  */
 export abstract class BillItem extends ValidationModel {
-
+  state :any;
   /**
    * 
    * 
