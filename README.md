@@ -75,6 +75,10 @@ bill.toJson() //A JSON object (without circular references)
     boolean <item>.isValid  // check validity
     <item>.errors   // errors format [{ propertyName: { validationName: 'Human readable error' }}]
 
+### Other
+
+    <item>.state // Unused instance variable available for UI purposes
+
 ## Using the nomenclature ([samples/node/usingNomenclature.js](samples/node/usingNomenclature.js))
 ```javascript
 var billing = require('../../').Billing;

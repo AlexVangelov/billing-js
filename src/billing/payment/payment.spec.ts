@@ -57,6 +57,15 @@ describe('Payment', () => {
     let payment = new Payment();
     expect(()=>{ payment.update() }).not.toThrow();
   });
+
+  it('update flags', ()=> {
+    let payment = new Payment();
+    expect(payment.isCash).toBeTruthy();
+    expect(payment.isFiscal).toBeTruthy();
+    payment.update({ isCash: false, isFiscal: false });
+    expect(payment.isCash).toBeFalsy();
+    expect(payment.isFiscal).toBeFalsy();
+  });
   
   it('no paymentType defaults', function() {
     let payment = new Payment();

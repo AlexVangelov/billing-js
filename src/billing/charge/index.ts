@@ -150,10 +150,10 @@ export class Charge extends BillItem {
 
   update(attributes: IChargeAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
-    if (attributes.name) this.name = attributes.name;
-    if (attributes.description) this._description = attributes.description;
-    if (attributes.price) this._price = attributes.price;
-    if (attributes.qty) this.qty = attributes.qty;
+    if (typeof attributes.name !== 'undefined') this.name = attributes.name;
+    if (typeof attributes.description !== 'undefined') this._description = attributes.description;
+    if (typeof attributes.price !== 'undefined') this._price = attributes.price;
+    if (typeof attributes.qty !== 'undefined') this.qty = attributes.qty;
     if (attributes.plu) this.plu = attributes.plu;
     if (attributes.pluId) this.pluId = attributes.pluId;
     if (attributes.taxGroup) this.taxGroup = attributes.taxGroup;
@@ -239,6 +239,7 @@ export class Charge extends BillItem {
 
 Charge.validates('bill', { presence: true });
 Charge.validates('price', { greaterThan: 0 });
+Charge.validates('qty', { greaterThan: 0 });
 Charge.validates('finalValue', { greaterThanOrEqualTo: 0 });
 Charge.validates('modifier', { invalid: (self)=> {
   return self.modifier && !self.modifier.isValid;
