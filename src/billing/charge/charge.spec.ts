@@ -243,11 +243,43 @@ describe('Charge', () => {
     expect(charge.update()).toBeTruthy();
   });
 
+  it('update zero or empty values', ()=> {
+    let charge = new Charge({ qty: 2, price: 2, name: 'n', description: 'd' });
+    charge.update({ qty: 0 });
+    expect(charge.qty).toEqual(0);
+    charge.update({ price: 0 });
+    expect(charge.price).toEqual(0);
+    charge.update({ name: '' });
+    expect(charge.name).toEqual('');
+    charge.update({ description: '' });
+    expect(charge.description).toEqual('');
+  });
+
   it('set modifier should adopt charge', function() {
     let charge = new Charge({ price: 1 });
     let modifier = new Modifier({ fixedValue: 1 });
     charge.modifier = modifier;
     expect(modifier.charge).toEqual(charge);
+  });
+
+  it('delete modifier', ()=> {
+    let charge = new Charge({ price: 1, modifier: { fixedValue: 1 }});
+    expect(charge.modifier).toBeDefined();
+    charge.deleteModifier();
+    expect(charge.modifier).toBeUndefined();
+  });
+
+  it('transfer modifier', ()=> {
+    let modifier = new Modifier({ fixedValue: 1 });
+    let charge1 = new Charge({ price: 1, modifier: modifier });
+    let charge2 = new Charge({ price: 2 });
+    expect(charge1.modifier).toEqual(modifier);
+    expect(modifier.charge).toEqual(charge1);
+    charge2.update({ modifier: modifier });
+    expect(modifier.charge).toEqual(charge2);
+    expect(charge2.modifier).toEqual(modifier);
+    expect(charge1).not.toEqual(charge2);
+    expect(charge1.modifier).toBeUndefined();
   });
 
   describe('validations', function() {

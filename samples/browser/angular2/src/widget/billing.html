@@ -1,0 +1,95 @@
+<h4>
+  <button class='btn btn-default pull-right' (click)='editModifier()'>- Discount / + Surcharge</button>
+  BillingJs Sample (Angular2)
+  <p><small>npm: <a href='https://www.npmjs.com/package/billing' target='_blank'>https://www.npmjs.com/package/billing</a></small></p>
+</h4>
+<div *ngIf='bill.errors' class='text-danger'>{{ bill.errors.messages.join(', ') }}</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button class='btn btn-default pull-right' (click)='editCharge()'>+ Add</button>
+    <h4>Charges</h4>
+  </div>
+  <!-- charges -->
+  <div class="list-group">
+    <div *ngFor='let charge of bill.charges'>
+      <button *ngIf='!charge.state' (click)='editCharge(charge)' class="list-group-item" [ngClass]="{ 'active': isSelected(charge), 'list-group-item-danger': !charge.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ charge.finalValue | currency:'USD':true:'1.2-2' }}</div>
+          {{ charge.qty }} * {{ charge.price | currency:'USD':true:'1.2-2' }}
+          <small>{{ charge.name }}</small>
+        </h4>
+        <p class="list-group-item-text">{{ charge.description }}</p>
+      </button>
+      <button style='padding-left: 40px; border-top-style: dashed;' *ngIf='charge.modifier && !charge.modifier.state' (click)='editModifier(charge.modifier)'  class="list-group-item" [ngClass]="{ 'active': isSelected(charge.modifier), 'list-group-item-danger': !charge.modifier.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ charge.modifier.value | currency:'USD':true:'1.2-2' }}</div>
+          {{ labelForModifier(charge.modifier) }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <div class="list-group">
+    <div *ngFor='let modifier of globalModifiers'>
+      <button *ngIf='!modifier.state' (click)='editModifier(modifier)' class="list-group-item global-modifier" [ngClass]="{ 'active': isSelected(modifier), 'list-group-item-danger': !modifier.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ modifier.value | currency:'USD':true:'1.2-2' }}</div>
+          {{ labelForModifier(modifier) }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <div class='panel-footer'>
+    <h4 class="list-group-item-heading">
+      <strong class='pull-right'>{{ bill.total | currency:'USD':true:'1.2-2' }}</strong>
+      Total
+    </h4>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button (click)='editPayment()' class='btn btn-default pull-right'>+ Add</button>
+    <h4>Payments</h4>
+  </div>
+  <div class="list-group">
+    <div *ngFor='let payment of bill.payments'>
+      <button *ngIf='!payment.state' (click)='editPayment(payment)' class="list-group-item" [ngClass]="{ 'active': isSelected(payment), 'list-group-item-danger': !payment.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ payment.value | currency:'USD':true:'1.2-2' }}</div>
+          {{ payment.name }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <div class='panel-footer'>
+    <h4 class="list-group-item-heading">
+      <strong class='pull-right' [ngClass]="{ 'text-danger': bill.balance > 0 }">{{ bill.balance | currency:'USD':true:'1.2-2' }}</strong>
+      Balance
+    </h4>
+  </div>
+</div>
+<div>
+<button class='btn btn-default btn-sm' (click)='showJson()'>toJson()</button>
+<button class='btn btn-default btn-sm' (click)='reset()'>Reset</button>
+<a class='btn btn-link btn-sm pull-right' href='https://github.com/AlexVangelov/billing-js' target='_blank'>
+  <img width=24 src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQwcHgiIGhlaWdodD0iNDBweCIgdmlld0JveD0iMTIgMTIgNDAgNDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMTIgMTIgNDAgNDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiMzMzMzMzMiIGQ9Ik0zMiAxMy40Yy0xMC41IDAtMTkgOC41LTE5IDE5YzAgOC40IDUuNSAxNS41IDEzIDE4YzEgMC4yIDEuMy0wLjQgMS4zLTAuOWMwLTAuNSAwLTEuNyAwLTMuMiBjLTUuMyAxLjEtNi40LTIuNi02LjQtMi42QzIwIDQxLjYgMTguOCA0MSAxOC44IDQxYy0xLjctMS4yIDAuMS0xLjEgMC4xLTEuMWMxLjkgMC4xIDIuOSAyIDIuOSAyYzEuNyAyLjkgNC41IDIuMSA1LjUgMS42IGMwLjItMS4yIDAuNy0yLjEgMS4yLTIuNmMtNC4yLTAuNS04LjctMi4xLTguNy05LjRjMC0yLjEgMC43LTMuNyAyLTUuMWMtMC4yLTAuNS0wLjgtMi40IDAuMi01YzAgMCAxLjYtMC41IDUuMiAyIGMxLjUtMC40IDMuMS0wLjcgNC44LTAuN2MxLjYgMCAzLjMgMC4yIDQuNyAwLjdjMy42LTIuNCA1LjItMiA1LjItMmMxIDIuNiAwLjQgNC42IDAuMiA1YzEuMiAxLjMgMiAzIDIgNS4xYzAgNy4zLTQuNSA4LjktOC43IDkuNCBjMC43IDAuNiAxLjMgMS43IDEuMyAzLjVjMCAyLjYgMCA0LjYgMCA1LjJjMCAwLjUgMC40IDEuMSAxLjMgMC45YzcuNS0yLjYgMTMtOS43IDEzLTE4LjFDNTEgMjEuOSA0Mi41IDEzLjQgMzIgMTMuNHoiLz48L3N2Zz4=">
+  View on GitHub
+</a>
+</div>
+
+<div class="modal show" *ngIf='selectedItem' id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" [ngSwitch]="dialogType">
+    <widget-charge *ngSwitchCase="'charge'" [charge]='selectedItem' (done)='done($event)'></widget-charge>
+    <widget-modifier *ngSwitchCase="'modifier'" [modifier]='selectedItem' [charges]='bill.charges' (done)='done($event)'></widget-modifier>
+    <widget-payment *ngSwitchCase="'payment'" [payment]='selectedItem' (done)='done($event)'></widget-payment>
+    <div *ngSwitchCase="'json'" class="modal-content">
+      <div class="panel-heading">
+        <button type="button" class="close" (click)='done(true)' aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">toJson()</h4>
+      </div>
+      <div class="modal-body">
+        <div *ngIf='!bill.isValid' class="alert alert-danger" role="alert">{{ bill.errors.messages.join(', ') }}</div>
+        <pre style='max-height: 400px; overflow: auto;'>{{ bill.toJson() | json }}</pre>
+      </div>
+    </div>
+  </div>
+</div>

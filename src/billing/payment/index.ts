@@ -36,7 +36,7 @@ export class Payment extends BillItem {
 
   private _isCash :boolean;
   get isCash() :boolean {
-    return this._isCash ? this._isCash : (this.paymentType ? this.paymentType.isCash : true);
+    return (typeof this._isCash !== 'undefined') ? this._isCash : (this.paymentType ? this.paymentType.isCash : true);
   }
   set isCash(value :boolean) {
     this._isCash = value;
@@ -44,7 +44,7 @@ export class Payment extends BillItem {
 
   private _isFiscal :boolean;
   get isFiscal() :boolean {
-    return this._isFiscal ? this._isFiscal : (this.paymentType ? this.paymentType.isFiscal : true);
+    return (typeof this._isFiscal !== 'undefined') ? this._isFiscal : (this.paymentType ? this.paymentType.isFiscal : true);
   }
   set isFiscal(value :boolean) {
     this._isFiscal = value;
@@ -58,7 +58,7 @@ export class Payment extends BillItem {
   constructor(attributes: IPaymentAttributes = {}) {
     super(attributes.bill);
     if (!attributes.value) {
-      if (this.bill) this.value = this.bill.total - this.bill.payments.sum();
+      if (this.bill) this.value = Math.round((this.bill.total - this.bill.payments.sum()) * 100) / 100;
     }
     this.update(attributes);
   }
@@ -75,13 +75,12 @@ export class Payment extends BillItem {
 
   update(attributes: IPaymentAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
-    if (attributes.name) this.name = attributes.name;
-    if (attributes.value) this.value = attributes.value;
+    if (typeof attributes.name !== 'undefined') this.name = attributes.name;
+    if (typeof attributes.value !== 'undefined') this.value = attributes.value;
     if (attributes.paymentType) this.paymentType = attributes.paymentType;
     if (attributes.paymentTypeId) this.paymentTypeId = attributes.paymentTypeId;
-    if (attributes.isCash) this.isCash = attributes.isCash;
-    if (attributes.isFiscal) this.isFiscal = attributes.isFiscal;
-    if (attributes.value) this.value = attributes.value;
+    if (typeof attributes.isCash !== 'undefined') this._isCash = attributes.isCash;
+    if (typeof attributes.isFiscal !== 'undefined') this._isFiscal = attributes.isFiscal;
     if (this.bill && !~this.bill.payments.indexOf(this)) this.bill.payments.add(this);
     return true;
   }
@@ -120,7 +119,7 @@ Payment.validates('value', { greaterThan: 0 });
 Payment.validates('paymentType', {
   invalid: {
     if: (self)=> {
-      return self.paymentTypeId && ! self.paymentType;
+      return self.paymentTypeId && !self.paymentType;
     }, message: 'is not included in the list'
   }
 });
