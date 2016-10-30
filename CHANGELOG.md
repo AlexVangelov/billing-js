@@ -1,3 +1,7 @@
+## 1.0.2
+
+  - Build dist
+
 ## 1.0.1
 
   - UI friendly changes and fixes.
