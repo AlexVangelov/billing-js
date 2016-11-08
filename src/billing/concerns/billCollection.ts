@@ -30,6 +30,11 @@ export abstract class BillCollection extends Array<BillItem> {
   constructor(bill: Bill) {
     super();
     this._bill = bill;
+
+    Object.defineProperties(this, {
+      _bill: { enumerable: false, value: bill },
+      length: { enumerable: false, writable: true, value: this.length }
+    });
   }
 
   get bill() :Bill {
@@ -77,3 +82,12 @@ export abstract class BillCollection extends Array<BillItem> {
     return this.map((item)=> item.toJson(useNomenclatureIds) );
   }
 }
+
+Object.defineProperties(BillCollection.prototype, {
+  constructor: { enumerable: false },
+  bill: { enumerable: false },
+  add: { enumerable: false },
+  remove: { enumerable: false },
+  save: { enumerable: false },
+  toJson: { enumerable: false }
+});

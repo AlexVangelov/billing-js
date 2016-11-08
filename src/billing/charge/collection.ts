@@ -89,3 +89,13 @@ export class ChargesCollection extends BillCollection {
     return sum;
   }
 }
+
+Object.defineProperties(ChargesCollection.prototype, {
+  constructor: { enumerable: false },
+  new: { enumerable: false },
+  add: { enumerable: false },
+  remove: { enumerable: false },
+  save: { enumerable: false },
+  sum: { enumerable: false },
+  finalSum: { enumerable: false }
+});
