@@ -9,7 +9,7 @@ import { Charge } from './billing/charge';
 import { Modifier } from './billing/modifier';
 import { Payment } from './billing/payment';
 import * as Nomenclature from './billing/nomenclature';
-import { Storable } from './billing/storable';
+import * as Storable from './billing/storable';
 
 export {
   Billing,

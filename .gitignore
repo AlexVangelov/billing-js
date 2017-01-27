@@ -7,4 +7,5 @@ typings/
 *.log
 *.tgz
 /samples/node/mongooseStoreSampleProject
+/samples/node/dynamoDbStoreProject
 .vscode
