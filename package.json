@@ -17,7 +17,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsc -w",
-    "preinstall": "typings install",
+    "postinstall": "typings install",
     "test": "karma start karma.conf.js",
     "build": "tsc -d",
     "dist": "webpack --progress --profile --bail",
