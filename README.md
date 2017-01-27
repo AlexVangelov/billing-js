@@ -6,6 +6,10 @@ Billing Module JS
 
     npm install billing
 
+  * Implements base billing standart.
+  * Data binding frameworks friendly.
+  * Example: [BillingJs Demo (Angular2)](https://plnkr.co/n0srTG)
+
 ## Usage
 
 ### Right constructor  ([samples/node/rightConstructor.js](samples/node/rightConstructor.js))
@@ -74,6 +78,10 @@ bill.toJson() //A JSON object (without circular references)
 
     boolean <item>.isValid  // check validity
     <item>.errors   // errors format [{ propertyName: { validationName: 'Human readable error' }}]
+
+### Other
+
+    <item>.state // Unused instance variable available for UI purposes
 
 ## Using the nomenclature ([samples/node/usingNomenclature.js](samples/node/usingNomenclature.js))
 ```javascript

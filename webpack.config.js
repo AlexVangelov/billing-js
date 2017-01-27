@@ -3,6 +3,9 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
+var webpack = require('webpack');
+var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+
 module.exports = {
   devtool: 'source-map',
   context: __dirname + "/src",
@@ -22,12 +25,20 @@ module.exports = {
   },
   module: {
     loaders: [
-      {
-        test: /\.ts$/,
-        loaders: ['ts']
-      }
+      { test: /\.ts$/, loader: 'awesome-typescript' }
     ]
   },
+  plugins: [
+    new ForkCheckerPlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(true),
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: {
+        keep_fnames: true
+      }
+    })
+  ],
   externals: {
     "billing": "BillingJs"
   }

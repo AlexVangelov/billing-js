@@ -203,11 +203,12 @@ describe('Charge', () => {
     expect(charge.description).toEqual('Fresh');
   });
 
-  it('set price', function() {
+  it('set price', function(done) {
     let charge = new Charge({ pluId: 1 });
     expect(charge.price).toEqual(0);
     charge.price = 1.26;
     expect(charge.price).toEqual(1.26);
+    done();
   });
 
   it('set modifier', function() {
@@ -242,11 +243,43 @@ describe('Charge', () => {
     expect(charge.update()).toBeTruthy();
   });
 
+  it('update zero or empty values', ()=> {
+    let charge = new Charge({ qty: 2, price: 2, name: 'n', description: 'd' });
+    charge.update({ qty: 0 });
+    expect(charge.qty).toEqual(0);
+    charge.update({ price: 0 });
+    expect(charge.price).toEqual(0);
+    charge.update({ name: '' });
+    expect(charge.name).toEqual('');
+    charge.update({ description: '' });
+    expect(charge.description).toEqual('');
+  });
+
   it('set modifier should adopt charge', function() {
     let charge = new Charge({ price: 1 });
     let modifier = new Modifier({ fixedValue: 1 });
     charge.modifier = modifier;
     expect(modifier.charge).toEqual(charge);
+  });
+
+  it('delete modifier', ()=> {
+    let charge = new Charge({ price: 1, modifier: { fixedValue: 1 }});
+    expect(charge.modifier).toBeDefined();
+    charge.deleteModifier();
+    expect(charge.modifier).toBeUndefined();
+  });
+
+  it('transfer modifier', ()=> {
+    let modifier = new Modifier({ fixedValue: 1 });
+    let charge1 = new Charge({ price: 1, modifier: modifier });
+    let charge2 = new Charge({ price: 2 });
+    expect(charge1.modifier).toEqual(modifier);
+    expect(modifier.charge).toEqual(charge1);
+    charge2.update({ modifier: modifier });
+    expect(modifier.charge).toEqual(charge2);
+    expect(charge2.modifier).toEqual(modifier);
+    expect(charge1).not.toEqual(charge2);
+    expect(charge1.modifier).toBeUndefined();
   });
 
   describe('validations', function() {
@@ -310,10 +343,11 @@ describe('Charge', () => {
       expect(charge.taxRatio).toEqual(0.09);
     });
 
-    it('missing nomenclature should not throw exteptions', function() {
+    it('missing nomenclature should not throw exteptions', function(done) {
       let charge = new Charge({ pluId: 2 });
       expect(()=> { charge.taxRatio; }).not.toThrow();
       expect(charge.department).toBeUndefined();
+      done();
     });
 
     it('direct department', function() {
@@ -334,11 +368,15 @@ describe('Charge', () => {
 
     it('update nomenclature direct', function() {
       let charge = new Charge({ price: 3 });
-      charge.update({ plu: Nomenclature.Plu.find(1) });
+      let plu: Nomenclature.Plu, taxGroup :Nomenclature.TaxGroup, department: Nomenclature.Department;
+      Nomenclature.Plu.find(1, (r)=> plu = r );
+      charge.update({ plu: plu });
       expect(charge.pluId).toEqual(1);
-      charge.update({ taxGroup: Nomenclature.TaxGroup.find(1) });
+      Nomenclature.TaxGroup.find(1, (r)=> taxGroup = r );
+      charge.update({ taxGroup: taxGroup });
       expect(charge.taxGroupId).toEqual(1);
-      charge.update({ department: Nomenclature.Department.find(2) });
+      Nomenclature.Department.find(2, (r)=> department = r );
+      charge.update({ department: department });
       expect(charge.departmentId).toEqual(2);
     });
   });

@@ -57,6 +57,15 @@ describe('Payment', () => {
     let payment = new Payment();
     expect(()=>{ payment.update() }).not.toThrow();
   });
+
+  it('update flags', ()=> {
+    let payment = new Payment();
+    expect(payment.isCash).toBeTruthy();
+    expect(payment.isFiscal).toBeTruthy();
+    payment.update({ isCash: false, isFiscal: false });
+    expect(payment.isCash).toBeFalsy();
+    expect(payment.isFiscal).toBeFalsy();
+  });
   
   it('no paymentType defaults', function() {
     let payment = new Payment();
@@ -79,11 +88,12 @@ describe('Payment', () => {
       expect(payment.errors.messages).toContain('Value must be greater than 0');
     });
 
-    it('non existing paymentTypeId', function() {
+    it('non existing paymentTypeId', function(done) {
       let bill = new Bill();
       let payment = bill.payments.new({ paymentTypeId: 101, value: 2 });
       expect(payment.isValid).toBeFalsy();
       expect(payment.errors.messages).toContain('PaymentType is not included in the list');
+      done();
     });
   });
 
@@ -115,9 +125,12 @@ describe('Payment', () => {
 
     it('set/update nomenclature direct', function() {
       let payment = new Payment();
-      payment.paymentType = Nomenclature.PaymentType.find(1);
+      let p: Nomenclature.PaymentType;
+      Nomenclature.PaymentType.find(1, (r)=> payment.paymentType = r );
       expect(payment.paymentTypeId).toEqual(1);
-      payment.update({ paymentType: Nomenclature.PaymentType.find(2) });
+      Nomenclature.PaymentType.find(2, (r)=> p = r);
+      payment.update({ paymentType: p });
+      expect(payment.paymentTypeId).toEqual(2);
     });
   });
 });

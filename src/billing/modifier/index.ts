@@ -6,6 +6,7 @@
 import { BillItem } from '../concerns/billItem';
 import { Charge } from '../charge';
 import { IModifierAttributes } from './interface';
+import { ModifiersCollection } from './collection';
 
 /**
  * 
@@ -49,8 +50,11 @@ export class Modifier extends BillItem {
   }
 
   set charge(charge :Charge) {
-    if (charge instanceof Charge) this._charge = charge;
-    else throw new ReferenceError('Set Charge by attributes is not allowed for modifier');
+    if (charge instanceof Charge || charge === null) {
+      if (this.charge) this.charge.deleteModifier();
+      if (charge) this._charge = charge;
+      else delete this._charge;
+    } else throw new ReferenceError('Set Charge by attributes is not allowed for modifier');
   }
 
   /**
@@ -82,9 +86,10 @@ export class Modifier extends BillItem {
 
   update(attributes: IModifierAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
-    if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
-    if (attributes.fixedValue) this.fixedValue = attributes.fixedValue;
-    if (attributes.charge) this._charge = attributes.charge;
+    if (attributes.percentRatio === null) delete this.percentRatio;
+    else if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
+    if (typeof attributes.fixedValue!== 'undefined') this.fixedValue = attributes.fixedValue || 0;
+    if (typeof attributes.charge !== 'undefined') this.charge = attributes.charge;
     if (this.charge) {
       let chargeBill = this.charge.bill;
       if (chargeBill) {
@@ -128,4 +133,4 @@ Modifier.validates('value', { notEqualTo: 0,
   }
 });
 
-export { ModifiersCollection } from './collection';
+export { ModifiersCollection };

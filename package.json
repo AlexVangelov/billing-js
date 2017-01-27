@@ -1,6 +1,6 @@
 {
   "name": "billing",
-  "version": "0.0.7",
+  "version": "1.0.1",
   "description": "Billing Module Js",
   "author": "AlexV",
   "repository": {
@@ -20,10 +20,11 @@
     "preinstall": "typings install",
     "test": "karma start karma.conf.js",
     "build": "tsc -d",
-    "dist": "webpack -p"
+    "dist": "webpack --progress --profile --bail",
+    "sample-angular": "webpack-dev-server --content-base samples/browser/angular2/"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.2.31",
+    "awesome-typescript-loader": "^2.2.4",
     "istanbul": "^0.4.5",
     "jasmine-core": "^2.4.1",
     "karma": "^1.2.0",
@@ -33,10 +34,10 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-typescript": "^2.0.5",
     "source-map": "^0.5.6",
-    "ts-loader": "^0.8.2",
     "typescript": "^2.0.0",
     "typings": "^1.3.3",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
   },
   "typings": "./lib/index.d.ts",
   "files": [

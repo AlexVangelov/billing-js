@@ -7,6 +7,7 @@ import { BillItem } from '../concerns/billItem';
 import { Modifier } from '../modifier';
 import { IChargeAttributes } from './interface';
 import { IModifierAttributes } from '../modifier/interface';
+import { ChargesCollection } from './collection';
 
 import { Plu, TaxGroup, Department } from '../nomenclature';
 
@@ -94,7 +95,10 @@ export class Charge extends BillItem {
       if (!this.bill) this._bill = modifierBill;
       else if (this.bill !== modifierBill) throw new ReferenceError('Charge with modifier belonging to another bill.');
     } else modifier.update({ bill: this.bill });
-    if (modifier.charge !== this) modifier.charge = this;
+    if (modifier.charge !== this) {
+      if (modifier.charge) modifier.charge.deleteModifier();
+      modifier.charge = this;
+    }
     this._modifier = modifier;
     if (this.bill && !~this.bill.charges.indexOf(this)) this.bill.charges.add(this);
   }
@@ -146,10 +150,10 @@ export class Charge extends BillItem {
 
   update(attributes: IChargeAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
-    if (attributes.name) this.name = attributes.name;
-    if (attributes.description) this._description = attributes.description;
-    if (attributes.price) this._price = attributes.price;
-    if (attributes.qty) this.qty = attributes.qty;
+    if (typeof attributes.name !== 'undefined') this.name = attributes.name;
+    if (typeof attributes.description !== 'undefined') this._description = attributes.description;
+    if (typeof attributes.price !== 'undefined') this._price = attributes.price;
+    if (typeof attributes.qty !== 'undefined') this.qty = attributes.qty;
     if (attributes.plu) this.plu = attributes.plu;
     if (attributes.pluId) this.pluId = attributes.pluId;
     if (attributes.taxGroup) this.taxGroup = attributes.taxGroup;
@@ -194,21 +198,39 @@ export class Charge extends BillItem {
   }
 
   get plu() :Plu {
-    if (this.pluId) return Plu.find(this.pluId);
+    let _plu :Plu;
+    if (this.pluId) Plu.find(this.pluId, (plu)=> {
+      _plu = plu;
+    }).catch((err)=> {
+      console.warn(`Charge#plu ${this.pluId} ${err.message}`);
+    });
+    return _plu;
   }
   set plu(plu :Plu) {
     this.pluId = plu.id;
   }
 
   get taxGroup() {
-    if (this.taxGroupId) return TaxGroup.find(this.taxGroupId);
+    let _taxGroup :TaxGroup;
+    if (this.taxGroupId) TaxGroup.find(this.taxGroupId, (taxGroup)=> {
+      _taxGroup = taxGroup;
+    }).catch((err)=> {
+      console.warn(`Charge#taxGroup ${this.taxGroupId} ${err.message}`);
+    });
+    return _taxGroup;
   }
   set taxGroup(taxGroup :TaxGroup) {
     this.taxGroupId = taxGroup.id;
   }
 
   get department() {
-    if (this.departmentId) return Department.find(this.departmentId);
+    let _department :Department;
+    if (this.departmentId) Department.find(this.departmentId, (department)=> {
+      _department = department;
+    }).catch((err)=> {
+      console.warn(`Charge#department ${this.departmentId} ${err.message}`);
+    });
+    return _department;
   }
   set department(department :Department) {
     this.departmentId = department.id;
@@ -217,9 +239,10 @@ export class Charge extends BillItem {
 
 Charge.validates('bill', { presence: true });
 Charge.validates('price', { greaterThan: 0 });
+Charge.validates('qty', { greaterThan: 0 });
 Charge.validates('finalValue', { greaterThanOrEqualTo: 0 });
 Charge.validates('modifier', { invalid: (self)=> {
   return self.modifier && !self.modifier.isValid;
 }});
 
-export { ChargesCollection } from './collection';
+export { ChargesCollection };
