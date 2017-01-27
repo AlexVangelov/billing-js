@@ -1,0 +1,13 @@
+/*
+ Copyright (c) 2017 AlexV <email@data.bg>
+ 
+ This software is released under the MIT License.
+ http://opensource.org/licenses/mit-license.php
+*/
+
+widget-billing {
+  font-size: 12px;
+}
+widget-billing .global-modifier:not(:hover) {
+  background-color: #f9f9f9;
+}

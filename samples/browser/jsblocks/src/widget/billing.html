@@ -1,0 +1,86 @@
+<h4>
+  <button class='btn btn-default pull-right' data-query='click(editModifier)'>- Discount / + Surcharge</button>
+  BillingJs Sample ( <img src='http://jsblocks.com/img/logoBeta.png' style='height: 24px;'> jsblocks )<br>
+  <small>See also: <a href='https://plnkr.co/n0srTG'>BillingJs Sample ( <img src='https://angularjs.org/img/AngularJS-large.png' style='height: 24px;'> Angular2 )</a></small>
+</h4>
+<!--<div *ngIf='bill.errors' class='text-danger'>{{ bill.errors.messages.join(', ') }}</div>-->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button class='btn btn-default pull-right' data-query='click($view.editCharge)'>+ Add</button>
+    <h4>Charges</h4>
+  </div>
+  <!-- charges -->
+  <div class="list-group">
+    <div data-query='each(bill().charges)'>
+      <button data-query='render(!$this.state).click($view.editCharge, $this)' class="list-group-item" [ngClass]="{ 'active': isSelected(charge), 'list-group-item-danger': !charge.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ $view.money(finalValue) }}</div>
+          {{ qty }} * {{ $view.money(price)  }}
+          <small>{{ name }}</small>
+        </h4>
+        <p class="list-group-item-text">{{ description }}</p>
+      </button>
+      <button style='padding-left: 40px; border-top-style: dashed;' class="list-group-item" [ngClass]="{ 'active': isSelected(charge.modifier), 'list-group-item-danger': !charge.modifier.isValid }" class="list-group-item"
+        data-query="render(modifier && !modifier.state).click($view.editModifier, modifier)">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ $view.money(modifier.value) }}</div>
+          {{ $view.labelForModifier(modifier) }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <!-- modifiers -->
+  <div class="list-group">
+    <div data-query='each($view.globalModifiers())'>
+      <button data-query='render(!$this.state)' (click)='$view.editModifier(modifier)' class="list-group-item global-modifier" [ngClass]="{ 'active': isSelected(modifier), 'list-group-item-danger': !modifier.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ $view.money(modifier.value) }}</div>
+          {{ labelForModifier(modifier) }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <div class='panel-footer'>
+    <h4 class="list-group-item-heading">
+      <strong class='pull-right'>{{ $view.money(bill().total) }}</strong>
+      Total
+    </h4>
+  </div>
+</div>
+<!-- payments -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button data-query='click($view.editPayment)' class='btn btn-default pull-right'>+ Add</button>
+    <h4>Payments</h4>
+  </div>
+  <div class="list-group">
+    <div data-query='each(bill().payments)'>
+      <button data-query='render(!$this.state).click($view.editPayment, $this)' class="list-group-item" [ngClass]="{ 'active': isSelected(payment), 'list-group-item-danger': !payment.isValid }">
+        <h4 class="list-group-item-heading">
+          <div class='pull-right'>{{ $view.money(value) }}</div>
+          {{ name }}
+        </h4>
+      </button>
+    </div>
+  </div>
+  <div class='panel-footer'>
+    <h4 class="list-group-item-heading">
+      <strong class='pull-right' [ngClass]="{ 'text-danger': bill.balance > 0 }">{{ $view.money(bill.balance) }}</strong>
+      Balance
+    </h4>
+  </div>
+</div>
+<div>
+  <button class='btn btn-default btn-sm' data-query='click(showJson)'>toJson()</button>
+  <button class='btn btn-default btn-sm' data-query='click(reset)'>Reset</button>
+  <a class='btn btn-link btn-sm pull-right' href='https://github.com/AlexVangelov/billing-js' target='_blank'>
+    <img height="18" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQwcHgiIGhlaWdodD0iNDBweCIgdmlld0JveD0iMTIgMTIgNDAgNDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMTIgMTIgNDAgNDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9IiMzMzMzMzMiIGQ9Ik0zMiAxMy40Yy0xMC41IDAtMTkgOC41LTE5IDE5YzAgOC40IDUuNSAxNS41IDEzIDE4YzEgMC4yIDEuMy0wLjQgMS4zLTAuOWMwLTAuNSAwLTEuNyAwLTMuMiBjLTUuMyAxLjEtNi40LTIuNi02LjQtMi42QzIwIDQxLjYgMTguOCA0MSAxOC44IDQxYy0xLjctMS4yIDAuMS0xLjEgMC4xLTEuMWMxLjkgMC4xIDIuOSAyIDIuOSAyYzEuNyAyLjkgNC41IDIuMSA1LjUgMS42IGMwLjItMS4yIDAuNy0yLjEgMS4yLTIuNmMtNC4yLTAuNS04LjctMi4xLTguNy05LjRjMC0yLjEgMC43LTMuNyAyLTUuMWMtMC4yLTAuNS0wLjgtMi40IDAuMi01YzAgMCAxLjYtMC41IDUuMiAyIGMxLjUtMC40IDMuMS0wLjcgNC44LTAuN2MxLjYgMCAzLjMgMC4yIDQuNyAwLjdjMy42LTIuNCA1LjItMiA1LjItMmMxIDIuNiAwLjQgNC42IDAuMiA1YzEuMiAxLjMgMiAzIDIgNS4xYzAgNy4zLTQuNSA4LjktOC43IDkuNCBjMC43IDAuNiAxLjMgMS43IDEuMyAzLjVjMCAyLjYgMCA0LjYgMCA1LjJjMCAwLjUgMC40IDEuMSAxLjMgMC45YzcuNS0yLjYgMTMtOS43IDEzLTE4LjFDNTEgMjEuOSA0Mi41IDEzLjQgMzIgMTMuNHoiLz48L3N2Zz4=">
+    View on GitHub
+  </a>
+  <a class='btn btn-link btn-sm pull-right' href="https://www.npmjs.com/package/billing" target='_blank'>
+    <img src="https://badge.fury.io/js/billing.png" alt="npm version" height="18">
+    https://www.npmjs.com/package/billing
+  </a>
+</div>
+
+<div class="modal" data-query="setClass('show', selectedItem).view(Modal)" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>

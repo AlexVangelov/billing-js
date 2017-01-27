@@ -1,0 +1,15 @@
+<div class="modal-dialog" role="document" [ngSwitch]="dialogType">
+  <widget-charge *ngSwitchCase="'charge'" [charge]='selectedItem' (done)='done($event)'></widget-charge>
+  <widget-modifier *ngSwitchCase="'modifier'" [modifier]='selectedItem' [charges]='bill.charges' (done)='done($event)'></widget-modifier>
+  <widget-payment *ngSwitchCase="'payment'" [payment]='selectedItem' (done)='done($event)'></widget-payment>
+  <div *ngSwitchCase="'json'" class="modal-content">
+    <div class="panel-heading">
+      <button type="button" class="close" data-query='click($parent.done, true)' aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="myModalLabel">toJson()</h4>
+    </div>
+    <div class="modal-body">
+      <!--<div *ngIf='!bill.isValid' class="alert alert-danger" role="alert">{{ bill.errors.messages.join(', ') }}</div>
+      <pre style='max-height: 400px; overflow: auto;'>{{ bill.toJson() | json }}</pre>-->
+    </div>
+  </div>
+</div>
