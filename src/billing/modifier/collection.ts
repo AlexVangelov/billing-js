@@ -50,5 +50,11 @@ export class ModifiersCollection extends BillCollection {
     if (!~this.indexOf(modifier)) this.push(modifier);
     return modifier;
   }
-  
 }
+
+Object.defineProperties(ModifiersCollection.prototype, {
+  constructor: { enumerable: false },
+  new: { enumerable: false },
+  add: { enumerable: false },
+  sum: { enumerable: false }
+});

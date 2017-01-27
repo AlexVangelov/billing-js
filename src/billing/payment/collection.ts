@@ -41,3 +41,9 @@ export class PaymentsCollection extends BillCollection {
     return sum;
   }
 }
+
+Object.defineProperties(PaymentsCollection.prototype, {
+  constructor: { enumerable: false },
+  new: { enumerable: false },
+  sum: { enumerable: false }
+});

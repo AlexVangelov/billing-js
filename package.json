@@ -21,7 +21,8 @@
     "test": "karma start karma.conf.js",
     "build": "tsc -d",
     "dist": "webpack --progress --profile --bail",
-    "sample-angular": "webpack-dev-server --content-base samples/browser/angular2/"
+    "sample-angular": "webpack-dev-server --content-base samples/browser/angular2/",
+    "sample-jsblocks": "webpack-dev-server --content-base samples/browser/jsblocks/"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^2.2.4",
