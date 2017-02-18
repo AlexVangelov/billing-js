@@ -29,7 +29,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new ForkCheckerPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(true),
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),

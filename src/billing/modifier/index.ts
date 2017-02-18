@@ -80,8 +80,8 @@ export class Modifier extends BillItem {
    */
   delete():Boolean {
     if (this.bill) this.bill.modifiers.remove(this);
-    if (this.charge) delete this.charge.deleteModifier();
-    return delete this;
+    if (this.charge) this.charge.deleteModifier();
+    return true; //delete this;
   }
 
   update(attributes: IModifierAttributes = {}) :boolean {

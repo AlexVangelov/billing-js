@@ -7,6 +7,12 @@ import { Bill } from './bill';
 import { IBillAttributes } from './interface';
 
 export class Bills extends Array<Bill> {
+  constructor() {
+    super();
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, Bills.prototype);
+    else this['__proto__'] = Bills.prototype;
+  }
+
   new(attributes: IBillAttributes = {}) :Bill {
     let bill = new Bill(attributes);
     if (!~this.indexOf(bill))this.push(bill);

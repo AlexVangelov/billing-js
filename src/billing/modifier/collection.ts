@@ -17,7 +17,11 @@ import { IModifierAttributes } from './interface';
  * @extends {BillCollection}
  */
 export class ModifiersCollection extends BillCollection {
-
+  constructor(bill: Bill) {
+    super(bill);
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, ModifiersCollection.prototype);
+    else this['__proto__'] = ModifiersCollection.prototype;
+  }
   /**
    * 
    * 

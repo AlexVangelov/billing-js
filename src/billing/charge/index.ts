@@ -145,7 +145,7 @@ export class Charge extends BillItem {
 
   delete():Boolean {
     if (this.bill) this.bill.charges.remove(this);
-    return delete this;
+    return true; //delete this;
   }
 
   update(attributes: IChargeAttributes = {}) :boolean {

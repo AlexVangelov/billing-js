@@ -16,7 +16,11 @@ import { IPaymentAttributes } from './interface';
  * @extends {BillCollection}
  */
 export class PaymentsCollection extends BillCollection {
-  
+  constructor(bill: Bill) {
+    super(bill);
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, PaymentsCollection.prototype);
+    else this['__proto__'] = PaymentsCollection.prototype;
+  }
   /**
    * 
    * 

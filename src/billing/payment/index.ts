@@ -70,7 +70,7 @@ export class Payment extends BillItem {
    */
   delete():Boolean {
     if (this.bill) this.bill.payments.remove(this);
-    return delete this;
+    return true; //delete this;
   }
 
   update(attributes: IPaymentAttributes = {}) :boolean {
