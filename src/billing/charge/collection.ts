@@ -16,7 +16,11 @@ import { IChargeAttributes } from './interface';
  * @extends {BillCollection}
  */
 export class ChargesCollection extends BillCollection {
-
+  constructor(bill: Bill) {
+    super(bill);
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, ChargesCollection.prototype);
+    else this['__proto__'] = ChargesCollection.prototype;
+  }
   /**
    * 
    * 
@@ -89,13 +93,3 @@ export class ChargesCollection extends BillCollection {
     return sum;
   }
 }
-
-Object.defineProperties(ChargesCollection.prototype, {
-  constructor: { enumerable: false },
-  new: { enumerable: false },
-  add: { enumerable: false },
-  remove: { enumerable: false },
-  save: { enumerable: false },
-  sum: { enumerable: false },
-  finalSum: { enumerable: false }
-});

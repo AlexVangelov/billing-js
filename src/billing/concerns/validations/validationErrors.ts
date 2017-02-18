@@ -3,6 +3,8 @@ export class ValidationErrors extends Array<{ [property :string] :Array<{ [key :
 
   constructor(modelName :string) {
     super();
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, ValidationErrors.prototype);
+    else this['__proto__'] = ValidationErrors.prototype;
   }
 
   add(property :string, key: string, message: string) {

@@ -17,7 +17,11 @@ import { IModifierAttributes } from './interface';
  * @extends {BillCollection}
  */
 export class ModifiersCollection extends BillCollection {
-
+  constructor(bill: Bill) {
+    super(bill);
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, ModifiersCollection.prototype);
+    else this['__proto__'] = ModifiersCollection.prototype;
+  }
   /**
    * 
    * 
@@ -51,10 +55,3 @@ export class ModifiersCollection extends BillCollection {
     return modifier;
   }
 }
-
-Object.defineProperties(ModifiersCollection.prototype, {
-  constructor: { enumerable: false },
-  new: { enumerable: false },
-  add: { enumerable: false },
-  sum: { enumerable: false }
-});

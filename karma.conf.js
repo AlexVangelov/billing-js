@@ -13,7 +13,7 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      "**/*.ts": ["karma-typescript"]
+      "src/**/*.ts": ["karma-typescript"]
     },
 
     reporters: ["mocha", "karma-typescript"],
@@ -26,7 +26,8 @@ module.exports = function (config) {
       reports: {
         "html": "coverage",
         "text-summary": ""
-      }
+      },
+      exclude: ['samples']
     }
 
   });

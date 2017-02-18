@@ -16,7 +16,11 @@ import { IPaymentAttributes } from './interface';
  * @extends {BillCollection}
  */
 export class PaymentsCollection extends BillCollection {
-  
+  constructor(bill: Bill) {
+    super(bill);
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, PaymentsCollection.prototype);
+    else this['__proto__'] = PaymentsCollection.prototype;
+  }
   /**
    * 
    * 
@@ -41,9 +45,3 @@ export class PaymentsCollection extends BillCollection {
     return sum;
   }
 }
-
-Object.defineProperties(PaymentsCollection.prototype, {
-  constructor: { enumerable: false },
-  new: { enumerable: false },
-  sum: { enumerable: false }
-});

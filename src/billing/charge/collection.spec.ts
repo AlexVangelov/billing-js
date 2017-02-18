@@ -3,8 +3,6 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-/// <reference path="../../../typings/index.d.ts" />
-
 import { ChargesCollection } from './collection';
 import { Bill } from '../bill';
 import { Charge } from '../charge';

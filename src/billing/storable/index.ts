@@ -5,7 +5,7 @@
 
 import { IStoreRecord, IStoreConfig } from './interface';
 import { MemoryStore } from './memoryStore';
-import { DynamoDbStore } from './dynamoDbStore';
+// import { DynamoDbStore } from './dynamoDbStore';
 import { IStore } from './interface';
 
 export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
@@ -106,5 +106,5 @@ export abstract class Storable {
 
 export {
   MemoryStore,
-  DynamoDbStore
+  // DynamoDbStore
 }

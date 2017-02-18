@@ -9,9 +9,8 @@ import { IBillAttributes } from './interface';
 export class Bills extends Array<Bill> {
   constructor() {
     super();
-    Object.defineProperties(this, {
-      length: { enumerable: false, writable: true, value: this.length }
-    });
+    if (Object.setPrototypeOf) Object.setPrototypeOf(this, Bills.prototype);
+    else this['__proto__'] = Bills.prototype;
   }
 
   new(attributes: IBillAttributes = {}) :Bill {
@@ -20,8 +19,3 @@ export class Bills extends Array<Bill> {
     return bill;
   }
 }
-
-Object.defineProperties(Bills.prototype, {
-  constructor: { enumerable: false },
-  new: { enumerable: false }
-});
