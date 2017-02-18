@@ -15,7 +15,7 @@ export class Bills extends Array<Bill> {
 
   new(attributes: IBillAttributes = {}) :Bill {
     let bill = new Bill(attributes);
-    if (!~this.indexOf(bill))this.push(bill);
+    this.push(bill);
     return bill;
   }
 }

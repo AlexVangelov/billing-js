@@ -44,6 +44,7 @@ export abstract class BillItem extends ValidationModel {
   }
 
   abstract update(attribute :BillItemAttributes) :boolean;
+  abstract toJson(useNomenclatureIds :boolean) :any;
 
   /**
    * 
@@ -62,12 +63,11 @@ export abstract class BillItem extends ValidationModel {
    * @returns {boolean}
    */
   save() :boolean {
-    if (this.isValid) return false;
+    if (!this.isValid) this.isSaved = false;
     else {
       this.isSaved = true;
     }
     return this.isSaved;
   }
 
-  toJson(useNomenclatureIds = false) :any {}
 }

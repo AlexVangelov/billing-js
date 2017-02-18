@@ -23,6 +23,7 @@ export class Bill extends ValidationModel {
 
   constructor(attributes :IBillAttributes = {}) {
     super();
+    if (attributes.operatorId) this.operatorId = attributes.operatorId;
   }
 
   /**
@@ -77,9 +78,9 @@ export class Bill extends ValidationModel {
 
   save() :boolean {
     let success = true;
-    if (!this.charges.save()) success = success || true;
-    if (!this.modifiers.save()) success = success || true;
-    if (!this.payments.save()) success = success || true;
+    if (!this.charges.save()) success = false;
+    if (!this.modifiers.save()) success = false;
+    if (!this.payments.save()) success = false;
     return this.isSaved = success;
   }
 

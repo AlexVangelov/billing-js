@@ -4,6 +4,7 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { Bill } from './bill';
+import * as Nomenclature from './nomenclature';
 
 describe('Bill', ()=> {
   it('init', () => {
@@ -47,5 +48,66 @@ describe('Bill', ()=> {
     
     expect(bill.isValid).toBeFalsy();
     expect(bill.errors[0]).toEqual({ charges: Object({ invalid: 'are invalid' }) });
+  });
+
+  it('global modifier', ()=> {
+    let bill = new Bill();
+    bill.charges.new({ price: 1, modifier: { fixedValue: 1 } });
+    let globalModifier = bill.modifiers.new({ percentRatio: -0.5 });
+    expect(bill.modifiers.length).toEqual(2);
+    expect(bill.modifier).toEqual(globalModifier);
+  });
+
+  it('toJson', ()=> {
+    let bill = new Bill();
+    bill.charges.new({ price: 1, modifier: { fixedValue: 1 } });
+    bill.modifiers.new({ percentRatio: -0.5 });
+    bill.payments.new();
+    expect(bill.toJson()).toEqual({
+      charges: [ { qty: 1, price: 1, name: '', modifier: { fixedValue: 1 } } ],
+      payments: [ { name: '', value: 1, isCash: true, isFiscal: true } ],
+      modifier: { percentRatio: -0.5 }
+    });
+  });
+
+  it('toJson (empty)', ()=> {
+    let bill = new Bill();
+    expect(bill.toJson()).toEqual({});
+  });
+
+  it('toJson (invalid)', ()=> {
+    let bill = new Bill();
+    bill.charges.new({ price: -1 });
+    bill.modifiers.new({ fixedValue: -1 });
+    bill.payments.new({ value: -1 });
+    expect(bill.toJson()).toBeUndefined();
+  });
+
+  it('get operator', ()=> {
+    Nomenclature.init({
+      operators: [ 
+        { id: 1, code: '1', name: 'Operator1' },
+        { id: 2, name: 'Operator2' }
+      ]
+    });
+    let bill = Bill.new();
+    expect(bill.operator).toBeUndefined();
+    bill = Bill.new({ operatorId: 1 });
+    expect(bill.operator.name).toEqual('Operator1');
+    expect(bill.operator.code).toEqual('1');
+  });
+
+  it('save', ()=>{
+    let bill = Bill.new();
+    bill.charges.new({ price: 1 });
+    expect(()=> { bill.save() }).not.toThrow();
+    expect(bill.save()).toBeTruthy();
+  });
+
+  it('save invalid', ()=>{
+    let bill = Bill.new();
+    bill.charges.new({ price: -1 });
+    expect(()=> { bill.save() }).not.toThrow();
+    expect(bill.save()).toBeFalsy();
   });
 });
