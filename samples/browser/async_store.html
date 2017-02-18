@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Billing test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='../../dist/billing.js'></script>
+    <script src='../../dist/billing.DynamoDbStore.js'></script>
+    <script src='../../dist/billing.RestApiStore.js'></script>
+    <script>
+      if (window.billingJs) {
+        var bill = billingJs.Billing.bills.new();
+        bill.charges.new({ price: 1 });
+        bill.modifiers.new({ percentRatio: 0.5 });
+        bill.payments.new()
+        document.write(JSON.stringify(bill.toJson()));
+      } else document.write('billingJs unavailable (exec "npm run dist" first)')
+    </script>
+  </head>
+  <body>
+    
+  </body>
+</html>

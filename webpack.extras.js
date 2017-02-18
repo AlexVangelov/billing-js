@@ -10,13 +10,14 @@ module.exports = {
   devtool: 'source-map',
   context: __dirname + "/src",
   entry: {
-    "billing": "./index.ts"
+    "dynamoDb": "./billing/storable/dynamoDbStore",
+    "restApi": "./billing/storable/restApiStore"
   },
   output: {
     path: __dirname + "/dist",
-    filename: "[name].js",
+    filename: "billing.[name]Store.js",
     libraryTarget: "umd",
-    library: ["billingJs"],
+    library: ["billingJs", "extras", "[name]"],
     umdNamedDefine: true
   },
   resolve: {
