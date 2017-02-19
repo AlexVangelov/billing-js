@@ -13,14 +13,14 @@ export class Store implements IStore {
   dbName: string;
   collectionName: string;
 
-  constructor(collectionName: string, dbName :string = 'BillingJs') {
+  constructor(dbName :string = 'BillingJs') {
     this.dbName = dbName;
-    this.collectionName = collectionName;
     this.IndxDb = window.indexedDB || window['mozIndexedDB'] || window['webkitIndexedDB'] || window['msIndexedDB'];
   }
 
-  init() {
+  initCollection(collectionName: string) {
     let self = this;
+    this.collectionName = collectionName;
     return new Promise((resolve, reject) => {
       let req: IDBOpenDBRequest;
       req = this.IndxDb.open(this.dbName);
@@ -41,7 +41,7 @@ export class Store implements IStore {
   reset() {
     this.db.close();
     this.IndxDb.deleteDatabase(this.dbName);
-    return this.init();
+    return this.initCollection(this.collectionName);
   }
 
   initTable(): any {
@@ -67,7 +67,11 @@ export class Store implements IStore {
     }
   }
 
-  findById(id: number) :Promise<IStoreRecord> {
+  findById(id :number, callback ?:any) :any {
+    return callback(new Error('Not Found'));
+  }
+
+  findById_(id: number) :Promise<IStoreRecord> {
     return new Promise((resolve, reject) => {
       let tx = this.db.transaction([this.collectionName]);
       let store = tx.objectStore(this.collectionName);

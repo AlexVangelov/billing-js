@@ -47,7 +47,7 @@ describe('Storable', ()=> {
       done();
     });
     expect(item).toBeUndefined();
-  })
+  });
 
   it('find catchable', ()=> {
     new TestClass({ store: [
@@ -57,15 +57,15 @@ describe('Storable', ()=> {
     expect(catchable.catch).toBeDefined();
   });
 
-  it('all', ()=> {
-    new TestClass({ store: [
-      { id: 100, property: 'One' },
-      { id: 101, property: 'Two' }
-    ]});
-    let items :any
-    TestClass.all((rs)=> items = rs);
-    expect(items.length).toEqual(2);
-    expect((<any>items[0]).property).toEqual('One');
-    expect((<any>items[1]).property).toEqual('Two');
-  });
+  // it('all', ()=> {
+  //   new TestClass({ store: [
+  //     { id: 100, property: 'One' },
+  //     { id: 101, property: 'Two' }
+  //   ]});
+  //   let items :any
+  //   TestClass.all((rs)=> items = rs);
+  //   expect(items.length).toEqual(2);
+  //   expect((<any>items[0]).property).toEqual('One');
+  //   expect((<any>items[1]).property).toEqual('Two');
+  // });
 });

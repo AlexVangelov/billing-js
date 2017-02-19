@@ -6,27 +6,33 @@
 import { IStore, IStoreRecord } from './interface';
 
 export class MemoryStore implements IStore {
-  private _items :Array<IStoreRecord> = [];
+  private _db :{ [collectionName :string] :Array<IStoreRecord> } = {};
 
-  constructor(items :Array<IStoreRecord>) {
-    this._items = items;
+  constructor() {
+    //this._items = items;
   }
 
-  findById(id: number, callback: any) {
-    for (let i of this._items) {
-      if (i.id === id) {
-        return callback(undefined, i);
+  initCollection(collectionName :string, items :Array<IStoreRecord> = []) {
+    this._db[collectionName] = items;
+  }
+
+  findById(collectionName: string, id: number, callback: any) {
+    if (this._db[collectionName]) {
+      for (let i of this._db[collectionName]) {
+        if (i.id === id) {
+          return callback(undefined, i);
+        }
       }
-    }
-    return callback(new Error('Not Found'));
+      return callback(new Error('Not Found'));
+    } else return callback(new Error(`Collection ${collectionName} is not initialized`));
   }
 
-  findOne(conditions: any, callback: any) {
-    if (this._items.length > 0) return callback(undefined, this._items[0]);
-    else return callback(new Error('Not Found'));
-  }
+  // findOne(conditions: any, callback: any) {
+  //   if (this._items.length > 0) return callback(undefined, this._items[0]);
+  //   else return callback(new Error('Not Found'));
+  // }
 
-  find(conditions :any, callback :any) {
-    return callback(undefined, this._items);
-  }
+  // find(conditions :any, callback :any) {
+  //   return callback(undefined, this._items);
+  // }
 }

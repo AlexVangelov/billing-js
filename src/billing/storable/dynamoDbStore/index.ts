@@ -34,6 +34,9 @@ export class Store implements IStore {
     });
   }
 
+  initCollection(collectionName: string) {
+  }
+
   findById(id: number, callback: any) {
     for (let i of this._items) {
       if (i.id === id) {

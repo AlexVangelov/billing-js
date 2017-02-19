@@ -52,11 +52,11 @@ export abstract class Storable {
 
   static find<T extends Storable>(this: IStorableClass<T>, id: number, callback :(item: T) => any) :StoreCatchable {
     let catchable = new StoreCatchable();
+    let className = (<any>this).name;
     if (!this._store) {
-      let className = (<any>this).name;
       catchable.throwAsync(new Error(`${className} store is not configured!`));
     } else {
-      this._store.findById(id, (err, record)=> {
+      this._store.findById(className, id, (err, record)=> {
         if (err) catchable.throwAsync(err);
         else if (!record) catchable.throwAsync(new Error('Not Found'));
         else callback(new this(record));
@@ -80,27 +80,29 @@ export abstract class Storable {
   //   return catchable;
   // }
 
-  static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :StoreCatchable {
-    let catchable = new StoreCatchable();
-    if (!this._store) {
-      let className = (<any>this).name;
-      catchable.throwAsync(new Error(`${className} store is not configured!`));
-    } else {
-      this._store.find({}, (err, records)=> {
-        if (err) {
-          catchable.throwAsync(err);
-        } else callback(records.map((record)=> {
-          return new this(record);
-        }));
-      });
-    }
-    return catchable;
-  }
+  // static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :StoreCatchable {
+  //   let catchable = new StoreCatchable();
+  //   if (!this._store) {
+  //     let className = (<any>this).name;
+  //     catchable.throwAsync(new Error(`${className} store is not configured!`));
+  //   } else {
+  //     this._store.find({}, (err, records)=> {
+  //       if (err) {
+  //         catchable.throwAsync(err);
+  //       } else callback(records.map((record)=> {
+  //         return new this(record);
+  //       }));
+  //     });
+  //   }
+  //   return catchable;
+  // }
 
-  static initStore(config :ArrayOrStoreConfig | any) {
-    if (config instanceof Array) {
-      this._store = new MemoryStore(config);
-    } else this._store = config;
+  static initStore<T extends Storable>(this: IStorableClass<T>, items ?:ArrayOrStoreConfig, store ?:IStore) {
+    this._store = store || new MemoryStore();
+    if (items instanceof Array) {
+      let className = (<any>this).name;
+      this._store.initCollection(className, items);
+    }
   }
 }
 
