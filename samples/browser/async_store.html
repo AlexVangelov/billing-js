@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src='../../dist/billing.js'></script>
-    <script src='../../dist/billing.DynamoDbStore.js'></script>
-    <script src='../../dist/billing.RestApiStore.js'></script>
+    <script src='../../dist/billing.dynamoDbStore.js'></script>
+    <script src='../../dist/billing.restApiStore.js'></script>
+    <script src='../../dist/billing.indexedDbStore.js'></script>
     <script>
       if (window.billingJs) {
         var bill = billingJs.Billing.bills.new();

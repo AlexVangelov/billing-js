@@ -5,6 +5,7 @@
 
 import { IValidations } from './interface';
 import { ValidationErrors } from './validationErrors';
+import { Storable } from '../../storable';
 
 export declare type MapKeyOrMessage = String | { [key :string] :string };
 
@@ -15,7 +16,7 @@ export declare type MapKeyOrMessage = String | { [key :string] :string };
  * @abstract
  * @class ValidationModel
  */
-export abstract class ValidationModel {
+export abstract class ValidationModel extends Storable {
   private static _validations: { [className: string]: { [property: string]: IValidations } } = {};
 
   private _errors :ValidationErrors;

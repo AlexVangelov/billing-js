@@ -1,0 +1,37 @@
+{
+  "bills": {
+    "properties": [
+      { "id": ""}
+    ]
+  },
+  "charges": {
+    "properties": [
+      { "bill": "reference" },
+      { "qty": "decimal" },
+      { "price_cents": "integer" },
+      { "price_currency": "string", "default": "USD" },
+      { "name": "string" },
+      { "description": "string" },
+      { "tax_ratio": "decimal" }
+    ]
+  },
+  "modifiers": {
+    "properties": [
+      { "bill": "reference" },
+      { "charge": "reference" },
+      { "percent_ratio": "decimal" },
+      { "fixed_value_cents": "integer" },
+      { "fixed_value_currency": "string", "default": "USD" }
+    ]
+  },
+  "payment": {
+    "properties": [
+      { "bill": "reference" },
+      { "name": "string" },
+      { "value_cents": "decimal" },
+      { "value_currency": "string", "default": "USD" },
+      { "isCash": "string" },
+      { "isFiscal": "string" }
+    ]
+  }
+}

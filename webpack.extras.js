@@ -11,7 +11,8 @@ module.exports = {
   context: __dirname + "/src",
   entry: {
     "dynamoDb": "./billing/storable/dynamoDbStore",
-    "restApi": "./billing/storable/restApiStore"
+    "restApi": "./billing/storable/restApiStore",
+    "indexedDb": "./billing/storable/indexedDbStore"
   },
   output: {
     path: __dirname + "/dist",

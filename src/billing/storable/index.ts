@@ -65,20 +65,20 @@ export abstract class Storable {
     return catchable;
   }
 
-  static findOne<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :(item: T) => any) :StoreCatchable {
-    let catchable = new StoreCatchable();
-    if (!this._store) {
-      let className = (<any>this).name;
-      catchable.throwAsync(new Error(`${className} store is not configured!`));
-    } else {
-      this._store.findOne(conditions, (err, record)=> {
-        if (err) catchable.throwAsync(err);
-        else if (!record) catchable.throwAsync(new Error('Not Found'));
-        else callback(new this(record));
-      });
-    }
-    return catchable;
-  }
+  // static findOne<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :(item: T) => any) :StoreCatchable {
+  //   let catchable = new StoreCatchable();
+  //   if (!this._store) {
+  //     let className = (<any>this).name;
+  //     catchable.throwAsync(new Error(`${className} store is not configured!`));
+  //   } else {
+  //     this._store.findOne(conditions, (err, record)=> {
+  //       if (err) catchable.throwAsync(err);
+  //       else if (!record) catchable.throwAsync(new Error('Not Found'));
+  //       else callback(new this(record));
+  //     });
+  //   }
+  //   return catchable;
+  // }
 
   static all<T extends Storable>(this: IStorableClass<T>, callback: (item: Array<T>) => any) :StoreCatchable {
     let catchable = new StoreCatchable();
