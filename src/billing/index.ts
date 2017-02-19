@@ -4,6 +4,10 @@
 // http://opensource.org/licenses/mit-license.php
 
 import { Bills } from './collection';
+import { Bill } from './bill';
+import { Charge } from './charge';
+import { Modifier } from './modifier';
+import { Payment } from './payment';
 
 import { INomenclatureAttributes } from './nomenclature/interface';
 import * as Nomenclature from './nomenclature';
@@ -18,8 +22,20 @@ export interface IBillingConfig {
 
 export module Billing {
   export var bills :Bills = new Bills();
-  export function config(config: IBillingConfig = {}) {
+  export function config(config: IBillingConfig = {}, callback ?:any) {
     let nomenclatureStore = config.store ? config.store : new MemoryStore();
     if (config.nomenclature) Nomenclature.init(config.nomenclature, nomenclatureStore);
+    if (config.store) {
+      Bill.initStore(null, config.store, (err)=> {
+        if (err && callback) return callback(err);
+        Charge.initStore(null, config.store, (err)=> {
+          if (err && callback) return callback(err);
+          Modifier.initStore(null, config.store, (err)=> {
+            if (err && callback) return callback(err);
+            Payment.initStore(null, config.store, callback);
+          });
+        });
+      });
+    }
   }
 }

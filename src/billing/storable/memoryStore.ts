@@ -12,8 +12,9 @@ export class MemoryStore implements IStore {
     //this._items = items;
   }
 
-  initCollection(collectionName :string, items :Array<IStoreRecord> = []) {
+  initCollection(collectionName :string, items :Array<IStoreRecord> = [], callback ?:Function) {
     this._db[collectionName] = items;
+    if (callback) callback(null, this._db);
   }
 
   findById(collectionName: string, id: number, callback: any) {
@@ -35,4 +36,8 @@ export class MemoryStore implements IStore {
   // find(conditions :any, callback :any) {
   //   return callback(undefined, this._items);
   // }
+
+  save(collectionName :string, record: any, callback ?:Function) {
+
+  }
 }

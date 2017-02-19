@@ -76,11 +76,13 @@ export class Bill extends ValidationModel {
     return this.total - this.payments.sum();
   }
 
-  save() :boolean {
+  save(callback ?:Function) :boolean {
     let success = true;
     if (!this.charges.save()) success = false;
     if (!this.modifiers.save()) success = false;
     if (!this.payments.save()) success = false;
+    if (success) this.constructor['save'](this, callback);
+    else if (callback) callback(this.errors, this);
     return this.isSaved = success;
   }
 

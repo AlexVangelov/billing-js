@@ -54,4 +54,8 @@ export class Store implements IStore {
   find(conditions :any, callback :any) {
     return callback(undefined, this._items);
   }
+
+  save(collectionName :string, record: any, callback ?:Function) {
+
+  }
 }

@@ -70,4 +70,15 @@ describe('ValidationModel', () => {
     expect(testModel.errors[0]['getter']).toEqual({ greaterThanOrEqualTo: 'must be greater than or equal to 2' });
     expect(testModel.errors.messages[0]).toEqual("Getter must be greater than or equal to 2");
   });
+
+  it('is Storable', ()=> {
+    class TestModelStorable extends ValidationModel {
+      property: number;
+      constructor(property? :number) {
+        super();
+        this.property = property;
+      }
+    }
+    expect(TestModelStorable.initStore).toBeDefined();
+  });
 });

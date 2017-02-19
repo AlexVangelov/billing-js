@@ -97,17 +97,27 @@ describe('Bill', ()=> {
     expect(bill.operator.code).toEqual('1');
   });
 
-  it('save', ()=>{
-    let bill = Bill.new();
-    bill.charges.new({ price: 1 });
-    expect(()=> { bill.save() }).not.toThrow();
-    expect(bill.save()).toBeTruthy();
+  it('extends Storable', ()=> {
+    expect(Bill.initStore).toBeDefined();
+  });
+  
+  describe('store', ()=> {
+    beforeAll(()=> {
+      Bill.initStore();
+    });
+    it('save', ()=>{
+      let bill = Bill.new();
+      bill.charges.new({ price: 1 });
+      expect(()=> { bill.save() }).not.toThrow();
+      expect(bill.save()).toBeTruthy();
+    });
+
+    it('save invalid', ()=>{
+      let bill = Bill.new();
+      bill.charges.new({ price: -1 });
+      expect(()=> { bill.save() }).not.toThrow();
+      expect(bill.save()).toBeFalsy();
+    });
   });
 
-  it('save invalid', ()=>{
-    let bill = Bill.new();
-    bill.charges.new({ price: -1 });
-    expect(()=> { bill.save() }).not.toThrow();
-    expect(bill.save()).toBeFalsy();
-  });
 });

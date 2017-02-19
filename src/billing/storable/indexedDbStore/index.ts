@@ -11,41 +11,49 @@ export class Store implements IStore {
   IndxDb: IDBFactory;
   db: IDBDatabase;
   dbName: string;
-  collectionName: string;
 
   constructor(dbName :string = 'BillingJs') {
     this.dbName = dbName;
     this.IndxDb = window.indexedDB || window['mozIndexedDB'] || window['webkitIndexedDB'] || window['msIndexedDB'];
   }
 
-  initCollection(collectionName: string) {
+  _getDb(callback :Function) {
     let self = this;
-    this.collectionName = collectionName;
-    return new Promise((resolve, reject) => {
-      let req: IDBOpenDBRequest;
-      req = this.IndxDb.open(this.dbName);
-      req.onupgradeneeded = (ev: any)=> {
-        self.db = ev.target.result;
-        self.initTable();
-      }
-      req.onsuccess = (ev: any)=> {
-        self.db = ev.target.result;
-        resolve(self.db);
-      }
-      req.onerror = (ev: any)=> {
-        reject(ev.error);
-      }
+    let req = this.IndxDb.open(this.dbName);
+    req.onupgradeneeded = (ev: any)=> {
+      self.db = ev.target.result;
+      self.db.createObjectStore('Bill', { keyPath: "id", autoIncrement: true });
+      self.db.createObjectStore('Charge', { keyPath: "id", autoIncrement: true });
+      self.db.createObjectStore('Modifier', { keyPath: "id", autoIncrement: true });
+      self.db.createObjectStore('Payment', { keyPath: "id", autoIncrement: true });
+    }
+    req.onsuccess = (ev: any)=> {
+      self.db = ev.target.result;
+      callback(null, self.db);
+    }
+    req.onerror = (ev: any)=> {
+      callback(ev.error);
+    }
+  }
+
+  initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback ?:Function) {
+    let self = this;
+    this._getDb((err)=> {
+      if (err) return callback(err);
+      callback(null, this.db);
+    })
+  }
+
+  reset(callback ?:Function) {
+    this._getDb((err)=> {
+      this.db.close();
+      this.IndxDb.deleteDatabase(this.dbName);
+      if (callback) callback();
     });
   }
 
-  reset() {
-    this.db.close();
-    this.IndxDb.deleteDatabase(this.dbName);
-    return this.initCollection(this.collectionName);
-  }
-
-  initTable(): any {
-    switch(this.collectionName) {
+  initTable(collectionName): any {
+    switch(collectionName) {
       case 'bills': {
         this.db.createObjectStore('bills', { keyPath: "id", autoIncrement: true });
         break;
@@ -63,18 +71,27 @@ export class Store implements IStore {
         break;
       }
       default:
-        this.db.createObjectStore(this.collectionName, { keyPath: "id", autoIncrement: true });
+        this.db.createObjectStore(collectionName, { keyPath: "id", autoIncrement: true });
     }
   }
 
-  findById(id :number, callback ?:any) :any {
-    return callback(new Error('Not Found'));
+  findById(collectionName :string, id :number, callback :Function) :any {
+    let tx = this.db.transaction([collectionName]);
+    let store = tx.objectStore(collectionName);
+    let request = store.get(id);
+    request.onerror = ()=> {
+      callback(request.error);
+    };
+    request.onsuccess = ()=> {
+      if (!request.result) callback(new Error('Not Found'));
+      else callback(null, request.result);
+    };
   }
 
-  findById_(id: number) :Promise<IStoreRecord> {
+  findById_(collectionName :string, id: number) :Promise<IStoreRecord> {
     return new Promise((resolve, reject) => {
-      let tx = this.db.transaction([this.collectionName]);
-      let store = tx.objectStore(this.collectionName);
+      let tx = this.db.transaction([collectionName]);
+      let store = tx.objectStore(collectionName);
       let request = store.get(id);
       request.onerror = ()=> {
         reject(request.error);
@@ -95,33 +112,31 @@ export class Store implements IStore {
     return callback(undefined, []);
   }
 
-  save(record: any) :Promise<any> {
-    return new Promise((resolve, reject) => {
-      let tx = this.db.transaction([this.collectionName], "readwrite");
-      let store = tx.objectStore(this.collectionName);
-      if (!record.id) {
-        let request = store.add(record);
-        request.onerror = ()=> reject(request.error);
-        request.onsuccess = ()=> {
-          record.id = request.result; 
-          resolve(record);
-        }
-      } else {
-        let getRequest = store.get(record.id);
-        getRequest.onerror = ()=> reject(getRequest.error);
-        getRequest.onsuccess = ()=> {
-          let existing = getRequest.result;
-          if (!existing) reject(new Error('Not Found'));
-          else {
-            for (let p in record) existing[p] = record[p];
-            let updateRequest = store.put(existing);
-            updateRequest.onerror = ()=> reject(updateRequest.error);
-            updateRequest.onsuccess = (ev: any)=> {
-              resolve(existing);
-            }
-          } 
-        };
+  save(collectionName :string, record: any, callback ?:Function) {
+    let tx = this.db.transaction([collectionName], "readwrite");
+    let store = tx.objectStore(collectionName);
+    if (!record.id) {
+      let request = store.add(record);
+      request.onerror = ()=> callback(request.error);
+      request.onsuccess = ()=> {
+        record.id = request.result; 
+        callback(null, record);
       }
-    });
+    } else {
+      let getRequest = store.get(record.id);
+      getRequest.onerror = ()=> callback(getRequest.error);
+      getRequest.onsuccess = ()=> {
+        let existing = getRequest.result;
+        if (!existing) callback(new Error('Not Found'));
+        else {
+          for (let p in record) existing[p] = record[p];
+          let updateRequest = store.put(existing);
+          updateRequest.onerror = ()=> callback(updateRequest.error);
+          updateRequest.onsuccess = (ev: any)=> {
+            callback(null, existing);
+          }
+        } 
+      };
+    }
   }
 }
