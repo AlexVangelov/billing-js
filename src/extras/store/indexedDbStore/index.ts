@@ -3,8 +3,7 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-import { Promise } from 'es6-promise';
-import { IStore, IStoreRecord } from '../interface';
+import { IStore, IStoreRecord } from '../../../billing/storable/interface';
 
 export class Store implements IStore {
   private _items: Array<IStoreRecord> = [];
@@ -86,21 +85,6 @@ export class Store implements IStore {
       if (!request.result) callback(new Error('Not Found'));
       else callback(null, request.result);
     };
-  }
-
-  findById_(collectionName :string, id: number) :Promise<IStoreRecord> {
-    return new Promise((resolve, reject) => {
-      let tx = this.db.transaction([collectionName]);
-      let store = tx.objectStore(collectionName);
-      let request = store.get(id);
-      request.onerror = ()=> {
-        reject(request.error);
-      };
-      request.onsuccess = ()=> {
-        if (!request.result) reject(new Error('Not Found'));
-        else resolve(request.result);
-      };
-    });
   }
 
   // findOne(conditions: any, callback: any) {

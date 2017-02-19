@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-import { IStore, IStoreRecord } from '../interface';
+import { IStore, IStoreRecord } from '../../../billing/storable/interface';
 
 import * as AWS from 'aws-sdk/global';
 import { ConfigurationOptions as AWSConfigurationOptions } from 'aws-sdk/lib/config';

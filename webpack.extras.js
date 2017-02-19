@@ -10,9 +10,9 @@ module.exports = {
   devtool: 'source-map',
   context: __dirname + "/src",
   entry: {
-    "dynamoDb": "./billing/storable/dynamoDbStore",
-    "restApi": "./billing/storable/restApiStore",
-    "indexedDb": "./billing/storable/indexedDbStore"
+    "dynamoDb": "./extras/store/dynamoDbStore",
+    "restApi": "./extras/store/restApiStore",
+    "indexedDb": "./extras/store/indexedDbStore"
   },
   output: {
     path: __dirname + "/dist",

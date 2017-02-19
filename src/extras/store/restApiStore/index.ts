@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-import { IStore, IStoreRecord } from '../interface';
+import { IStore, IStoreRecord } from '../../../billing/storable/interface';
 
 export class Store implements IStore {
   private _items :Array<IStoreRecord> = [];
