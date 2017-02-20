@@ -62,10 +62,13 @@ export abstract class BillItem extends ValidationModel {
    * 
    * @returns {boolean}
    */
-  save() :boolean {
-    if (!this.isValid) this.isSaved = false;
-    else {
+  save(callback ?:Function) :boolean {
+    if (!this.isValid) {
+      this.isSaved = false;
+      if (callback) callback(this.errors, this);
+    } else {
       this.isSaved = true;
+      this.constructor['save'](this, callback);
     }
     return this.isSaved;
   }

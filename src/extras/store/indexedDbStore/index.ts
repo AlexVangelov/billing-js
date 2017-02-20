@@ -18,6 +18,7 @@ export class Store implements IStore {
 
   _getDb(callback :Function) {
     let self = this;
+    if (this.db) return callback(null, this.db);
     let req = this.IndxDb.open(this.dbName);
     req.onupgradeneeded = (ev: any)=> {
       self.db = ev.target.result;
@@ -35,7 +36,7 @@ export class Store implements IStore {
     }
   }
 
-  initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback ?:Function) {
+  initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback :Function) {
     let self = this;
     this._getDb((err)=> {
       if (err) return callback(err);
@@ -43,11 +44,13 @@ export class Store implements IStore {
     })
   }
 
-  reset(callback ?:Function) {
+  reset(callback :Function) {
     this._getDb((err)=> {
+      if (err) return callback(err);
       this.db.close();
       this.IndxDb.deleteDatabase(this.dbName);
-      if (callback) callback();
+      delete this.db;
+      this._getDb(callback);
     });
   }
 
@@ -87,23 +90,15 @@ export class Store implements IStore {
     };
   }
 
-  // findOne(conditions: any, callback: any) {
-  //   if (this._items.length > 0) return callback(undefined, this._items[0]);
-  //   else return callback(new Error('Not Found'));
-  // }
-
-  find(conditions :any, callback :any) {
-    return callback(undefined, []);
-  }
-
-  save(collectionName :string, record: any, callback ?:Function) {
+  save(collectionName :string, model: any, callback ?:Function) {
     let tx = this.db.transaction([collectionName], "readwrite");
     let store = tx.objectStore(collectionName);
+    let record = model.toJson(true);
     if (!record.id) {
       let request = store.add(record);
       request.onerror = ()=> callback(request.error);
       request.onsuccess = ()=> {
-        record.id = request.result; 
+        record.id = request.result;
         callback(null, record);
       }
     } else {

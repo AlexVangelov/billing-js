@@ -29,6 +29,7 @@ export class PaymentsCollection extends BillCollection {
    */
   new(attributes: IPaymentAttributes = {}) :Payment {
     attributes.bill = this.bill;
+    if (this.bill.constructor['_store']) Payment._store = this.bill.constructor['_store'];
     return <Payment> this.add(new Payment(attributes));
   }
 

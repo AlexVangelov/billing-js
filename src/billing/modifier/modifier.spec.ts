@@ -158,11 +158,11 @@ describe('Modifier', () => {
 
   it('set charge by attributes not supported', function() {
     let modifier = new Modifier({ fixedValue: 1 });
-    expect(()=>{ modifier.charge = <Charge>{ price: 1 }; }).toThrowError(ReferenceError);
+    expect(()=>{ modifier.charge = <Charge>{ price: 41 }; }).toThrowError(ReferenceError);
   });
 
   it('zero charge modifier', function() {
-    let charge = new Charge({ price: 1 });
+    let charge = new Charge({ price: 91 });
     let modifier = charge.modify({ percentRatio: 0 });
     expect(modifier.isValid).toBeFalsy();
     expect(modifier.errors.messages).toContain("Value must be different from 0");
@@ -202,7 +202,7 @@ describe('Modifier', () => {
 
   it('update from charge to global', ()=> {
     let modifier = new Modifier({ fixedValue: 1 });
-    let charge = new Charge({ price: 1, modifier: modifier });
+    let charge = new Charge({ price: 61, modifier: modifier });
     expect(modifier.charge).toEqual(charge);
     modifier.update({ charge: null });
     expect(modifier.charge).toBeUndefined();
@@ -211,7 +211,7 @@ describe('Modifier', () => {
   it('100% global', function() {
     let bill = new Bill();
     let modifier = bill.modifiers.new({ percentRatio: -1.0 });
-    bill.charges.new({ price: 1 });
+    bill.charges.new({ price: 71 });
     expect(bill.balance).toEqual(0);
     expect(modifier.isValid).toBeTruthy();
     expect(bill.isValid).toBeTruthy();
@@ -226,7 +226,7 @@ describe('Modifier', () => {
     it('minimal', function() {
       let bill = new Bill();
       let modifier = bill.modifiers.new({ percentRatio: 0.5 });
-      bill.charges.new({ price: 1});
+      bill.charges.new({ price: 771});
       expect(modifier.toJson()).toEqual({ percentRatio: 0.5 });
     });
   });

@@ -30,6 +30,7 @@ export class ModifiersCollection extends BillCollection {
    */
   new(attributes: IModifierAttributes = {}) :Modifier {
     attributes.bill = this.bill;
+    if (this.bill.constructor['_store']) Modifier._store = this.bill.constructor['_store'];
     return <Modifier> this.add(new Modifier(attributes));
   }
 

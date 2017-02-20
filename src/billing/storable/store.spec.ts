@@ -15,18 +15,20 @@ class TestClass extends Storable {
 
 describe('Storable', ()=> {
   it('attach to a model', function() {
-    let testClass = new TestClass({ store: [{ id: 100, property: 'works' }] });
+    TestClass.initStore([{ id: 88, property: 'works' }]);
+    let testClass = new TestClass();
     let test :TestClass;
-    TestClass.find(100, (r)=> test = r);
+    TestClass.find(88, (r)=> test = r);
     expect(test instanceof TestClass).toBeTruthy();
     expect(test.property).toEqual('works');
   });
 
   it('find', (done)=> {
-    new TestClass({ store: [
+    TestClass.initStore([
       { id: 100, property: 'One' },
       { id: 101, property: 'Two' }
-    ]});
+    ]);
+    new TestClass();
     let item :TestClass;
     TestClass.find(100, (r)=> item = r);
     expect(item instanceof TestClass).toBeTruthy();
@@ -37,22 +39,24 @@ describe('Storable', ()=> {
   });
 
   it('find non existing catch', (done)=> {
-    new TestClass({ store: [
+    TestClass.initStore([
       { id: 100, property: 'One' },
       { id: 101, property: 'Two' }
-    ]});
+    ]);
+    new TestClass();
     let item :TestClass;
     TestClass.find(99, (r)=> item = r).catch((err)=> {
-      expect(err).toEqual(new Error('Not Found'));
+      expect(err).toEqual(new Error('Not Found (TestClass#99)'));
       done();
     });
     expect(item).toBeUndefined();
   });
 
   it('find catchable', ()=> {
-    new TestClass({ store: [
+    TestClass.initStore([
       { id: 1, property: 'One' }
-    ]});
+    ]);
+    new TestClass();
     let catchable = TestClass.find(1,()=>{});
     expect(catchable.catch).toBeDefined();
   });

@@ -9,8 +9,7 @@ describe('IndexedDbStore Integration', ()=> {
       store: store
     }, (err, db)=> {
       if (!err) {
-        store.reset();
-        done();
+        store.reset(done);
       }
     });
   });
@@ -24,8 +23,26 @@ describe('IndexedDbStore Integration', ()=> {
 
   it('create', (done)=> {
     let bill = Billing.bills.new();
-    //bill.save((err, record)=>{
-      done();
-    //});
+    bill.save((record)=> {
+      BillingBill.find(record.id, (bill)=>{
+        expect(bill.id).toBeDefined();
+        done();
+      });
+    });
+  });
+
+  it('create with charge', (done)=> {
+    let bill = Billing.bills.new();
+    bill.charges.new({ price: 1.5 });
+    bill.save((record)=> {
+      BillingBill.find(record.id, (bill)=>{
+        expect(bill.id).toBeDefined();
+        //expect(bill.charges.length).toEqual(1);
+        if (bill.charges.length) {
+          expect(bill.charges[0]['price']).toEqual(1.5);
+        }
+        done();
+      });
+    });
   });
 });

@@ -52,7 +52,7 @@ describe('Bill', ()=> {
 
   it('global modifier', ()=> {
     let bill = new Bill();
-    bill.charges.new({ price: 1, modifier: { fixedValue: 1 } });
+    bill.charges.new({ price: 21, modifier: { fixedValue: 1 } });
     let globalModifier = bill.modifiers.new({ percentRatio: -0.5 });
     expect(bill.modifiers.length).toEqual(2);
     expect(bill.modifier).toEqual(globalModifier);
@@ -102,12 +102,14 @@ describe('Bill', ()=> {
   });
   
   describe('store', ()=> {
-    beforeAll(()=> {
-      Bill.initStore();
+    beforeAll((done)=> {
+      Bill.initStore(null, null, (err)=> {
+        if(!err) done();
+      });
     });
     it('save', ()=>{
       let bill = Bill.new();
-      bill.charges.new({ price: 1 });
+      bill.charges.new({ price: 13 });
       expect(()=> { bill.save() }).not.toThrow();
       expect(bill.save()).toBeTruthy();
     });

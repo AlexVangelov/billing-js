@@ -24,7 +24,7 @@ export class MemoryStore implements IStore {
           return callback(undefined, i);
         }
       }
-      return callback(new Error('Not Found'));
+      return callback(new Error(`Not Found (${collectionName}#${id})`));
     } else return callback(new Error(`Collection ${collectionName} is not initialized`));
   }
 

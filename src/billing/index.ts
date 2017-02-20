@@ -27,11 +27,20 @@ export module Billing {
     if (config.nomenclature) Nomenclature.init(config.nomenclature, nomenclatureStore);
     if (config.store) {
       Bill.initStore(null, config.store, (err)=> {
-        if (err && callback) return callback(err);
+        if (err && callback) {
+          console.error('Bill.initStore', err);
+          return callback(err);
+        }
         Charge.initStore(null, config.store, (err)=> {
-          if (err && callback) return callback(err);
+          if (err && callback) {
+            console.error('Charge.initStore', err);
+            return callback(err);
+          }
           Modifier.initStore(null, config.store, (err)=> {
-            if (err && callback) return callback(err);
+            if (err && callback) {
+              console.error('Modifier.initStore', err);
+              return callback(err);
+            }
             Payment.initStore(null, config.store, callback);
           });
         });

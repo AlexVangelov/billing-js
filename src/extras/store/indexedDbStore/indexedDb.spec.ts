@@ -3,6 +3,7 @@ import { Store } from './index';
 describe('IndexedDbStore', ()=> {
   let store: Store;
   let collectionName = 'Bill';
+  let mockModel = (record)=> { return { toJson: ()=> { return record; } }; };
 
   beforeAll((done)=>{
     store = new Store('items');
@@ -12,10 +13,12 @@ describe('IndexedDbStore', ()=> {
   });
 
   it('init', function(done) {
-    expect(()=> { store.reset(); }).not.toThrow();
-    store.initCollection(collectionName, null, (err, db)=> {
+    store.reset((err)=> {
       expect(err).toBeNull();
-      done();
+      store.initCollection(collectionName, null, (err, db)=> {
+        expect(err).toBeNull();
+        done();
+      });
     });
   });
 
@@ -27,15 +30,16 @@ describe('IndexedDbStore', ()=> {
   });
 
   it('save (create)', (done)=> {
-    store.save(collectionName, {}, (err, record)=> {
+    store.save(collectionName, mockModel({}), (err, record)=> {
       expect(record.id).toBeDefined();
       done();
     });
   });
 
   it('save (update)', (done)=> {
-    store.save(collectionName, { name: "Test" }, (err, record)=> {
-      store.save(collectionName, { id: record.id, name: "Test Update"}, (err, updatedRecord)=> {
+    store.save(collectionName, mockModel({ name: "Test" }), (err, record)=> {
+      record.name = "Test Update";
+      store.save(collectionName, mockModel({ id: record.id, name: "Test Update"}), (err, updatedRecord)=> {
         expect(updatedRecord.name).toEqual("Test Update");
         done();
       });

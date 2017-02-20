@@ -22,22 +22,21 @@ export class Bill extends ValidationModel {
   isSaved: boolean;
 
   constructor(attributes :IBillAttributes = {}) {
-    super();
+    super(attributes);
     if (attributes.operatorId) this.operatorId = attributes.operatorId;
   }
 
-  /**
-   * 
-   * 
-   * @type {ChargesCollection}
-   */
-  charges :ChargesCollection = new ChargesCollection(this);
-  /**
-   * 
-   * 
-   * @type {ModifiersCollection}
-   */
-  modifiers :ModifiersCollection = new ModifiersCollection(this);
+  private _charges :ChargesCollection;
+  get charges() :ChargesCollection {
+    if (!this._charges) this._charges = new ChargesCollection(this);
+    return this._charges; 
+  }
+  
+  private _modifiers :ModifiersCollection;
+  get modifiers() :ModifiersCollection {
+    if (!this._modifiers) this._modifiers = new ModifiersCollection(this);
+    return this._modifiers;
+  }
   /**
    * 
    * 
@@ -45,12 +44,12 @@ export class Bill extends ValidationModel {
    * @memberOf Bill
    */
   operatorId :number;
-  /**
-   * 
-   * 
-   * @type {PaymentsCollection}
-   */
-  payments :PaymentsCollection = new PaymentsCollection(this);
+  
+  private _payments :PaymentsCollection;
+  get payments() :PaymentsCollection {
+    if (!this._payments) this._payments = new PaymentsCollection(this);
+    return this._payments;
+  }
 
   get modifier() :GlobalModifier {
     for (let m of this.modifiers) {

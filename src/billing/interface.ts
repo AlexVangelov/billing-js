@@ -6,5 +6,6 @@
 import * as NObjects from './nomenclature';
 
 export interface IBillAttributes {
+  id ?:any;
   operatorId ?:number;
 }

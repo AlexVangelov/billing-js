@@ -8,7 +8,7 @@ import { MemoryStore } from './memoryStore';
 // import { DynamoDbStore } from './dynamoDbStore';
 import { IStore } from './interface';
 
-export declare type ArrayOrStoreConfig = Array<IStoreRecord> | IStoreConfig;
+export declare type ArrayOrStoreConfig = Array<any> | IStoreConfig;
 
 export interface IStorableClass<T extends Storable> {
   _store :IStore;
@@ -32,9 +32,10 @@ export abstract class Storable {
   static _store :IStore;
   private _queueSize :number = 0;
   private _reposeCallback;
+  id :any;
 
   constructor(attributes :any = {}) {
-    if (attributes.store) (<any>this.constructor).initStore(attributes.store); 
+    this.id = attributes.id;
   }
 
   incQueue() {
@@ -54,11 +55,11 @@ export abstract class Storable {
     let catchable = new StoreCatchable();
     let className = (<any>this).name;
     if (!this._store) {
-      catchable.throwAsync(new Error(`${className} store is not configured!`));
+      catchable.throwAsync(new Error(`${className} store is not configured (find)!`));
     } else {
       this._store.findById(className, id, (err, record)=> {
         if (err) catchable.throwAsync(err);
-        else if (!record) catchable.throwAsync(new Error('Not Found'));
+        else if (!record) catchable.throwAsync(new Error(`Not Found (${id})`));
         else callback(new this(record));
       });
     }
@@ -69,12 +70,12 @@ export abstract class Storable {
     let catchable = new StoreCatchable();
     let className = (<any>this).name;
     if (!this._store) {
-      catchable.throwAsync(new Error(`${className} store is not configured!`));
+      catchable.throwAsync(new Error(`${className} store is not configured (save)!`));
     } else {
       this._store.save(className, item, (err, record)=> {
         if (err) catchable.throwAsync(err);
-        else if (!record) catchable.throwAsync(new Error('Not Found'));
-        else callback(new this(record));
+        else if (!record) catchable.throwAsync(new Error(`Not Found ()`));
+        else if (callback) callback(new this(record));
       });
     }
     return catchable;

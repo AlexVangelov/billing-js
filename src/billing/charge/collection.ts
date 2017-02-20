@@ -29,8 +29,8 @@ export class ChargesCollection extends BillCollection {
    */
   new(attributes: IChargeAttributes = {}) :Charge {
     attributes.bill = this.bill;
-    let charge = new Charge(attributes);
-    return this.add(charge);
+    if (this.bill.constructor['_store']) Charge._store = this.bill.constructor['_store'];
+    return <Charge> this.add(new Charge(attributes));
   }
 
   /**
