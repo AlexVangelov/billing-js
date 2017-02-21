@@ -12,7 +12,11 @@ export declare type ArrayOrStoreConfig = Array<any> | IStoreConfig;
 
 export interface IStorableClass<T extends Storable> {
   _store :IStore;
-  new (...a: any[]): T
+  new (...a: any[]): T;
+}
+
+export interface IStorableHooks {
+  afterInitialize?(callback :Function) :any;
 }
 
 export class StoreCatchable {
@@ -28,7 +32,7 @@ export class StoreCatchable {
   }
 }
 
-export abstract class Storable {
+export abstract class Storable implements IStorableHooks {
   static _store :IStore;
   private _queueSize :number = 0;
   private _reposeCallback;
@@ -51,17 +55,25 @@ export abstract class Storable {
     else this._reposeCallback = reposeCallback;
   }
 
-  static find<T extends Storable>(this: IStorableClass<T>, id: number, callback :(item: T) => any) :StoreCatchable {
+  static find<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :(item: T) => any) :StoreCatchable {
     let catchable = new StoreCatchable();
     let className = (<any>this).name;
     if (!this._store) {
       catchable.throwAsync(new Error(`${className} store is not configured (find)!`));
     } else {
-      this._store.findById(className, id, (err, record)=> {
-        if (err) catchable.throwAsync(err);
-        else if (!record) catchable.throwAsync(new Error(`Not Found (${id})`));
-        else callback(new this(record));
-      });
+      if (conditions instanceof Object) {
+        console.log('find with conditions', conditions);
+      } else {
+        this._store.findById(className, conditions, (err, record)=> {
+          if (err) catchable.throwAsync(err);
+          else if (!record) catchable.throwAsync(new Error(`Not Found (${className}#${conditions})`));
+          else {
+            let model = new this(record);
+            if (model['afterInitialize']) model['afterInitialize'](callback);
+            else callback(model);
+          }
+        });
+      }
     }
     return catchable;
   }
@@ -75,7 +87,10 @@ export abstract class Storable {
       this._store.save(className, item, (err, record)=> {
         if (err) catchable.throwAsync(err);
         else if (!record) catchable.throwAsync(new Error(`Not Found ()`));
-        else if (callback) callback(new this(record));
+        else {
+          for (let p in record) item[p] = record[p];
+          if (callback) callback(item);
+        }
       });
     }
     return catchable;

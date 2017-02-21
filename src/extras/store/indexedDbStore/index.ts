@@ -93,7 +93,8 @@ export class Store implements IStore {
   save(collectionName :string, model: any, callback ?:Function) {
     let tx = this.db.transaction([collectionName], "readwrite");
     let store = tx.objectStore(collectionName);
-    let record = model.toJson(true);
+    let record = model.toJson(true, false);
+    console.log('*** For save: ', record);
     if (!record.id) {
       let request = store.add(record);
       request.onerror = ()=> callback(request.error);

@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 
-import { ChargesCollection } from './charge';
+import { Charge, ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
 import { PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
@@ -76,21 +76,28 @@ export class Bill extends ValidationModel {
   }
 
   save(callback ?:Function) :boolean {
-    let success = true;
-    if (!this.charges.save()) success = false;
-    if (!this.modifiers.save()) success = false;
-    if (!this.payments.save()) success = false;
-    if (success) this.constructor['save'](this, callback);
-    else if (callback) callback(this.errors, this);
+    let success = this.isValid;
+    if (success) {
+      this.constructor['save'](this, (record)=> {
+        console.log('Saved bill', record);
+        if (!this.charges.save()) success = false;  //req  ]
+        if (!this.modifiers.save()) success = false; //seq ] -> par
+        if (!this.payments.save()) success = false; //       -> par
+        this.isSaved = success;
+        if (success && callback) callback(record);
+      });
+    } else if (callback) callback(this.errors, this);
     return this.isSaved = success;
   }
 
-  toJson(useNomenclatureIds = false) :any {
+  toJson(useNomenclatureIds = false, deep = true) :any {
     if (this.isValid) {
       let json = {};
-      if (this.charges.length) json['charges'] = this.charges.toJson(useNomenclatureIds);
-      if (this.payments.length) json['payments'] = this.payments.toJson(useNomenclatureIds);
-      if (this.modifier) json['modifier'] = this.modifier.toJson();
+      if (deep) {
+        if (this.charges.length) json['charges'] = this.charges.toJson(useNomenclatureIds);
+        if (this.payments.length) json['payments'] = this.payments.toJson(useNomenclatureIds);
+        if (this.modifier) json['modifier'] = this.modifier.toJson();
+      }
       return json;
     }
   }
@@ -105,6 +112,18 @@ export class Bill extends ValidationModel {
       });
     }
     return _operator;
+  }
+
+  afterInitialize(callback :Function) {
+    if (this.id) {
+      if (!this._charges) {
+        console.log("Bill after initialize fetch charges");
+        Charge.find({ billId: this.id }, (charges)=> {
+          console.log(`found charges for bill ${this.id}`, charges);
+        });
+      }
+    }
+    callback(this);
   }
 
   static new(attributes :any = {}) :Bill {

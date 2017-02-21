@@ -34,6 +34,7 @@ describe('IndexedDbStore Integration', ()=> {
   it('create with charge', (done)=> {
     let bill = Billing.bills.new();
     bill.charges.new({ price: 1.5 });
+    expect(bill.charges.length).toEqual(1);
     bill.save((record)=> {
       BillingBill.find(record.id, (bill)=>{
         expect(bill.id).toBeDefined();
