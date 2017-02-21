@@ -55,14 +55,23 @@ export abstract class Storable implements IStorableHooks {
     else this._reposeCallback = reposeCallback;
   }
 
-  static find<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :(item: T) => any) :StoreCatchable {
+  static find<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :Function) :StoreCatchable {
     let catchable = new StoreCatchable();
     let className = (<any>this).name;
     if (!this._store) {
       catchable.throwAsync(new Error(`${className} store is not configured (find)!`));
     } else {
       if (conditions instanceof Object) {
-        console.log('find with conditions', conditions);
+        let models = [];
+        this._store.find(className, conditions, {}, (err, records)=> {
+          if (err) catchable.throwAsync(err);
+          else {
+            for(let i in records) {
+              models.push(new this(records[i]));
+            }
+            callback(models);
+          }
+        });
       } else {
         this._store.findById(className, conditions, (err, record)=> {
           if (err) catchable.throwAsync(err);
@@ -78,7 +87,7 @@ export abstract class Storable implements IStorableHooks {
     return catchable;
   }
 
-  static save<T extends Storable>(this: IStorableClass<T>, item: IStoreRecord, callback ?:Function) {
+  static save<T extends Storable>(this: IStorableClass<T>, item: IStoreRecord, callback :(item: IStoreRecord) => any) {
     let catchable = new StoreCatchable();
     let className = (<any>this).name;
     if (!this._store) {

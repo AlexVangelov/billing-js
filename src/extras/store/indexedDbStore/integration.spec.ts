@@ -38,8 +38,9 @@ describe('IndexedDbStore Integration', ()=> {
     bill.save((record)=> {
       BillingBill.find(record.id, (bill)=>{
         expect(bill.id).toBeDefined();
-        //expect(bill.charges.length).toEqual(1);
+        expect(bill.charges.length).toEqual(1);
         if (bill.charges.length) {
+          expect(bill.charges[0]['id']).toBeDefined();
           expect(bill.charges[0]['price']).toEqual(1.5);
         }
         done();

@@ -22,10 +22,16 @@ export class Store implements IStore {
     let req = this.IndxDb.open(this.dbName);
     req.onupgradeneeded = (ev: any)=> {
       self.db = ev.target.result;
-      self.db.createObjectStore('Bill', { keyPath: "id", autoIncrement: true });
-      self.db.createObjectStore('Charge', { keyPath: "id", autoIncrement: true });
-      self.db.createObjectStore('Modifier', { keyPath: "id", autoIncrement: true });
-      self.db.createObjectStore('Payment', { keyPath: "id", autoIncrement: true });
+      let objectStore = self.db.createObjectStore('Bill', { keyPath: "id", autoIncrement: true });
+      
+      objectStore = self.db.createObjectStore('Charge', { keyPath: "id", autoIncrement: true });
+      objectStore.createIndex("billIdIndex", "billId", { unique: false });
+
+      objectStore = self.db.createObjectStore('Modifier', { keyPath: "id", autoIncrement: true });
+      objectStore.createIndex("billIdIndex", "billId", { unique: false });
+
+      objectStore = self.db.createObjectStore('Payment', { keyPath: "id", autoIncrement: true });
+      objectStore.createIndex("billIdIndex", "billId", { unique: false });
     }
     req.onsuccess = (ev: any)=> {
       self.db = ev.target.result;
@@ -54,29 +60,6 @@ export class Store implements IStore {
     });
   }
 
-  initTable(collectionName): any {
-    switch(collectionName) {
-      case 'bills': {
-        this.db.createObjectStore('bills', { keyPath: "id", autoIncrement: true });
-        break;
-      }
-      case 'charges': {
-        this.db.createObjectStore('charges', { keyPath: "id", autoIncrement: true });
-        break;
-      }
-      case 'modifiers': {
-        this.db.createObjectStore('modifiers', { keyPath: "id", autoIncrement: true });
-        break;
-      }
-      case 'payments': {
-        this.db.createObjectStore('payments', { keyPath: "id", autoIncrement: true });
-        break;
-      }
-      default:
-        this.db.createObjectStore(collectionName, { keyPath: "id", autoIncrement: true });
-    }
-  }
-
   findById(collectionName :string, id :number, callback :Function) :any {
     let tx = this.db.transaction([collectionName]);
     let store = tx.objectStore(collectionName);
@@ -90,11 +73,46 @@ export class Store implements IStore {
     };
   }
 
+  findOne(collectionName :string, conditions :any, options :any, callback ?:Function) :IStoreRecord {
+    let tx = this.db.transaction([collectionName]);
+    let store = tx.objectStore(collectionName);
+    let conditionsKeys = Object.keys(conditions);
+    if (conditionsKeys.length > 1) return callback(new Error('Multiple conditions not implemented'));
+    let idx = store.index(`${conditionsKeys[0]}Index`);
+    let req = idx.get(conditions[conditionsKeys[0]]);
+    req.onerror = ()=> {
+      callback(req.error);
+    };
+    req.onsuccess = (ev :any)=> {
+      if (!ev.target.result) callback(new Error('Not Found'));
+      else callback(null, ev.target.result);
+    };
+  }
+
+  find(collectionName :string, conditions :any, options :any, callback ?:Function) :Array<IStoreRecord> {
+    let tx = this.db.transaction([collectionName]);
+    let store = tx.objectStore(collectionName);
+    let conditionsKeys = Object.keys(conditions);
+    if (conditionsKeys.length > 1) return callback(new Error('Multiple conditions not implemented'));
+    let idx = store.index(`${conditionsKeys[0]}Index`);
+    let req = idx.openCursor();
+    req.onerror = ()=> {
+      callback(req.error);
+    };
+    let items = [];
+    req.onsuccess = (ev :any)=> {
+      let cursor = ev.target.result;
+      if (cursor) {
+        items.push(cursor.value);
+        cursor.continue();
+      } else callback(null, items);
+    };
+  }
+
   save(collectionName :string, model: any, callback ?:Function) {
     let tx = this.db.transaction([collectionName], "readwrite");
     let store = tx.objectStore(collectionName);
     let record = model.toJson(true, false);
-    console.log('*** For save: ', record);
     if (!record.id) {
       let request = store.add(record);
       request.onerror = ()=> callback(request.error);

@@ -79,7 +79,6 @@ export class Bill extends ValidationModel {
     let success = this.isValid;
     if (success) {
       this.constructor['save'](this, (record)=> {
-        console.log('Saved bill', record);
         if (!this.charges.save()) success = false;  //req  ]
         if (!this.modifiers.save()) success = false; //seq ] -> par
         if (!this.payments.save()) success = false; //       -> par
@@ -117,13 +116,14 @@ export class Bill extends ValidationModel {
   afterInitialize(callback :Function) {
     if (this.id) {
       if (!this._charges) {
-        console.log("Bill after initialize fetch charges");
         Charge.find({ billId: this.id }, (charges)=> {
-          console.log(`found charges for bill ${this.id}`, charges);
+          charges.forEach((c)=> this.charges.add(c));
+          callback(this);
+        }).catch((err)=>{
+          this.addError('charges', err.message);
         });
       }
     }
-    callback(this);
   }
 
   static new(attributes :any = {}) :Bill {

@@ -20,9 +20,6 @@ export class ChargesCollection extends BillCollection {
     super(bill);
     if (Object.setPrototypeOf) Object.setPrototypeOf(this, ChargesCollection.prototype);
     else this['__proto__'] = ChargesCollection.prototype;
-    if (bill.id) {
-      console.log('charges has bill id');
-    }
   }
   /**
    * 

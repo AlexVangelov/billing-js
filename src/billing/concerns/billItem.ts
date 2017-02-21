@@ -38,9 +38,9 @@ export abstract class BillItem extends ValidationModel {
    * 
    * @param {Bill} bill
    */
-  constructor(bill: Bill) {
-    super();
-    this._bill = bill;
+  constructor(attributes :any = {}) {
+    super(attributes);
+    this._bill = attributes.bill;
   }
 
   abstract update(attribute :BillItemAttributes) :boolean;

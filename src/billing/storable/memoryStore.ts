@@ -33,9 +33,11 @@ export class MemoryStore implements IStore {
   //   else return callback(new Error('Not Found'));
   // }
 
-  // find(conditions :any, callback :any) {
-  //   return callback(undefined, this._items);
-  // }
+  find(collectionName :string, conditions :any, options :any, callback ?:Function) :Array<IStoreRecord> {
+    let records = [];
+    this._db[collectionName].forEach((r)=> records.push(r));
+    return callback(undefined, records);
+  }
 
   save(collectionName :string, record: any, callback ?:Function) {
 

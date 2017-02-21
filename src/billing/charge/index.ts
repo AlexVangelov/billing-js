@@ -82,7 +82,7 @@ export class Charge extends BillItem {
    * @memberOf Charge
    */
   constructor(attributes: IChargeAttributes = {}) {
-    super(attributes.bill);
+    super(attributes);
     this.update(attributes);
   }
 

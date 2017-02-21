@@ -56,7 +56,7 @@ export class Payment extends BillItem {
    * @param {IPaymentAttributes} [attributes={}]
    */
   constructor(attributes: IPaymentAttributes = {}) {
-    super(attributes.bill);
+    super(attributes);
     if (!attributes.value) {
       if (this.bill) this.value = Math.round((this.bill.total - this.bill.payments.sum()) * 100) / 100;
     }

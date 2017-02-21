@@ -41,7 +41,7 @@ export class Modifier extends BillItem {
    * @param {IModifierAttributes} [attributes={}]
    */
   constructor(attributes: IModifierAttributes = {}) {
-    super(attributes.bill);
+    super(attributes);
     this.update(attributes);
   }
 
