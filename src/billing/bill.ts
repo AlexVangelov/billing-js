@@ -5,7 +5,7 @@
 
 import { Charge, ChargesCollection } from './charge';
 import { Modifier, ModifiersCollection } from './modifier';
-import { PaymentsCollection } from './payment';
+import { Payment, PaymentsCollection } from './payment';
 import { ValidationModel } from './concerns/validations';
 import { Operator } from './nomenclature';
 import { IBillAttributes } from './interface';
@@ -118,7 +118,13 @@ export class Bill extends ValidationModel {
       if (!this._charges) {
         Charge.find({ billId: this.id }, (charges)=> {
           charges.forEach((c)=> this.charges.add(c));
-          callback(this);
+          Modifier.find({ billId: this.id }, (modifiers)=> {
+            modifiers.forEach((c)=> this.modifiers.add(c));
+            Payment.find({ billId: this.id }, (payments)=> {
+              payments.forEach((c)=> this.payments.add(c));
+              callback(this);
+            });
+          });
         }).catch((err)=>{
           this.addError('charges', err.message);
         });

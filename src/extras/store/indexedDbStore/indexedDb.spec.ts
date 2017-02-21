@@ -78,4 +78,21 @@ describe('IndexedDbStore', ()=> {
       });
     });
   });
+
+  it('findOne (multi index)', (done)=> {
+    store.save("Modifier", mockModel({ billId: 100, chargeId: 32, fixedValue: 4.5 }), (err, record)=> {
+      expect(err).toBeNull();
+      store.save("Modifier", mockModel({ billId: 100, name: "Test2" }), (err, record)=> {
+        store.findOne("Modifier", { billId: 100, chargeId: 32 }, null, (err, recors)=> {
+          expect(err).toBeNull();
+          expect(record).toBeDefined();
+          expect(record.billId).toEqual(100);
+          expect(record.chargeId).toEqual(32);
+          expect(record.fixedValue).toEqual(4.5);
+          done();
+        });
+      });
+    });
+  });
+
 });
