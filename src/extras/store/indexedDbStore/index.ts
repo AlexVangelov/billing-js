@@ -144,4 +144,5 @@ export class Store implements IStore {
       };
     }
   }
+
 }
