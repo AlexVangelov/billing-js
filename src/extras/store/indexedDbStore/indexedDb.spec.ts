@@ -83,7 +83,7 @@ describe('IndexedDbStore', ()=> {
     store.save("Modifier", mockModel({ billId: 100, chargeId: 32, fixedValue: 4.5 }), (err, record)=> {
       expect(err).toBeNull();
       store.save("Modifier", mockModel({ billId: 100, name: "Test2" }), (err, record)=> {
-        store.findOne("Modifier", { billId: 100, chargeId: 32 }, null, (err, recors)=> {
+        store.findOne("Modifier", { billId: 100, chargeId: 32 }, null, (err, record)=> {
           expect(err).toBeNull();
           expect(record).toBeDefined();
           expect(record.billId).toEqual(100);

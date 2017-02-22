@@ -29,7 +29,7 @@ export class Store implements IStore {
 
       objectStore = self.db.createObjectStore('Modifier', { keyPath: "id", autoIncrement: true });
       objectStore.createIndex("billIdIndex", "billId", { unique: false });
-      objectStore.createIndex("billIdChargeIdIndex", ["billId", "chargeId"], { unique: true });
+      objectStore.createIndex("billIdchargeIdIndex", ["billId", "chargeId"], { unique: true });
 
       objectStore = self.db.createObjectStore('Payment', { keyPath: "id", autoIncrement: true });
       objectStore.createIndex("billIdIndex", "billId", { unique: false });
@@ -74,15 +74,17 @@ export class Store implements IStore {
     };
   }
 
-  findOne(collectionName :string, conditions :any, options :any, callback ?:Function) :IStoreRecord {
+  findOne(collectionName :string, conditions :any, options :any, callback ?:Function) :any {
     let tx = this.db.transaction([collectionName]);
     let store = tx.objectStore(collectionName);
     let conditionsKeys = Object.keys(conditions);
     let idx :IDBIndex;
     let req :IDBRequest;
     if (conditionsKeys.length > 1) {
+      let vals = [];
+      conditionsKeys.forEach((key)=> vals.push(conditions[key]));
       idx = store.index(`${conditionsKeys.join('')}Index`);
-      req = idx.get(Object.values(conditions));
+      req = idx.get(vals);
     } else {
       idx = store.index(`${conditionsKeys[0]}Index`);
       req = idx.get(conditions[conditionsKeys[0]]);
