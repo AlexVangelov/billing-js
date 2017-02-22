@@ -180,12 +180,11 @@ export class Charge extends BillItem {
 
   toJson(useNomenclatureIds = false) :any {
     if (this.isValid) {
-      let json = {
-        qty: this.qty
-      };
-      if (this.bill && this.bill.id) json['billId'] = this.bill.id; //for relational storages 
-      json['price'] = this.price;
-      json['name'] = this.name;
+      let json = this.jsonBase({ 
+        qty: this.qty,
+        price: this.price,
+        name: this.name
+      });
       if (this.description) json['description'] = this.description;
       if (this.modifier) json['modifier'] = this.modifier.toJson();
       if (this.taxRatio) json['taxRatio'] = this.taxRatio;

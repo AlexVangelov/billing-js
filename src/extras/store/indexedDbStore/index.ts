@@ -104,7 +104,7 @@ export class Store implements IStore {
     let conditionsKeys = Object.keys(conditions);
     if (conditionsKeys.length > 1) return callback(new Error('Multiple conditions not implemented'));
     let idx = store.index(`${conditionsKeys[0]}Index`);
-    let req = idx.openCursor();
+    let req = idx.openCursor(conditions[conditionsKeys[0]]);
     req.onerror = ()=> {
       callback(req.error);
     };

@@ -36,6 +36,35 @@ describe('IndexedDbStore', ()=> {
     });
   });
 
+  it('create - increment id', (done)=> {
+    store.save(collectionName, mockModel({}), (err, record1)=> {
+      expect(record1.id).toBeDefined();
+      store.save(collectionName, mockModel({}), (err, record2)=> {
+        expect(record2.id).toEqual(record1.id +1);
+        store.save(collectionName, mockModel({}), (err, record3)=> {
+          expect(record3.id).toEqual(record2.id +1);
+          done();
+        });
+      });
+    });
+  });
+
+  it('create - search', (done)=> {
+    store.save('Charge', mockModel({ price: 11, billId: 1001 }), (err, record1)=> {
+      expect(record1.id).toBeDefined();
+      store.save('Charge', mockModel({ price: 12, billId: 1002 }), (err, record2)=> {
+        expect(record2.id).toEqual(record1.id +1);
+        store.save('Charge', mockModel({ price: 13, billId: 1002 }), (err, record3)=> {
+          expect(record3.id).toEqual(record2.id +1);
+          store.find('Charge', { billId: 1002}, {}, (err, records)=> {
+            expect(records.length).toEqual(2);
+            done();
+          });
+        });
+      });
+    });
+  });
+
   it('save (update)', (done)=> {
     store.save(collectionName, mockModel({ name: "Test" }), (err, record)=> {
       record.name = "Test Update";

@@ -26,11 +26,7 @@ export abstract class BillItem extends ValidationModel {
    */
   protected _bill: Bill;
 
-  /**
-   * 
-   * 
-   * @type {boolean}
-   */
+  billId :any;
   isSaved: boolean = false;
   
   /**
@@ -40,6 +36,8 @@ export abstract class BillItem extends ValidationModel {
    */
   constructor(attributes :any = {}) {
     super(attributes);
+    if (attributes.billId) this.billId = attributes.billId;
+    if (this.billId && attributes.bill && this.billId !== attributes.bill) throw('Cross bill id!');
     this._bill = attributes.bill;
   }
 
@@ -71,6 +69,11 @@ export abstract class BillItem extends ValidationModel {
       this.constructor['save'](this, callback);
     }
     return this.isSaved;
+  }
+
+  jsonBase(initial :any = {}) :any {
+    if (this._bill && this._bill.id) initial['billId'] = this._bill.id;
+    return initial;
   }
 
 }

@@ -87,12 +87,12 @@ export class Payment extends BillItem {
 
   toJson(useNomenclatureIds = false) {
     if (this.isValid) {
-      let json = {
+      let json = this.jsonBase({
         name: this.name,
         value: this.value,
         isCash: this.isCash,
         isFiscal: this.isFiscal
-      }
+      });
       if (useNomenclatureIds) {
         if (this.paymentTypeId) json['paymentTypeId'] = this.paymentTypeId;
       }

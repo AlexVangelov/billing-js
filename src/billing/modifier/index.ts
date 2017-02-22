@@ -106,7 +106,7 @@ export class Modifier extends BillItem {
 
   toJson() {
     if (this.isValid) {
-      let json = {};
+      let json = this.jsonBase();
       if (this.percentRatio) json['percentRatio'] = this.percentRatio;
       else json['fixedValue'] = this.fixedValue;
       return json;
