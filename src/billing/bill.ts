@@ -10,6 +10,8 @@ import { ValidationModel } from './concerns/validations';
 import { Operator } from './nomenclature';
 import { IBillAttributes } from './interface';
 
+import { parallelExec } from '../utils/parallelExec'; 
+
 export declare type GlobalModifier = Modifier;
 /**
  * 
@@ -79,13 +81,22 @@ export class Bill extends ValidationModel {
     let success = this.isValid;
     if (success) {
       this.constructor['save'](this, (record)=> {
-        if (!this.charges.save()) success = false;  //req  ]
-        if (!this.modifiers.save()) success = false; //seq ] -> par
-        if (!this.payments.save()) success = false; //       -> par
+        let cbs = [];
+        let self = this;
+        cbs.push((c)=> {
+          if (!self.charges.save((results)=>{ //wait for charges to be saved (provide db chargeId)
+            if (!self.modifiers.save(c)) success = false; //seq ] -> par
+          })) success = false;  //req  ]
+        });
+        cbs.push((c)=> {
+          if (!self.payments.save(c)) success = false; //       -> par
+        });
+        if (success) parallelExec(cbs, (allResults)=> {
+          if (callback) callback(record);
+        }); //else has errors but is it enough?
         this.isSaved = success;
-        if (success && callback) callback(record);
       });
-    } else if (callback) callback(this.errors, this);
+    } else if (callback) callback(this.errors, this); // this is wrong
     return this.isSaved = success;
   }
 
@@ -119,9 +130,19 @@ export class Bill extends ValidationModel {
         Charge.find({ billId: this.id }, (charges)=> {
           charges.forEach((c)=> this.charges.add(c));
           Modifier.find({ billId: this.id }, (modifiers)=> {
-            modifiers.forEach((c)=> this.modifiers.add(c));
+            modifiers.forEach((m)=> {
+              if (m.chargeId) {
+                for (let c in charges) {
+                  if (charges[c].id === m.chargeId) {
+                    m.charge = charges[c];
+                    break;
+                  }
+                }
+              }
+              this.modifiers.add(m);
+            });
             Payment.find({ billId: this.id }, (payments)=> {
-              payments.forEach((c)=> this.payments.add(c));
+              payments.forEach((p)=> this.payments.add(p));
               callback(this);
             });
           });

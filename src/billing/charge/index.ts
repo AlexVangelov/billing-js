@@ -178,7 +178,7 @@ export class Charge extends BillItem {
     return true;
   }
 
-  toJson(useNomenclatureIds = false) :any {
+  toJson(useNomenclatureIds = false, deep = true) :any {
     if (this.isValid) {
       let json = this.jsonBase({ 
         qty: this.qty,
@@ -186,7 +186,7 @@ export class Charge extends BillItem {
         name: this.name
       });
       if (this.description) json['description'] = this.description;
-      if (this.modifier) json['modifier'] = this.modifier.toJson();
+      if (deep && this.modifier) json['modifier'] = this.modifier.toJson();
       if (this.taxRatio) json['taxRatio'] = this.taxRatio;
       if (useNomenclatureIds) {
         if (this.pluId) json['pluId'] = this.pluId;

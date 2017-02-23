@@ -19,11 +19,8 @@ export interface IModifierAttributes {
    * @type {Bill}
    */
   bill?: Bill;
-  /**
-   * 
-   * 
-   * @type {Charge}
-   */
+  
+  chargeId?: any;
   charge?: Charge;
   /**
    * 

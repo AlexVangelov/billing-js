@@ -16,11 +16,8 @@ import { ModifiersCollection } from './collection';
  * @extends {BillItem}
  */
 export class Modifier extends BillItem {
-  /**
-   * 
-   * 
-   * @type {Charge}
-   */
+  
+  chargeId :any;
   private _charge :Charge;
   /**
    * 
@@ -86,6 +83,7 @@ export class Modifier extends BillItem {
 
   update(attributes: IModifierAttributes = {}) :boolean {
     if (attributes.bill) this._bill = attributes.bill;
+    if (attributes.chargeId) this.chargeId = attributes.chargeId;
     if (attributes.percentRatio === null) delete this.percentRatio;
     else if (attributes.percentRatio) this.percentRatio = attributes.percentRatio;
     if (typeof attributes.fixedValue!== 'undefined') this.fixedValue = attributes.fixedValue || 0;
@@ -109,6 +107,7 @@ export class Modifier extends BillItem {
       let json = this.jsonBase();
       if (this.percentRatio) json['percentRatio'] = this.percentRatio;
       else json['fixedValue'] = this.fixedValue;
+      if (this.charge && this.charge.id) json['chargeId'] = this.charge.id; 
       return json;
     }
   }

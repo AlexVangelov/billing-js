@@ -5,6 +5,7 @@
 
 import { BillItem } from './billItem';
 import { Bill } from '../bill';
+import { parallelExec } from '../../utils/parallelExec'; 
 
 /**
  * 
@@ -65,11 +66,15 @@ export abstract class BillCollection extends Array<BillItem> {
     } else return false;
   }
 
-  save() :boolean {
+  save(callback ?:Function) :boolean {
     let success = true;
-    this.forEach((item)=> {
-      if (!item.save()) success = false;
-    });
+    let cbs = [];
+    this.forEach( 
+      (item)=> cbs.push((c)=> {
+        if (!item.save(c)) success = false;
+      })
+    );
+    parallelExec(cbs, callback);
     return success;
   }
 
