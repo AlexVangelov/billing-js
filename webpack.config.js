@@ -10,13 +10,17 @@ module.exports = {
   devtool: 'source-map',
   context: __dirname + "/src",
   entry: {
-    "billing": "./index.ts"
+    "core":       "./index.ts",
+    "dynamoDb":   "./extras/store/dynamoDbStore",
+    "restApi":    "./extras/store/restApiStore",
+    "indexedDb":  "./extras/store/indexedDbStore"
   },
   output: {
     path: __dirname + "/dist",
-    filename: "[name].js",
+    filename: "billing.[name].js",
     libraryTarget: "umd",
-    library: ["billingJs"],
+    library: ["billingJs", "[name]"],
+    chunkCallbackName: 'Delta',
     umdNamedDefine: true
   },
   resolve: {
@@ -30,14 +34,14 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(true),
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: {
-        keep_fnames: true
-      }
-    })
+    // new webpack.optimize.OccurenceOrderPlugin(true),
+    // new webpack.NoErrorsPlugin(),
+    // new webpack.optimize.DedupePlugin(),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   mangle: {
+    //     keep_fnames: true
+    //   }
+    // })
   ],
   externals: {
     "billing": "BillingJs"

@@ -8,6 +8,8 @@ import { MemoryStore } from './memoryStore';
 // import { DynamoDbStore } from './dynamoDbStore';
 import { IStore } from './interface';
 
+import { Catchable } from '../../utils/catchable';
+
 export declare type ArrayOrStoreConfig = Array<any> | IStoreConfig;
 
 export interface IStorableClass<T extends Storable> {
@@ -17,19 +19,6 @@ export interface IStorableClass<T extends Storable> {
 
 export interface IStorableHooks {
   afterInitialize?(callback :Function) :any;
-}
-
-export class StoreCatchable {
-  _catchCallback :(err: any)=> any;
-  catch(catchCallback :(err: any)=> any) {
-    this._catchCallback = catchCallback;
-  };
-  throwAsync(err :any) {
-    setTimeout(()=> {
-      if (this._catchCallback) this._catchCallback(err);
-      else throw err;
-    }, 0);
-  }
 }
 
 export abstract class Storable implements IStorableHooks {
@@ -55,8 +44,8 @@ export abstract class Storable implements IStorableHooks {
     else this._reposeCallback = reposeCallback;
   }
 
-  static find<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :Function) :StoreCatchable {
-    let catchable = new StoreCatchable();
+  static find<T extends Storable>(this: IStorableClass<T>, conditions: any, callback :Function) :Catchable {
+    let catchable = new Catchable();
     let className = (<any>this).name;
     if (!this._store) {
       catchable.throwAsync(new Error(`${className} store is not configured (find)!`));
@@ -88,7 +77,7 @@ export abstract class Storable implements IStorableHooks {
   }
 
   static save<T extends Storable>(this: IStorableClass<T>, item: IStoreRecord, callback :(item: IStoreRecord) => any) {
-    let catchable = new StoreCatchable();
+    let catchable = new Catchable();
     let className = (<any>this).name;
     if (!this._store) {
       catchable.throwAsync(new Error(`${className} store is not configured (save)!`));

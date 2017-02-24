@@ -17,16 +17,33 @@ export class WidgetBilling {
   selectedCollection :any;
   bill :any;
   dialogType :any;
+
+  createDemoBill = ()=> {
+    let bill = billingJs.core.Billing.bills.new();
+    
+    bill = billingJs.core.Billing.bills.new();
+    bill.charges.new({ price: 8.3, name: 'Umbrella', description: 'Unmatched quality and classic design' });
+    bill.charges.new({ price: 135, name: 'Briefcase', description: 'High-quality ballistic nylon fabric',
+      modifier: { percentRatio: -0.1 } });
+    bill.charges.new({ qty: 3, price: .65, description: 'Accessories' });
+    bill.charges.new({ qty: 0.5, price: 8.80, name: 'Almonds' });
+    bill.payments.new({ name: 'Cash' });
+    return bill;
+  }
   
   constructor() {
-    this.bill = billingJs.Billing.bills.new();
-    
-    this.bill = billingJs.Billing.bills.new();
-    this.bill.charges.new({ price: 8.3, name: 'Umbrella', description: 'Unmatched quality and classic design' });
-    this.bill.charges.new({ price: 135, name: 'Briefcase', description: 'High-quality ballistic nylon fabric',
-      modifier: { percentRatio: -0.1 } });
-    this.bill.charges.new({ qty: 3, price: .65, description: 'Accessories' });
-    this.bill.payments.new({ name: 'Cash' });
+    var store = new billingJs.indexedDb.Store('TestBillingDb');
+    var self = this;
+    billingJs.core.Billing.config({
+      store: store
+    }, function() {
+      billingJs.core.BillingBill.find(1, (bill)=> {
+        self.bill = bill;
+      }).catch(()=> {
+        self.bill = self.createDemoBill();
+        self.bill.save();
+      });
+    });
   }
   
   private buildCollectionItem() :any {
@@ -76,7 +93,7 @@ export class WidgetBilling {
   }
   
   reset() {
-    this.bill = billingJs.Billing.bills.new();
+    this.bill = billingJs.core.Billing.bills.new();
   }
   
   get globalModifiers() {

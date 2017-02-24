@@ -20,7 +20,7 @@
     "test": "karma start karma.conf.js",
     "build": "tsc -d",
     "dist": "webpack --progress --profile --bail",
-    "postdist": "webpack --progress --profile --bail --config webpack.extras.js",
+    "_postdist": "webpack --progress --profile --bail --config webpack.extras.js",
     "sample-angular": "webpack-dev-server --content-base samples/browser/angular2/",
     "sample-jsblocks": "webpack-dev-server --content-base samples/browser/jsblocks/"
   },

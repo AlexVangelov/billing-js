@@ -48,12 +48,18 @@ export class WidgetCharge {
   onSubmit(ev :any) {
     ev.preventDefault();
     this.charge.update(this.chargeForm.value);
-    if (this.charge.isValid) this.done.emit(true);
-    else {
+    // if (this.charge.isValid) this.done.emit(true);
+    // else {
+    //   this.errorMsg = this.charge.errors.messages.join(', ');
+    //   this.charge.update(this.origCharge); //TODO provide rollback mechanism
+    // }
+    let success =  this.charge.save(()=> {
+      this.done.emit(true);
+    });
+    if (!success) {
       this.errorMsg = this.charge.errors.messages.join(', ');
       this.charge.update(this.origCharge); //TODO provide rollback mechanism
     }
-    return true;
   }
 
   addModifier() {

@@ -34,20 +34,20 @@ export class Store implements IStore {
       objectStore = self.db.createObjectStore('Payment', { keyPath: "id", autoIncrement: true });
       objectStore.createIndex("billIdIndex", "billId", { unique: false });
     }
-    req.onsuccess = (ev: any)=> {
+    if (callback) req.onsuccess = (ev: any)=> {
       self.db = ev.target.result;
       callback(null, self.db);
-    }
+    };
     req.onerror = (ev: any)=> {
-      callback(ev.error);
-    }
+      if (callback) callback(ev.error);
+    };
   }
 
   initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback :Function) {
     let self = this;
     this._getDb((err)=> {
-      if (err) return callback(err);
-      callback(null, this.db);
+      if (err && callback) return callback(err);
+      if (callback) callback(null, this.db);
     })
   }
 
@@ -65,12 +65,12 @@ export class Store implements IStore {
     let tx = this.db.transaction([collectionName]);
     let store = tx.objectStore(collectionName);
     let request = store.get(id);
-    request.onerror = ()=> {
+    if (callback) request.onerror = ()=> {
       callback(request.error);
     };
     request.onsuccess = ()=> {
       if (!request.result) callback(new Error('Not Found'));
-      else callback(null, request.result);
+      else if (callback) callback(null, request.result);
     };
   }
 
@@ -89,12 +89,12 @@ export class Store implements IStore {
       idx = store.index(`${conditionsKeys[0]}Index`);
       req = idx.get(conditions[conditionsKeys[0]]);
     }
-    req.onerror = ()=> {
+    if (callback) req.onerror = ()=> {
       callback(req.error);
     };
     req.onsuccess = (ev :any)=> {
       if (!ev.target.result) callback(new Error('Not Found'));
-      else callback(null, ev.target.result);
+      else if (callback) callback(null, ev.target.result);
     };
   }
 
@@ -106,7 +106,7 @@ export class Store implements IStore {
     let idx = store.index(`${conditionsKeys[0]}Index`);
     let req = idx.openCursor(conditions[conditionsKeys[0]]);
     req.onerror = ()=> {
-      callback(req.error);
+      if (callback) callback(req.error);
     };
     let items = [];
     req.onsuccess = (ev :any)=> {
@@ -114,7 +114,7 @@ export class Store implements IStore {
       if (cursor) {
         items.push(cursor.value);
         cursor.continue();
-      } else callback(null, items);
+      } else if (callback) callback(null, items);
     };
   }
 
@@ -124,14 +124,14 @@ export class Store implements IStore {
     let record = model.toJson(true, false);
     if (!record.id) {
       let request = store.add(record);
-      request.onerror = ()=> callback(request.error);
+      if (callback) request.onerror = ()=> callback(request.error);
       request.onsuccess = ()=> {
         record.id = request.result;
-        callback(null, record);
+        if (callback) callback(null, record);
       }
     } else {
       let getRequest = store.get(record.id);
-      getRequest.onerror = ()=> callback(getRequest.error);
+      if (callback) getRequest.onerror = ()=> callback(getRequest.error);
       getRequest.onsuccess = ()=> {
         let existing = getRequest.result;
         if (!existing) callback(new Error('Not Found'));
@@ -140,7 +140,7 @@ export class Store implements IStore {
           let updateRequest = store.put(existing);
           updateRequest.onerror = ()=> callback(updateRequest.error);
           updateRequest.onsuccess = (ev: any)=> {
-            callback(null, existing);
+            if (callback) callback(null, existing);
           }
         } 
       };
