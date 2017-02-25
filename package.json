@@ -3,6 +3,9 @@
   "version": "1.0.2",
   "description": "Billing Module Js",
   "author": "AlexV",
+  "engines": {
+    "node": ">=4.3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AlexVangelov/billing-js.git"

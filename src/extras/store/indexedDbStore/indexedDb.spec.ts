@@ -68,7 +68,9 @@ describe('IndexedDbStore', ()=> {
   it('save (update)', (done)=> {
     store.save(collectionName, mockModel({ name: "Test" }), (err, record)=> {
       record.name = "Test Update";
+      expect(record.id).toBeDefined();
       store.save(collectionName, mockModel({ id: record.id, name: "Test Update"}), (err, updatedRecord)=> {
+        expect(updatedRecord.id).toEqual(record.id);
         expect(updatedRecord.name).toEqual("Test Update");
         done();
       });

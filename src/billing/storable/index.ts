@@ -28,7 +28,7 @@ export abstract class Storable implements IStorableHooks {
   id :any;
 
   constructor(attributes :any = {}) {
-    this.id = attributes.id;
+    if (attributes.id) this.id = attributes.id;
   }
 
   incQueue() {

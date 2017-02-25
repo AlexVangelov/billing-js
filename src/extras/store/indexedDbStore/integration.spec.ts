@@ -204,4 +204,41 @@ describe('IndexedDbStore Integration', ()=> {
       });
     });
   });
+
+  it('update bill items', (done)=> {
+    let bill = Billing.bills.new();
+    bill.charges.new({ price: 1.5 });
+    bill.charges.new({ price: 4.5, modifier: { percentRatio: 0.2 } });
+    bill.modifiers.new({ percentRatio: -0.1 });
+    bill.payments.new();
+    bill.save(()=>{ // test orig bill
+      expect(bill.id).toBeDefined();
+      expect(bill.charges.length).toEqual(2);
+      expect(bill.modifiers.length).toEqual(2);
+      expect(bill.payments.length).toEqual(1);
+      if (bill.charges.length === 2 && bill.modifiers.length === 2 && bill.payments.length == 1) {
+        bill.charges[0].update({ price: 1.6 });
+        bill.charges[0].save((charge)=> {
+          expect(charge.id).toEqual(bill.charges[0].id);
+          expect(bill.charges.length).toEqual(2);
+          expect(bill.charges[0]['price']).toEqual(1.6);   
+          bill.charges[1].update({ price: 4.6 });
+          bill.charges[1].save((charge)=> {
+            expect(charge.id).toEqual(bill.charges[1].id);
+            expect(bill.charges.length).toEqual(2);
+            expect(bill.charges[1]['price']).toEqual(4.6);
+
+            bill.modifier.update({ fixedValue: 5 });
+            bill.save((updatedBill)=>{
+              expect(updatedBill.id).toEqual(bill.id);
+              expect(updatedBill.charges.length).toEqual(2);
+              expect(updatedBill.modifiers.length).toEqual(2);
+              expect(updatedBill.payments.length).toEqual(1);
+              done();
+            });
+          });
+        });
+      }
+    });
+  });
 });

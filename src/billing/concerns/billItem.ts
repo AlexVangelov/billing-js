@@ -72,6 +72,7 @@ export abstract class BillItem extends ValidationModel {
   }
 
   jsonBase(initial :any = {}) :any {
+    if (this.id) initial['id'] = this.id;
     if (this._bill && this._bill.id) initial['billId'] = this._bill.id;
     return initial;
   }
