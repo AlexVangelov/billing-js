@@ -25,7 +25,11 @@ export class Bill extends ValidationModel {
 
   constructor(attributes :IBillAttributes = {}) {
     super(attributes);
-    if (attributes.operatorId) this.operatorId = attributes.operatorId;
+    let jsonAttributes = JSON.parse(JSON.stringify(attributes));
+    if (jsonAttributes.operatorId) this.operatorId = jsonAttributes.operatorId;
+    if (jsonAttributes.charges) jsonAttributes.charges.forEach((c)=> this.charges.new(c));
+    if (jsonAttributes.modifier) this.modifiers.new(jsonAttributes.modifier);
+    if (jsonAttributes.payments) jsonAttributes.payments.forEach((p)=> this.payments.new(p));
   }
 
   private _charges :ChargesCollection;

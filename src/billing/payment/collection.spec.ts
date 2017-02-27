@@ -66,4 +66,11 @@ describe('PaymentsCollection', () => {
     let payment = new Payment();
     expect(collection.remove(payment)).toBeFalsy();
   });
+
+  it('add cross bill', ()=> {
+    let bill2 = new Bill();
+    let collection = new PaymentsCollection(bill);
+    let payment = new Payment({ bill: bill2 });
+    expect(()=> { collection.add(payment); }).toThrowError(ReferenceError);
+  });
 });

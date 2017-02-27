@@ -45,6 +45,6 @@ export module Billing {
           });
         });
       });
-    }
+    } else if (callback) callback(); //TODO go parallel
   }
 }

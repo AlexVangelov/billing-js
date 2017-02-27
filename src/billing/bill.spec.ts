@@ -14,6 +14,52 @@ describe('Bill', ()=> {
     expect(bill.payments.bill).toEqual(bill);
   });
 
+  it('from json', ()=> {
+    let jsonBill = {
+      "charges": [
+        {
+          "qty": 1,
+          "price": 8.3,
+          "name": "Umbrella",
+          "description": "Unmatched quality and classic design"
+        },
+        {
+          "qty": 1,
+          "price": 135,
+          "name": "Briefcase",
+          "description": "High-quality ballistic nylon fabric",
+          "modifier": {
+            "percentRatio": -0.1
+          }
+        },
+        {
+          "qty": 3,
+          "price": 0.65,
+          "name": "",
+          "description": "Accessories"
+        },
+        {
+          "qty": 0.5,
+          "price": 5.56,
+          "name": "Almonds"
+        }
+      ],
+      "payments": [
+        {
+          "name": "Cash",
+          "value": 134.53,
+          "isCash": true,
+          "isFiscal": true
+        }
+      ],
+      "modifier": {
+        "fixedValue": 1
+      }
+    };
+    let bill = new Bill(jsonBill);
+    expect(bill.toJson()).toEqual(jsonBill);
+  });
+
   it('total', ()=> {
     let bill = new Bill();
     //1 charge (5)

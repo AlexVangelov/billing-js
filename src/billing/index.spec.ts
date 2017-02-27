@@ -11,6 +11,19 @@ describe('Billing', ()=> {
     Billing.config();
   });
 
+  it('config with nomenclature', ()=> {
+    expect(()=> Billing.config({ nomenclature: {} }) ).not.toThrow(); 
+  });
+
+  it('config callback', ()=> {
+    let configDone = {
+      cb: ()=> {}
+    };
+    spyOn(configDone, 'cb');
+    Billing.config({}, configDone.cb);
+    expect(configDone.cb).toHaveBeenCalled();
+  });
+
   it('bills', ()=> {
     let billsCount = Billing.bills.length;
     let bill = Billing.bills.new();

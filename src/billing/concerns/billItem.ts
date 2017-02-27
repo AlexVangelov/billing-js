@@ -37,7 +37,7 @@ export abstract class BillItem extends ValidationModel {
   constructor(attributes :any = {}) {
     super(attributes);
     if (attributes.billId) this.billId = attributes.billId;
-    if (this.billId && attributes.bill && this.billId !== attributes.bill) throw('Cross bill id!');
+    if (this.billId && attributes.bill && this.billId !== attributes.bill.id) throw('Cross bill id!');
     this._bill = attributes.bill;
   }
 
