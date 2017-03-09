@@ -12,46 +12,50 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 
 export class Store implements IStore {
   private _items :Array<IStoreRecord> = [];
-  private docClient :any;
+  private docClient :DynamoDB.DocumentClient;
 
-  constructor(options?: AWSConfigurationOptions) {
-    AWS.config.update(options || { // default - local DynamoDB
-      region: "us-west-2",
-      endpoint: 'http://localhost:8000',
-      accessKeyId: "fakeMyKeyId",
-      secretAccessKey: "fakeSecretAccessKey"
-    }, true);
+  constructor(options?: AWSConfigurationOptions | DynamoDB.DocumentClient) {
+    if (options && /DocumentClient/.test(options.constructor.toString())) {
+      this.docClient = <DynamoDB.DocumentClient>options;
+    } else {
+      AWS.config.update(options || { // default - local DynamoDB
+        // region: process.env.AWS_REGION,
+        // endpoint: process.env.DYNAMODB_ENDPOINT,//'http://localhost:8000',
+        // accessKeyId: process.env.AWS_ACCESS_KEY,
+        // secretAccessKey: process.env.AWS_SECRET_KEY
+        region: "us-east-1",
+        endpoint: 'http://localhost:8000',
+        accessKeyId: "fakeMyKeyId",
+        secretAccessKey: "fakeSecretAccessKey"
+      }, true);
 
-    this.docClient = new DynamoDB.DocumentClient();
+      this.docClient = new DynamoDB.DocumentClient();
+    }
+  }
+
+  initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback :Function) {
+    callback(null, this.docClient);
+  }
+
+  findById(collectionName :string, id: number, callback: any) :any {
     this.docClient.get({
-      TableName: 'Movies',
+      TableName: collectionName,
       Key: {
-        year: 2015,
-        title: 'The Big New Movie'
+        id: id
       }
-    }, function(err, data) {
-      console.log('db', err, data)  
+    }, (err, data)=> {
+      if (err) callback(err);
+      else if (!data.Item) callback(new Error('Not Found'));
+      else callback(err, data.Item);
     });
   }
 
-  initCollection(collectionName: string) {
-  }
-
-  findById(id: number, callback: any) {
-    for (let i of this._items) {
-      if (i.id === id) {
-        return callback(undefined, i);
-      }
-    }
-    return callback(new Error('Not Found'));
-  }
-
-  findOne(conditions: any, callback: any) {
+  findOne(collectionName :string, conditions: any, callback: any) {
     if (this._items.length > 0) return callback(undefined, this._items[0]);
     else return callback(new Error('Not Found'));
   }
 
-  find(conditions :any, callback :any) {
+  find(collectionName :string, conditions :any, callback :any) {
     return callback(undefined, this._items);
   }
 

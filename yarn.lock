@@ -247,9 +247,9 @@ awesome-typescript-loader@^3.0.4:
     object-assign "^4.1.1"
     source-map-support "^0.4.11"
 
-aws-sdk@^2.16.0:
-  version "2.20.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.20.0.tgz#e083f33a597661bb91e43911a99bb794797e8ca1"
+aws-sdk@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.24.0.tgz#9d811e639b9aa6422e10d215523a2b9f899c0ea8"
   dependencies:
     buffer "4.9.1"
     crypto-browserify "1.0.9"
@@ -3826,13 +3826,10 @@ typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@>=2.1.4, typescript@^2.0.3:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.1.tgz#4862b662b988a4c8ff691cc7969622d24db76ae9"
-typescript@^2.1.6:
+typescript@>=2.1.4, typescript@^2.0.3, typescript@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.6.tgz#40c7e6e9e5da7961b7718b55505f9cac9487a607"
-  
+
 typings-core@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/typings-core/-/typings-core-1.6.1.tgz#ce4b2931ea2f19bb8f3dacbec69983ac4e964a37"

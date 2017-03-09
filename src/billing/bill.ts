@@ -154,7 +154,7 @@ export class Bill extends ValidationModel {
         }).catch((err)=>{
           this.addError('charges', err.message);
         });
-      }
+      } else callback(this);
     }
   }
 
