@@ -47,7 +47,7 @@ export class Store implements IStore {
     let self = this;
     this._getDb((err)=> {
       if (err && callback) return callback(err);
-      if (callback) callback(null, this.db);
+      if (callback) callback(null, self.db);
     })
   }
 
@@ -61,7 +61,7 @@ export class Store implements IStore {
     });
   }
 
-  findById(collectionName :string, id :number, callback :Function) :any {
+  findById(collectionName :string, id :number | string, callback :Function) :any {
     let tx = this.db.transaction([collectionName]);
     let store = tx.objectStore(collectionName);
     let request = store.get(id);

@@ -17,7 +17,7 @@ export class MemoryStore implements IStore {
     if (callback) callback(null, this._db);
   }
 
-  findById(collectionName: string, id: number, callback: any) {
+  findById(collectionName: string, id: string, callback: any) {
     if (this._db[collectionName]) {
       for (let i of this._db[collectionName]) {
         if (i.id === id) {

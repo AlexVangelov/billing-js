@@ -34,14 +34,14 @@ module.exports = {
     ]
   },
   plugins: [
-    // new webpack.optimize.OccurenceOrderPlugin(true),
-    // new webpack.NoErrorsPlugin(),
-    // new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   mangle: {
-    //     keep_fnames: true
-    //   }
-    // })
+    new webpack.optimize.OccurenceOrderPlugin(true),
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: {
+        keep_fnames: true
+      }
+    })
   ],
   externals: {
     "billing": "BillingJs"

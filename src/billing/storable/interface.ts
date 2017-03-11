@@ -1,5 +1,5 @@
 export interface IStoreRecord {
-  id ?:number;
+  id ?:string | number;
 }
 
 export interface IStoreConfig {
@@ -8,7 +8,7 @@ export interface IStoreConfig {
 
 export interface IStore {
   initCollection(collectionName :string, items ?:Array<IStoreRecord>, callback ?:Function) :any;
-  findById(collectionName, id :number, callback ?:any) :any;
+  findById(collectionName, id :number | string, callback ?:any) :any;
   save(collectionName :string, record: any, callback ?:Function) :any;
   find(collectionName :string, conditions :any, options :any, callback :any);
   // findOne(conditions :any, callback :any);

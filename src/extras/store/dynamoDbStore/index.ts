@@ -8,7 +8,7 @@ import { IStore, IStoreRecord } from '../../../billing/storable/interface';
 import * as AWS from 'aws-sdk/global';
 import { ConfigurationOptions as AWSConfigurationOptions } from 'aws-sdk/lib/config';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
-
+import * as uuid from 'uuid/v4';
 
 export class Store implements IStore {
   private _items :Array<IStoreRecord> = [];
@@ -19,14 +19,10 @@ export class Store implements IStore {
       this.docClient = <DynamoDB.DocumentClient>options;
     } else {
       AWS.config.update(options || { // default - local DynamoDB
-        // region: process.env.AWS_REGION,
-        // endpoint: process.env.DYNAMODB_ENDPOINT,//'http://localhost:8000',
-        // accessKeyId: process.env.AWS_ACCESS_KEY,
-        // secretAccessKey: process.env.AWS_SECRET_KEY
-        region: "us-east-1",
-        endpoint: 'http://localhost:8000',
-        accessKeyId: "fakeMyKeyId",
-        secretAccessKey: "fakeSecretAccessKey"
+        region: process.env.AWS_REGION || "us-east-1",
+        endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+        accessKeyId: process.env.AWS_ACCESS_KEY || 'fakeMyKeyId',
+        secretAccessKey: process.env.AWS_SECRET_KEY || 'fakeSecretAccessKey'
       }, true);
 
       this.docClient = new DynamoDB.DocumentClient();
@@ -34,14 +30,14 @@ export class Store implements IStore {
   }
 
   initCollection(collectionName: string, items :Array<IStoreRecord> = [], callback :Function) {
-    callback(null, this.docClient);
+    if (callback) callback(null, this.docClient);
   }
 
-  findById(collectionName :string, id: number, callback: any) :any {
+  findById(collectionName :string, id :string, callback: any) :any {
     this.docClient.get({
       TableName: collectionName,
       Key: {
-        id: id
+        id: id.toString()
       }
     }, (err, data)=> {
       if (err) callback(err);
@@ -59,7 +55,19 @@ export class Store implements IStore {
     return callback(undefined, this._items);
   }
 
-  save(collectionName :string, record: any, callback ?:Function) {
+  save(collectionName :string, model: any, callback ?:Function) {
+    let record = model.toJson(true, false);
+    if (!record.id) {
+      record.id = uuid();
+      record.createdAt = new Date().toISOString();
+      this.docClient.put({
+        TableName: collectionName,
+        Item: record
+      }, (err, data)=> {
+        callback(err, record);
+      });
+    } else {
 
+    }
   }
 }

@@ -4,7 +4,7 @@ import { Store as DynamoDbStore } from './';
 import * as AWS from "aws-sdk/global";
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 
-describe('DynamoDbStore Integration', ()=> {
+xdescribe('DynamoDbStore Integration', ()=> {
 
   beforeAll((done)=>{
     AWS.config.update(<any>{
@@ -30,7 +30,7 @@ describe('DynamoDbStore Integration', ()=> {
     });
   });
 
-  it('find existing', (done)=>{
+  xit('find existing', (done)=>{
     BillingBill.find(1, (bill)=>{
       expect(bill instanceof BillingBill).toBeTruthy();
       done();
